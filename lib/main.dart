@@ -6,6 +6,7 @@ import 'core/theme/app_spacing.dart';
 import 'core/widgets/app_card.dart';
 import 'core/widgets/app_button.dart';
 import 'core/widgets/app_text_field.dart';
+import 'features/auth/presentation/screens/screens.dart';
 
 void main() {
   runApp(const MulligansLawApp());
@@ -19,8 +20,23 @@ class MulligansLawApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mulligans Law',
       theme: AppTheme.lightTheme(),
-      home: const HomeScreen(),
       debugShowCheckedModeBanner: false,
+      initialRoute: WelcomeScreen.routeName,
+      routes: {
+        WelcomeScreen.routeName: (context) => const WelcomeScreen(),
+        SignInScreen.routeName: (context) => const SignInScreen(),
+        SignUpScreen.routeName: (context) => const SignUpScreen(),
+        ForgotPasswordScreen.routeName: (context) =>
+            const ForgotPasswordScreen(),
+        VerifyEmailScreen.routeName: (context) {
+          // Extract email from route arguments
+          final email =
+              ModalRoute.of(context)?.settings.arguments as String? ??
+              'your@email.com';
+          return VerifyEmailScreen(email: email);
+        },
+        '/home': (context) => const HomeScreen(),
+      },
     );
   }
 }

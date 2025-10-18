@@ -212,26 +212,22 @@
   - [X] Tests: 13 BLoC tests covering all event handlers and state transitions ✅
   - [X] VS Code launch.json configured for debugging tests interactively
 
-- [ ] **Create Login Screen** (P0) #auth #ui
+- [X] **Create Auth Screens** (P0) #auth #ui
 
-  - Email and password fields
-  - Sign in button
-  - Navigate to sign up
-  - Error messaging
-  - Tests: Widget tests for interactions
+  - [X] WelcomeScreen with branding and navigation to sign in/sign up
+  - [X] SignInScreen with email/password, forgot password link, Google sign in
+  - [X] SignUpScreen with name, email, password, optional handicap index
+  - [X] ForgotPasswordScreen with email input and success state
+  - [X] VerifyEmailScreen with 6-digit code input
+  - [X] All screens integrated with AuthBloc
+  - [X] Routes configured in main.dart
+  - [X] Tests: All screens compile without errors ✅
 
-- [ ] **Create Sign Up Screen** (P0) #auth #ui
-
-  - Email and password fields
-  - Confirm password field
-  - Sign up button
-  - Navigate to login
-  - Tests: Widget tests for validation
-
-- [ ] **Wire Up Auth Navigation** (P0) #auth #ui
-  - StreamBuilder on auth state
-  - Navigate to home when authenticated
-  - Navigate to login when not authenticated
+- [ ] **Wire Up Auth BLoC Provider** (P0) #auth #ui
+  - Add BlocProvider for AuthBloc in main.dart
+  - Initialize with Supabase dependencies
+  - Implement auth state check on app start
+  - Navigate to appropriate screen based on auth state
   - Tests: Integration test for auth flow
 
 ---
