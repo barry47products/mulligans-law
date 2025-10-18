@@ -203,12 +203,14 @@
   - [X] GetCurrentUser - Retrieve authenticated user
   - [X] Tests: 20 tests covering all use cases ✅
 
-- [ ] **Create Auth BLoC** (P0) #auth #tdd
+- [X] **Create Auth BLoC** (P0) #auth #tdd
 
-  - Define AuthEvent and AuthState
-  - Implement AuthBloc
-  - Write BLoC tests
-  - Tests: State transitions for all events
+  - [X] Define AuthEvent (5 events: CheckRequested, SignInRequested, SignUpRequested, SignOutRequested, UserChanged)
+  - [X] Define AuthState (5 states: Initial, Loading, Authenticated, Unauthenticated, Error)
+  - [X] Implement AuthBloc with event handlers
+  - [X] Listen to auth state changes stream
+  - [X] Tests: 13 BLoC tests covering all event handlers and state transitions ✅
+  - [X] VS Code launch.json configured for debugging tests interactively
 
 - [ ] **Create Login Screen** (P0) #auth #ui
 
