@@ -1,0 +1,36 @@
+# CodeQL configuration for Mulligans Law
+# Specifies which languages to analyze and which paths to ignore
+
+name: "CodeQL Config"
+
+# Disable automatic language detection and specify only languages in this project
+disable-default-queries: false
+
+# Only analyze JavaScript/TypeScript (for Docusaurus)
+# Note: CodeQL does not support Dart/Flutter analysis
+# Dart analysis is handled by flutter analyze in CI
+languages:
+  - javascript
+
+# Paths to ignore during analysis
+paths-ignore:
+  - '**/node_modules/**'
+  - '**/dist/**'
+  - '**/build/**'
+  - '**/.dart_tool/**'
+  - '**/coverage/**'
+  - '**/*.g.dart'
+  - '**/*.freezed.dart'
+  - 'ios/**'
+  - 'android/**'
+  - 'macos/**'
+  - 'windows/**'
+  - 'linux/**'
+  - 'web/**'
+
+# Paths to include (Docusaurus documentation)
+paths:
+  - 'docs-technical/**/*.js'
+  - 'docs-technical/**/*.ts'
+  - 'docs-technical/**/*.jsx'
+  - 'docs-technical/**/*.tsx'
