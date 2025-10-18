@@ -234,6 +234,9 @@ flutter test
 # Run with coverage
 flutter test --coverage
 
+# View coverage report locally (requires lcov: brew install lcov)
+genhtml coverage/lcov.info -o coverage/html && open coverage/html/index.html
+
 # Run specific test file
 flutter test test/features/scores/domain/usecases/submit_score_test.dart
 
@@ -313,6 +316,7 @@ mulligans-law/
 │   ├── functional-spec.md  # Feature requirements
 │   ├── technical-spec.md   # Architecture details
 │   ├── GITHUB_SETUP.md     # GitHub configuration
+│   ├── CODECOV_SETUP.md    # Coverage reporting setup
 │   └── DOCUSAURUS_SETUP.md # Docs site setup
 ├── docs-technical/         # Docusaurus documentation site
 │   ├── docs/              # Documentation content
