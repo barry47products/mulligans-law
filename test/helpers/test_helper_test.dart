@@ -105,19 +105,15 @@ void main() {
 
       // Assert
       verifyWidgetExists('Welcome to Mulligans Law');
-      verifyWidgetExists('Golf Society Score Tracking');
+      verifyWidgetExists('Track scores, compete with friends');
       expect(find.byIcon(Icons.golf_course), findsOneWidget);
+      expect(find.text('Sign In'), findsOneWidget);
+      expect(find.text('Create Account'), findsOneWidget);
     });
 
-    testWidgets('HomeScreen should have app bar with title', (tester) async {
-      // Arrange & Act
-      await tester.pumpWidget(const MulligansLawApp());
-
-      // Assert
-      expect(find.widgetWithText(AppBar, 'Mulligans Law'), findsOneWidget);
-    });
-
-    testWidgets('HomeScreen should display golf icon', (tester) async {
+    testWidgets('WelcomeScreen should display golf icon with correct size', (
+      tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(const MulligansLawApp());
 
@@ -126,9 +122,7 @@ void main() {
       expect(iconFinder, findsOneWidget);
 
       final icon = tester.widget<Icon>(iconFinder);
-      expect(icon.size, 80); // Updated to match design system
-      // Note: Icon color is now AppColors.primary (mint green #4CD4B0)
-      // We don't check exact color here as it's set by the theme
+      expect(icon.size, 60); // Welcome screen icon size
     });
   });
 }
