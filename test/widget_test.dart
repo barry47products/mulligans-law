@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mulligans_law/features/auth/presentation/screens/screens.dart';
 
 void main() {
@@ -10,7 +11,7 @@ void main() {
     // Verify that our welcome screen is displayed.
     expect(find.text('Welcome to Mulligans Law'), findsOneWidget);
     expect(find.text('Track scores, compete with friends'), findsOneWidget);
-    expect(find.byIcon(Icons.golf_course), findsOneWidget);
+    expect(find.byType(SvgPicture), findsOneWidget);
     expect(find.text('Sign In'), findsOneWidget);
     expect(find.text('Create Account'), findsOneWidget);
   });

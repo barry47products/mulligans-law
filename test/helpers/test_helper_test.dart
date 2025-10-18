@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mulligans_law/features/auth/presentation/screens/screens.dart';
 import 'test_helper.dart';
 
@@ -104,23 +105,24 @@ void main() {
       // Assert
       verifyWidgetExists('Welcome to Mulligans Law');
       verifyWidgetExists('Track scores, compete with friends');
-      expect(find.byIcon(Icons.golf_course), findsOneWidget);
+      expect(find.byType(SvgPicture), findsOneWidget);
       expect(find.text('Sign In'), findsOneWidget);
       expect(find.text('Create Account'), findsOneWidget);
     });
 
-    testWidgets('WelcomeScreen should display golf icon with correct size', (
+    testWidgets('WelcomeScreen should display logo with correct dimensions', (
       tester,
     ) async {
       // Arrange & Act
       await tester.pumpWidget(const MaterialApp(home: WelcomeScreen()));
 
       // Assert
-      final iconFinder = find.byIcon(Icons.golf_course);
-      expect(iconFinder, findsOneWidget);
+      final logoFinder = find.byType(SvgPicture);
+      expect(logoFinder, findsOneWidget);
 
-      final icon = tester.widget<Icon>(iconFinder);
-      expect(icon.size, 60); // Welcome screen icon size
+      final logo = tester.widget<SvgPicture>(logoFinder);
+      expect(logo.width, 200);
+      expect(logo.height, 200);
     });
   });
 }
