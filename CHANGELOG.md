@@ -1,3 +1,10 @@
+## [0.3.0](https://github.com/barry47products/mulligans-law/compare/v0.2.0...v0.3.0) (2025-10-18)
+
+
+### Features
+
+* **auth:** implement authentication data layer with TDD ([da37f75](https://github.com/barry47products/mulligans-law/commit/da37f7530f091e426307cd576ef545db13d5e318))
+
 ## [0.2.0](https://github.com/barry47products/mulligans-law/compare/v0.1.0...v0.2.0) (2025-10-18)
 
 
