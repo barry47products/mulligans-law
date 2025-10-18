@@ -1,3 +1,15 @@
+## [0.6.0](https://github.com/barry47products/mulligans-law/compare/v0.5.0...v0.6.0) (2025-10-18)
+
+
+### Features
+
+* **auth:** add authentication screens following Miro prototype ([c6bafda](https://github.com/barry47products/mulligans-law/commit/c6bafda1360239b246d093ff6666cca5aae32171))
+
+
+### Documentation
+
+* **test:** add test suite and comprehensive testing guide ([288aae7](https://github.com/barry47products/mulligans-law/commit/288aae7ddc05b313178226070980f56a2ab40ffe))
+
 ## [0.5.0](https://github.com/barry47products/mulligans-law/compare/v0.4.0...v0.5.0) (2025-10-18)
 
 
