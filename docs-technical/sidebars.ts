@@ -1,0 +1,79 @@
+import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
+
+// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+
+/**
+ * Creating a sidebar enables you to:
+ - create an ordered group of docs
+ - render a sidebar for each doc of that group
+ - provide next/previous navigation
+
+ The sidebars can be generated from the filesystem, or explicitly defined here.
+
+ Create as many sidebars as you want.
+ */
+const sidebars: SidebarsConfig = {
+  tutorialSidebar: [
+    'intro',
+    {
+      type: 'category',
+      label: 'Getting Started',
+      items: [
+        'getting-started/installation',
+        // Uncomment as you create these pages:
+        // 'getting-started/local-development',
+        // 'getting-started/first-contribution',
+        // 'getting-started/troubleshooting',
+      ],
+    },
+    // Uncomment these categories as you add pages:
+    // {
+    //   type: 'category',
+    //   label: 'Architecture',
+    //   items: [
+    //     'architecture/overview',
+    //     'architecture/clean-architecture',
+    //     'architecture/offline-first',
+    //     'architecture/database-design',
+    //   ],
+    // },
+    // {
+    //   type: 'category',
+    //   label: 'Features',
+    //   items: [
+    //     'features/authentication',
+    //     'features/score-capture',
+    //     'features/leaderboards',
+    //     'features/tournaments',
+    //   ],
+    // },
+    // {
+    //   type: 'category',
+    //   label: 'API Reference',
+    //   items: [
+    //     'api/repositories',
+    //     'api/use-cases',
+    //     'api/blocs',
+    //   ],
+    // },
+    // {
+    //   type: 'category',
+    //   label: 'Testing',
+    //   items: [
+    //     'testing/tdd-approach',
+    //     'testing/unit-testing',
+    //     'testing/integration-testing',
+    //   ],
+    // },
+    // {
+    //   type: 'category',
+    //   label: 'Deployment',
+    //   items: [
+    //     'deployment/ci-cd',
+    //     'deployment/releasing',
+    //   ],
+    // },
+  ],
+};
+
+export default sidebars;
