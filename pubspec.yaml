@@ -36,7 +36,7 @@ dependencies:
 
   # Backend & Database
   supabase_flutter: ^2.10.0
-  drift: ^2.22.0
+  drift: ^2.29.0
   drift_flutter: ^0.2.0
   path_provider: ^2.1.5
   path: ^1.9.1
