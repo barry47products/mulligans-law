@@ -4,6 +4,12 @@ on:
   push:
     branches: [ main ]
 
+# Required permissions for semantic-release
+permissions:
+  contents: write  # To create releases and push tags
+  issues: write    # To create issues on failure
+  pull-requests: write  # To comment on PRs
+
 jobs:
   semantic-release:
     name: Semantic Release
