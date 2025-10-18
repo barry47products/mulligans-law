@@ -1,3 +1,10 @@
+## [0.7.2](https://github.com/barry47products/mulligans-law/compare/v0.7.1...v0.7.2) (2025-10-18)
+
+
+### Bug Fixes
+
+* **ci:** remove custom CodeQL workflow to use default setup ([d4b6fa8](https://github.com/barry47products/mulligans-law/commit/d4b6fa8ca93fdd6db4c786a7bdf53bc5b38b3da7))
+
 ## [0.7.1](https://github.com/barry47products/mulligans-law/compare/v0.7.0...v0.7.1) (2025-10-18)
 
 
