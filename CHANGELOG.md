@@ -1,3 +1,10 @@
+## [0.4.0](https://github.com/barry47products/mulligans-law/compare/v0.3.0...v0.4.0) (2025-10-18)
+
+
+### Features
+
+* **auth:** implement auth use cases with TDD ([86f9b6e](https://github.com/barry47products/mulligans-law/commit/86f9b6e5ad8485ac24845cc41a7018762d9f5399))
+
 ## [0.3.0](https://github.com/barry47products/mulligans-law/compare/v0.2.0...v0.3.0) (2025-10-18)
 
 
