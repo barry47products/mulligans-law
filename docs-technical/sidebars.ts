@@ -26,17 +26,36 @@ const sidebars: SidebarsConfig = {
         // 'getting-started/troubleshooting',
       ],
     },
+    {
+      type: 'category',
+      label: 'Architecture',
+      items: [
+        'architecture/overview',
+        // Uncomment as you create these pages:
+        // 'architecture/clean-architecture',
+        // 'architecture/offline-first',
+        // 'architecture/database-design',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Development',
+      items: [
+        'workflow/development',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Testing',
+      items: [
+        'testing/strategy',
+        // Uncomment as you create these pages:
+        // 'testing/unit-testing',
+        // 'testing/widget-testing',
+        // 'testing/integration-testing',
+      ],
+    },
     // Uncomment these categories as you add pages:
-    // {
-    //   type: 'category',
-    //   label: 'Architecture',
-    //   items: [
-    //     'architecture/overview',
-    //     'architecture/clean-architecture',
-    //     'architecture/offline-first',
-    //     'architecture/database-design',
-    //   ],
-    // },
     // {
     //   type: 'category',
     //   label: 'Features',
@@ -54,23 +73,6 @@ const sidebars: SidebarsConfig = {
     //     'api/repositories',
     //     'api/use-cases',
     //     'api/blocs',
-    //   ],
-    // },
-    // {
-    //   type: 'category',
-    //   label: 'Testing',
-    //   items: [
-    //     'testing/tdd-approach',
-    //     'testing/unit-testing',
-    //     'testing/integration-testing',
-    //   ],
-    // },
-    // {
-    //   type: 'category',
-    //   label: 'Deployment',
-    //   items: [
-    //     'deployment/ci-cd',
-    //     'deployment/releasing',
     //   ],
     // },
   ],
