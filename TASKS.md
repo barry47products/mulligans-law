@@ -195,13 +195,13 @@
   - [X] Write unit tests for repository
   - [X] Tests: Sign up, sign in, sign out, session management ✅
 
-- [ ] **Create Auth Use Cases** (P0) #auth #tdd
+- [X] **Create Auth Use Cases** (P0) #auth #tdd
 
-  - SignInUseCase
-  - SignUpUseCase
-  - SignOutUseCase
-  - GetCurrentUserUseCase
-  - Tests: Business logic for each use case
+  - [X] SignIn - Email/password validation and sign in
+  - [X] SignUp - Email/password validation and registration
+  - [X] SignOut - Session termination
+  - [X] GetCurrentUser - Retrieve authenticated user
+  - [X] Tests: 20 tests covering all use cases ✅
 
 - [ ] **Create Auth BLoC** (P0) #auth #tdd
 
