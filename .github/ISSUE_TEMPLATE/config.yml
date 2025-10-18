@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Documentation
+    url: https://barry47products.github.io/mulligans-law/
+    about: Check the technical documentation for guides and API reference
+  - name: 📋 Task Board
+    url: https://github.com/barry47products/mulligans-law/blob/main/TASKS.md
+    about: View the complete task kanban board
+  - name: 💬 Discussions
+    url: https://github.com/barry47products/mulligans-law/discussions
+    about: Ask questions and discuss ideas with the community

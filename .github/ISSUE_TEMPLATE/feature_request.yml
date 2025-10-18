@@ -1,0 +1,89 @@
+name: Feature Request
+description: Suggest a new feature or enhancement
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please provide details below.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: "I'm frustrated when..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like
+      placeholder: What would you like to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe any alternative solutions you've considered
+      placeholder: What other approaches could solve this?
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature?
+      options:
+        - P0 - Critical (blocks other work)
+        - P1 - High (core feature)
+        - P2 - Medium (important but not urgent)
+        - P3 - Low (nice to have)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Feature Area
+      description: Which area does this feature affect?
+      multiple: true
+      options:
+        - Authentication
+        - Scores
+        - Leaderboards
+        - Tournaments
+        - Social Features
+        - Profile
+        - Settings
+        - Other
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: User Story
+      description: Describe this from a user's perspective
+      placeholder: |
+        As a [type of user]
+        I want [goal]
+        So that [benefit]
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: What needs to be true for this feature to be complete?
+      placeholder: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+        - [ ] Criterion 3
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add mockups, examples, or any other context

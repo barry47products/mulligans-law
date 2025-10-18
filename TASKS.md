@@ -93,18 +93,18 @@
   - Set coverage reporting (no enforcement initially)
   - Tests: Coverage reports appear in PRs
 
-- [ ] **Create PR Template** (P0) #setup #git
+- [X] **Create PR Template** (P0) #setup #git
 
-  - Create .github/pull_request_template.md
-  - Include: task reference, changes, testing checklist
-  - Tests: Template appears on new PRs
+  - [X] Create .github/pull_request_template.md
+  - [X] Include: task reference, changes, testing checklist
+  - [X] Tests: Template appears on new PRs ✅
 
-- [ ] **Create Issue Templates** (P0) #setup #git
+- [X] **Create Issue Templates** (P0) #setup #git
 
-  - Bug report template
-  - Feature request template
-  - Task template (from TASKS.md)
-  - Tests: Templates appear when creating issues
+  - [X] Bug report template
+  - [X] Feature request template
+  - [X] Task template (from TASKS.md)
+  - [X] Tests: Templates appear when creating issues ✅
 
 - [ ] **Initialize Supabase Local Development** (P0) #setup #database
 

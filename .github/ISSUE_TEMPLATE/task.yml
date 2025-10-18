@@ -1,0 +1,106 @@
+name: Task from TASKS.md
+description: Create an issue to track a task from TASKS.md
+title: "[Task]: "
+labels: ["task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This template is for tracking tasks from TASKS.md as GitHub issues.
+
+  - type: input
+    id: task-name
+    attributes:
+      label: Task Name
+      description: Name of the task from TASKS.md
+      placeholder: "e.g., Create Auth Data Layer"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: Task priority from TASKS.md
+      options:
+        - P0 - Critical (blocks other work)
+        - P1 - High (core feature)
+        - P2 - Medium (important)
+        - P3 - Low (nice to have)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Which category does this task belong to?
+      options:
+        - Setup
+        - Authentication
+        - Scores
+        - Leaderboards
+        - Tournaments
+        - Social Features
+        - Profile
+        - Settings
+        - Testing
+        - Documentation
+        - CI/CD
+        - Database
+        - Other
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Task Description
+      description: Detailed description of the task
+      placeholder: What needs to be done?
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How do we know when this task is complete?
+      placeholder: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+        - [ ] Criterion 3
+    validations:
+      required: true
+
+  - type: textarea
+    id: test-requirements
+    attributes:
+      label: Test Requirements
+      description: What tests need to be written?
+      placeholder: |
+        - Unit tests for...
+        - Widget tests for...
+        - Integration tests for...
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Does this task depend on other tasks?
+      placeholder: |
+        - Blocked by: #123
+        - Requires: #456
+
+  - type: textarea
+    id: technical-notes
+    attributes:
+      label: Technical Notes
+      description: Any technical considerations, architecture decisions, or implementation notes
+      placeholder: Architecture patterns, libraries to use, etc.
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
