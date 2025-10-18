@@ -1,3 +1,10 @@
+## [0.8.0](https://github.com/barry47products/mulligans-law/compare/v0.7.2...v0.8.0) (2025-10-18)
+
+
+### Features
+
+* **branding:** integrate Mulligans Law logo throughout app ([1f5b98b](https://github.com/barry47products/mulligans-law/commit/1f5b98bdd2bf28c3f50f7885bc1252de636a3867))
+
 ## [0.7.2](https://github.com/barry47products/mulligans-law/compare/v0.7.1...v0.7.2) (2025-10-18)
 
 
