@@ -1,3 +1,10 @@
+## [0.7.0](https://github.com/barry47products/mulligans-law/compare/v0.6.0...v0.7.0) (2025-10-18)
+
+
+### Features
+
+* **auth:** wire up authentication with Supabase and BLoC ([5ee092c](https://github.com/barry47products/mulligans-law/commit/5ee092cb5915b3710ee5befc79e9c7c7275a1944))
+
 ## [0.6.0](https://github.com/barry47products/mulligans-law/compare/v0.5.0...v0.6.0) (2025-10-18)
 
 
