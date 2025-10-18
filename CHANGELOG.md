@@ -1,3 +1,15 @@
+## [0.2.0](https://github.com/barry47products/mulligans-law/compare/v0.1.0...v0.2.0) (2025-10-18)
+
+
+### Features
+
+* **ui:** implement Mulligans Law design system ([932d7cb](https://github.com/barry47products/mulligans-law/commit/932d7cb4702b704e3935959b84e9c51349399557)), closes [#4CD4B0](https://github.com/barry47products/mulligans-law/issues/4CD4B0)
+
+
+### Documentation
+
+* **changelog:** add initial changelog for v0.1.0 ([e7ff024](https://github.com/barry47products/mulligans-law/commit/e7ff024bda9cead2de3a07c5db765760d878a4da))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
