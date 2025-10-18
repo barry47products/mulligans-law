@@ -378,19 +378,33 @@ CREATE POLICY "Captains can update their society"
 
 **Provider:** Supabase Auth
 
+**Status:** ✅ Fully Implemented (62 tests passing)
+
 **Flow:**
 
 1. User signs in (email/password)
 2. Supabase returns JWT token
-3. Token stored securely (flutter_secure_storage)
+3. Token stored by Supabase client (SharedPreferences)
 4. Token sent with all API requests
 5. RLS policies enforce permissions
 
 **Session Management:**
 
-- Tokens auto-refresh
-- Offline: cached auth state
-- Online: validate with server
+- Tokens auto-refresh before expiration
+- AuthBloc listens to auth state changes
+- AuthGate routes based on authentication status
+- Session validation on app start
+
+**Implementation Details:**
+
+See [Authentication Feature Documentation](../features/authentication.md) for complete details on:
+
+- Domain entities (AuthUser, AuthSession)
+- Use cases (SignIn, SignUp, SignOut, GetCurrentUser)
+- BLoC state management (5 events, 5 states)
+- UI screens (Welcome, SignIn, SignUp, ForgotPassword, VerifyEmail)
+- Error handling (7 custom exceptions)
+- Testing (51 auth tests + 11 widget tests)
 
 ## State Management
 
