@@ -1,5 +1,7 @@
 # Mulligans Law
 
+[![CD](https://github.com/barry47products/mulligans-law/actions/workflows/cd.yml/badge.svg)](https://github.com/barry47products/mulligans-law/actions/workflows/cd.yml)
+
 A Flutter mobile application for managing golf scores and leaderboards for social golf societies. Supports regular season play, knockout competitions, offline score capture, and real-time leaderboards.
 
 > **Note**: This project is built with AI-assisted development tools, including Claude Code, for implementation assistance. All code changes are reviewed and committed by human developers who maintain full oversight and decision-making authority.
@@ -82,7 +84,7 @@ supabase start
 
 This will output important connection details:
 
-```
+```bash
 API URL: http://localhost:54321
 GraphQL URL: http://localhost:54321/graphql/v1
 DB URL: postgresql://postgres:postgres@localhost:54322/postgres
@@ -96,6 +98,7 @@ service_role key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 #### Access Supabase Studio
 
 Open [http://localhost:54323](http://localhost:54323) to access the Supabase Studio dashboard where you can:
+
 - View database tables
 - Run SQL queries
 - Manage authentication
@@ -194,13 +197,14 @@ When your task is complete:
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
-```
+```bash
 <type>(<scope>): <subject>
 
 [optional body]
 ```
 
 **Types:**
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `test`: Add/update tests
@@ -305,7 +309,7 @@ Access the local Supabase Studio at [http://localhost:54323](http://localhost:54
 
 ## 📁 Project Structure
 
-```
+```bash
 mulligans-law/
 ├── .github/
 │   └── workflows/          # CI/CD pipelines
@@ -352,7 +356,7 @@ mulligans-law/
 
 Each feature follows **Clean Architecture**:
 
-```
+```bash
 feature/
 ├── data/
 │   ├── models/            # Data models (JSON serialization)
@@ -444,6 +448,7 @@ Runs on **merge to main**:
 ### Branch Protection
 
 Main branch is protected with:
+
 - ✓ Require PR reviews (self-review allowed for solo dev)
 - ✓ Require status checks (CI must pass)
 - ✓ No force pushes
@@ -454,6 +459,7 @@ Main branch is protected with:
 ### Supabase Issues
 
 **Can't connect to Supabase:**
+
 ```bash
 # Check if Supabase is running
 supabase status
@@ -466,6 +472,7 @@ docker ps
 ```
 
 **Database issues:**
+
 ```bash
 # Reset database (WARNING: deletes all data)
 supabase db reset
@@ -477,6 +484,7 @@ supabase db logs
 ### Flutter Issues
 
 **Build errors:**
+
 ```bash
 # Clean build
 flutter clean
@@ -487,6 +495,7 @@ flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
 **Dependency conflicts:**
+
 ```bash
 # Update dependencies
 flutter pub upgrade
@@ -498,6 +507,7 @@ flutter pub get
 ### Testing Issues
 
 **Tests failing:**
+
 ```bash
 # Run tests with verbose output
 flutter test --reporter expanded
@@ -534,4 +544,4 @@ This is currently a solo development project. If you'd like to contribute:
 
 ---
 
-**Happy Coding! ⛳️**
+## **Happy Coding! ⛳️**

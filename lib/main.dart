@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
+import 'core/config/supabase_config.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_typography.dart';
@@ -6,9 +9,26 @@ import 'core/theme/app_spacing.dart';
 import 'core/widgets/app_card.dart';
 import 'core/widgets/app_button.dart';
 import 'core/widgets/app_text_field.dart';
+import 'features/auth/data/repositories/auth_repository_impl.dart';
+import 'features/auth/domain/usecases/get_current_user.dart';
+import 'features/auth/domain/usecases/sign_in.dart';
+import 'features/auth/domain/usecases/sign_out.dart';
+import 'features/auth/domain/usecases/sign_up.dart';
+import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/auth/presentation/bloc/auth_event.dart';
+import 'features/auth/presentation/bloc/auth_state.dart';
 import 'features/auth/presentation/screens/screens.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Supabase
+  await Supabase.initialize(
+    url: SupabaseConfig.supabaseUrl,
+    anonKey: SupabaseConfig.supabaseAnonKey,
+    debug: SupabaseConfig.enableDebugLogging,
+  );
+
   runApp(const MulligansLawApp());
 }
 
@@ -17,25 +37,67 @@ class MulligansLawApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mulligans Law',
-      theme: AppTheme.lightTheme(),
-      debugShowCheckedModeBanner: false,
-      initialRoute: WelcomeScreen.routeName,
-      routes: {
-        WelcomeScreen.routeName: (context) => const WelcomeScreen(),
-        SignInScreen.routeName: (context) => const SignInScreen(),
-        SignUpScreen.routeName: (context) => const SignUpScreen(),
-        ForgotPasswordScreen.routeName: (context) =>
-            const ForgotPasswordScreen(),
-        VerifyEmailScreen.routeName: (context) {
-          // Extract email from route arguments
-          final email =
-              ModalRoute.of(context)?.settings.arguments as String? ??
-              'your@email.com';
-          return VerifyEmailScreen(email: email);
+    // Create repository and use cases
+    final supabaseClient = Supabase.instance.client;
+    final authRepository = AuthRepositoryImpl(supabase: supabaseClient);
+    final signInUseCase = SignIn(authRepository);
+    final signUpUseCase = SignUp(authRepository);
+    final signOutUseCase = SignOut(authRepository);
+    final getCurrentUserUseCase = GetCurrentUser(authRepository);
+
+    return BlocProvider(
+      create: (context) => AuthBloc(
+        signIn: signInUseCase,
+        signUp: signUpUseCase,
+        signOut: signOutUseCase,
+        getCurrentUser: getCurrentUserUseCase,
+        authRepository: authRepository,
+      )..add(AuthCheckRequested()),
+      child: MaterialApp(
+        title: 'Mulligans Law',
+        theme: AppTheme.lightTheme(),
+        debugShowCheckedModeBanner: false,
+        home: const AuthGate(),
+        routes: {
+          WelcomeScreen.routeName: (context) => const WelcomeScreen(),
+          SignInScreen.routeName: (context) => const SignInScreen(),
+          SignUpScreen.routeName: (context) => const SignUpScreen(),
+          ForgotPasswordScreen.routeName: (context) =>
+              const ForgotPasswordScreen(),
+          VerifyEmailScreen.routeName: (context) {
+            // Extract email from route arguments
+            final email =
+                ModalRoute.of(context)?.settings.arguments as String? ??
+                'your@email.com';
+            return VerifyEmailScreen(email: email);
+          },
+          '/home': (context) => const HomeScreen(),
         },
-        '/home': (context) => const HomeScreen(),
+      ),
+    );
+  }
+}
+
+/// Authentication gate that routes to appropriate screen based on auth state
+class AuthGate extends StatelessWidget {
+  const AuthGate({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        if (state is AuthLoading || state is AuthInitial) {
+          // Show loading indicator while checking auth status
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else if (state is AuthAuthenticated) {
+          // User is authenticated, show home screen
+          return const HomeScreen();
+        } else {
+          // User is not authenticated, show welcome screen
+          return const WelcomeScreen();
+        }
       },
     );
   }

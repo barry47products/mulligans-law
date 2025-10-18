@@ -6,7 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mulligans_law/main.dart';
+import 'package:mulligans_law/features/auth/presentation/screens/screens.dart';
 import 'test_helper.dart';
 
 void main() {
@@ -97,11 +97,9 @@ void main() {
   });
 
   group('Sample Widget Tests', () {
-    testWidgets('MulligansLawApp should display welcome screen', (
-      tester,
-    ) async {
+    testWidgets('WelcomeScreen should display all elements', (tester) async {
       // Arrange & Act
-      await tester.pumpWidget(const MulligansLawApp());
+      await tester.pumpWidget(const MaterialApp(home: WelcomeScreen()));
 
       // Assert
       verifyWidgetExists('Welcome to Mulligans Law');
@@ -115,7 +113,7 @@ void main() {
       tester,
     ) async {
       // Arrange & Act
-      await tester.pumpWidget(const MulligansLawApp());
+      await tester.pumpWidget(const MaterialApp(home: WelcomeScreen()));
 
       // Assert
       final iconFinder = find.byIcon(Icons.golf_course);
