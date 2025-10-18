@@ -120,13 +120,15 @@
   - [X] Document local setup process (docs/SUPABASE_LOCAL_SETUP.md)
   - [X] Tests: `supabase start` succeeds ✅
 
-- [ ] **Create Initial Database Migration** (P0) #database
+- [X] **Create Initial Database Migration** (P0) #database
 
-  - Enable UUID extension
-  - Create societies table with RLS
-  - Create members table with RLS
-  - Create updated_at trigger
-  - Tests: Migration applies successfully
+  - [X] Enable UUID extension (uuid-ossp and pgcrypto)
+  - [X] Create societies table with RLS (4 policies)
+  - [X] Create members table with RLS (5 policies)
+  - [X] Create updated_at trigger function (auto-updates timestamps)
+  - [X] Create indexes for performance (8 indexes total)
+  - [X] Add table and column comments (documentation)
+  - [X] Tests: Migration applies successfully ✅
 
 - [X] **Set Up Testing Infrastructure** (P0) #testing
 
