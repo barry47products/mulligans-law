@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 import 'core/config/supabase_config.dart';
 import 'core/theme/app_theme.dart';
@@ -109,7 +110,19 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Mulligans Law')),
+      appBar: AppBar(
+        title: const Text('Mulligans Law'),
+        actions: [
+          // Temporary sign out button for testing
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              context.read<AuthBloc>().add(const AuthSignOutRequested());
+            },
+            tooltip: 'Sign Out',
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.screenPaddingHorizontal),
         child: Column(
@@ -121,7 +134,11 @@ class HomeScreen extends StatelessWidget {
             Center(
               child: Column(
                 children: [
-                  Icon(Icons.golf_course, size: 80, color: AppColors.primary),
+                  SvgPicture.asset(
+                    'assets/images/logo.svg',
+                    width: 120,
+                    height: 120,
+                  ),
                   const SizedBox(height: AppSpacing.space4),
                   Text(
                     'Welcome to Mulligans Law',

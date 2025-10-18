@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -96,14 +97,6 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   Widget _buildBranding() {
-    return Container(
-      width: 120,
-      height: 120,
-      decoration: BoxDecoration(
-        color: AppColors.primary,
-        shape: BoxShape.circle,
-      ),
-      child: Icon(Icons.golf_course, size: 60, color: AppColors.textOnPrimary),
-    );
+    return SvgPicture.asset('assets/images/logo.svg', width: 200, height: 200);
   }
 }
