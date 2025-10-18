@@ -123,4 +123,4 @@ docs-technical/build/
 docs-technical/.docusaurus/
 docs-technical/.cache-loader/
 docs-technical/yarn.lock
-docs-technical/package-lock.json
+# Note: package-lock.json is committed for reproducible builds
