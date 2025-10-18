@@ -310,13 +310,14 @@ mulligans-law/
 ├── .github/
 │   └── workflows/          # CI/CD pipelines
 │       ├── ci.yml          # Lint, test, build
-│       ├── deploy.yml      # App deployment
+│       ├── cd.yml          # App deployment (semantic-release)
 │       └── deploy-docs.yml # Documentation deployment
 ├── docs/                   # Project documentation
 │   ├── functional-spec.md  # Feature requirements
 │   ├── technical-spec.md   # Architecture details
 │   ├── GITHUB_SETUP.md     # GitHub configuration
 │   ├── CODECOV_SETUP.md    # Coverage reporting setup
+│   ├── DEPLOYMENT.md       # CD pipeline and deployment guide
 │   └── DOCUSAURUS_SETUP.md # Docs site setup
 ├── docs-technical/         # Docusaurus documentation site
 │   ├── docs/              # Documentation content
