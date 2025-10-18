@@ -56,13 +56,14 @@
   - [X] Create initial commit
   - [X] Tests: Repository initialized ✅
 
-- [ ] **Configure Git Commit Hooks** (P0) #setup #git
+- [X] **Configure Git Commit Hooks** (P0) #setup #git
 
-  - Install husky or similar
-  - Pre-commit: dart format
-  - Pre-commit: validate commit message (conventional commits)
-  - Pre-commit: run quick tests (optional)
-  - Tests: Hooks prevent bad commits
+  - [X] Install Lefthook (Git hooks manager)
+  - [X] Pre-commit: dart format (auto-formats staged files)
+  - [X] Pre-commit: flutter analyze (catches issues before commit)
+  - [X] Commit-msg: validate conventional commits format
+  - [ ] Pre-commit: run quick tests (optional - commented out for speed)
+  - [X] Tests: Hooks prevent bad commits ✅
 
 - [X] **Create GitHub Repository** (P0) #setup #git
 
@@ -71,13 +72,13 @@
   - [ ] Configure branch protection for main (optional - can do later)
   - [X] Tests: Remote repository accessible ✅
 
-- [ ] **Set Up GitHub Actions - CI Pipeline** (P0) #setup #ci
+- [X] **Set Up GitHub Actions - CI Pipeline** (P0) #setup #ci
 
-  - Create .github/workflows/ci.yml
-  - Configure: checkout, Flutter setup, dependencies
-  - Add: format check, analyze, tests, coverage
-  - Add: build Android APK and iOS (no codesign)
-  - Tests: CI runs successfully on push
+  - [X] Create .github/workflows/ci.yml
+  - [X] Configure: checkout, Flutter setup, dependencies
+  - [X] Add: format check, analyze, tests, coverage
+  - [X] Add: build Android APK and iOS (no codesign)
+  - [X] Tests: CI runs successfully on push ✅
 
 - [ ] **Set Up GitHub Actions - CD Pipeline** (P0) #setup #ci
 
