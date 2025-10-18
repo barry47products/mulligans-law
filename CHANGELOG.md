@@ -1,0 +1,44 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.1.0] - 2025-10-18
+
+### Added
+
+- Flutter project initialized with Clean Architecture structure
+- Database schema with societies and members tables
+- Row Level Security (RLS) policies for data protection
+- CI/CD pipelines with GitHub Actions
+- Semantic versioning with semantic-release
+- Codecov integration for test coverage tracking
+- Git hooks with Lefthook for code quality enforcement
+- Comprehensive technical documentation (Docusaurus)
+  - Architecture overview
+  - Development workflow guide
+  - Testing strategy guide
+- Testing infrastructure with helpers and mock factories
+- Supabase local development environment
+- GitHub issue and PR templates
+
+### Infrastructure
+
+- **CI Pipeline**: Automated testing, linting, and builds for iOS and Android
+- **CD Pipeline**: Semantic versioning and automated releases
+- **Documentation Site**: Docusaurus deployed to GitHub Pages
+- **Local Development**: Supabase CLI for local database development
+
+### Technical Details
+
+- Flutter 3.35.6 with Dart 3.9.2
+- Supabase for backend (PostgreSQL, Auth)
+- Drift 2.22.0 for offline-first local storage
+- BLoC pattern for state management
+- TDD approach with 70% coverage target
+
+---
+
+_This is a pre-1.0 development release. The application is not yet production-ready._
