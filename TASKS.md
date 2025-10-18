@@ -106,13 +106,13 @@
   - [X] Task template (from TASKS.md)
   - [X] Tests: Templates appear when creating issues ✅
 
-- [ ] **Initialize Supabase Local Development** (P0) #setup #database
+- [X] **Initialize Supabase Local Development** (P0) #setup #database
 
-  - Run `supabase init`
-  - Configure local Supabase
-  - Verify Docker containers start
-  - Document local setup process
-  - Tests: `supabase start` succeeds
+  - [X] Run `supabase init`
+  - [X] Configure local Supabase
+  - [X] Verify Docker containers start
+  - [X] Document local setup process (docs/SUPABASE_LOCAL_SETUP.md)
+  - [X] Tests: `supabase start` succeeds ✅
 
 - [ ] **Create Initial Database Migration** (P0) #database
 
