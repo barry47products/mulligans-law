@@ -38,14 +38,15 @@
   - [X] Create welcome screen with golf theme
   - [X] Tests: Project compiles successfully ✅
 
-- [ ] **Configure Dependencies** (P0) #setup
+- [X] **Configure Dependencies** (P0) #setup
 
-  - Add supabase_flutter
-  - Add drift and drift_flutter
-  - Add flutter_bloc
-  - Add testing dependencies (mockito, bloc_test)
-  - Add image_picker, cached_network_image
-  - Tests: All dependencies resolve
+  - [X] Add supabase_flutter (backend & auth)
+  - [X] Add drift and drift_flutter (local SQLite database)
+  - [X] Add flutter_bloc (state management)
+  - [X] Add testing dependencies (mockito, bloc_test, build_runner)
+  - [X] Add image_picker, cached_network_image (media handling)
+  - [X] Add path_provider, intl (utilities)
+  - [X] Tests: All dependencies resolve ✅
 
 - [ ] **Set Up Git Repository** (P0) #setup #git
 

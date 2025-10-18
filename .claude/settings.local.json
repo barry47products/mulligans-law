@@ -1,8 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(gh run list --limit 3)",
-      "Bash(gh run view * --log-failed)"
+      "Bash(flutter analyze)"
     ],
     "deny": [],
     "ask": []
