@@ -188,12 +188,12 @@
 
 ### Basic Auth Flow
 
-- [ ] **Create Auth Data Layer** (P0) #auth #tdd
+- [X] **Create Auth Data Layer** (P0) #auth #tdd
 
-  - Define AuthRepository interface (domain)
-  - Implement AuthRepositoryImpl with Supabase (data)
-  - Write unit tests for repository
-  - Tests: Sign up, sign in, sign out, session management
+  - [X] Define AuthRepository interface (domain)
+  - [X] Implement AuthRepositoryImpl with Supabase (data)
+  - [X] Write unit tests for repository
+  - [X] Tests: Sign up, sign in, sign out, session management ✅
 
 - [ ] **Create Auth Use Cases** (P0) #auth #tdd
 
