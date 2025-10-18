@@ -1,3 +1,15 @@
+## [0.7.1](https://github.com/barry47products/mulligans-law/compare/v0.7.0...v0.7.1) (2025-10-18)
+
+
+### Bug Fixes
+
+* **ci:** configure CodeQL to analyze only JavaScript/TypeScript ([7e5f6af](https://github.com/barry47products/mulligans-law/commit/7e5f6af724ae37c33f60c999847c659f4c855927))
+
+
+### Documentation
+
+* add comprehensive authentication documentation ([133e8c9](https://github.com/barry47products/mulligans-law/commit/133e8c993c4e4c5a00e7199e2c78af2e639fd08a))
+
 ## [0.7.0](https://github.com/barry47products/mulligans-law/compare/v0.6.0...v0.7.0) (2025-10-18)
 
 
