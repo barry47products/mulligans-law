@@ -1,3 +1,10 @@
+## [0.5.0](https://github.com/barry47products/mulligans-law/compare/v0.4.0...v0.5.0) (2025-10-18)
+
+
+### Features
+
+* **auth:** implement Auth BLoC for state management ([df23732](https://github.com/barry47products/mulligans-law/commit/df23732affd79abfa7ea246c3272c31fee900d1a))
+
 ## [0.4.0](https://github.com/barry47products/mulligans-law/compare/v0.3.0...v0.4.0) (2025-10-18)
 
 
