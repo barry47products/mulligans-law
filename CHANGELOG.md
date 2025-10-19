@@ -1,3 +1,11 @@
+## [0.10.0](https://github.com/barry47products/mulligans-law/compare/v0.9.0...v0.10.0) (2025-10-19)
+
+
+### Features
+
+* **societies:** implement society repository with TDD ([9dd4061](https://github.com/barry47products/mulligans-law/commit/9dd406145fa88f35182a2fcab6d02f06b4b19bfb))
+* **societies:** implement society use cases with TDD ([cd694ca](https://github.com/barry47products/mulligans-law/commit/cd694ca3205b49c1027678b96acebfcb33996676))
+
 ## [0.9.0](https://github.com/barry47products/mulligans-law/compare/v0.8.0...v0.9.0) (2025-10-19)
 
 
