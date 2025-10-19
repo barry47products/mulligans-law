@@ -1,3 +1,10 @@
+## [0.11.0](https://github.com/barry47products/mulligans-law/compare/v0.10.0...v0.11.0) (2025-10-19)
+
+
+### Features
+
+* **societies:** implement SocietyBloc with TDD ([4f8d7b7](https://github.com/barry47products/mulligans-law/commit/4f8d7b714031f14059a2a6ba3bbd486da1e40bca))
+
 ## [0.10.0](https://github.com/barry47products/mulligans-law/compare/v0.9.0...v0.10.0) (2025-10-19)
 
 
