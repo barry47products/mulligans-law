@@ -35,9 +35,12 @@ class DatabaseColumns {
   static const String userId = 'user_id';
   static const String email = 'email';
   static const String phone = 'phone';
+  static const String avatarUrl = 'avatar_url';
   static const String handicap = 'handicap';
   static const String role = 'role';
   static const String status = 'status';
+  static const String joinedAt = 'joined_at';
+  static const String lastPlayedAt = 'last_played_at';
 }
 
 /// Member role values

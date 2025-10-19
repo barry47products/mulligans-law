@@ -166,7 +166,9 @@ void main() {
 
     // Navigation test skipped - requires form screen to be implemented first
 
-    testWidgets('tapping society card selects that society', (tester) async {
+    testWidgets('tapping society card selects that society and navigates', (
+      tester,
+    ) async {
       // Arrange
       when(
         () => mockBloc.state,
@@ -175,8 +177,20 @@ void main() {
       when(() => mockBloc.add(any())).thenReturn(null);
 
       // Act
-      await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<SocietyBloc>(
+            create: (_) => mockBloc,
+            child: const SocietyListScreen(),
+          ),
+          routes: {
+            '/societies/edit': (context) =>
+                const Scaffold(body: Text('Edit Screen')),
+          },
+        ),
+      );
       await tester.tap(find.text('Mulligans Golf Society'));
+      await tester.pumpAndSettle();
 
       // Assert
       verify(() => mockBloc.add(const SocietySelected('society-1'))).called(1);

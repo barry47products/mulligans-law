@@ -296,20 +296,61 @@
 
 ### Member Management (Required for Dashboard)
 
-- [ ] **Create Member Data Layer** (P1) #members #tdd
-  - Define Member entity (id, societyId, userId, name, email, avatarUrl, handicap, role, joinedAt, lastPlayedAt)
-  - Create MemberModel for JSON serialization
-  - Define MemberRepository interface (getSocietyMembers, getMemberCount, addMember, updateMember, removeMember)
-  - Implement MemberRepositoryImpl with Supabase (members table already exists)
-  - Tests: Model serialization (8 tests), repository data transformations (6 tests)
+IMPORTANT: Member Architecture
+
+- User (auth.users) = Authentication identity only
+- Member (members table) = Person profile - ONE primary member per user created at registration
+- Society Membership = Member belongs to Society via members table with society_id
+- When user registers → creates auth.users + primary Member (society_id = null)
+- When member creates society → becomes captain of that society
+- When member joins society → gets 'member' role in that society
+- society_id is nullable to support primary member profile before joining societies
+
+- [ ] **Update Members Table Migration** (P0) #database #members
+  - Make society_id column nullable in members table
+  - Update RLS policies to handle null society_id (primary member profiles)
+  - Add unique constraint: one primary member per user (WHERE society_id IS NULL)
+  - Update existing test data if needed
+  - Tests: Migration applies successfully
+
+- [X] **Create Member Data Layer** (P1) #members #tdd ✅
+  - [X] Define Member entity with all fields (id, societyId, userId, name, email, avatarUrl, handicap, role, joinedAt, lastPlayedAt) ✅
+  - [X] Create MemberModel with JSON serialization (fromJson, toJson, fromEntity, toEntity) ✅
+  - [X] Define MemberRepository interface (getSocietyMembers, getMemberCount, addMember, updateMember, removeMember, getMemberById) ✅
+  - [X] Implement MemberRepositoryImpl with Supabase ✅
+  - [X] Create member exception classes (MemberNotFoundException, InvalidMemberDataException, etc.) ✅
+  - [X] Add database column constants (avatarUrl, joinedAt, lastPlayedAt) ✅
+  - [X] Tests: 19 tests passing (11 model + 8 repository data transformations) ✅
+
+- [ ] **Update Member Entity for Nullable Society** (P1) #members #tdd
+  - Change Member entity: societyId from required to nullable (String?)
+  - Update MemberModel to handle null society_id
+  - Add repository method: getPrimaryMember(userId) - gets member where society_id IS NULL
+  - Add repository method: createPrimaryMember - creates member with null society_id
+  - Tests: Update existing tests, add tests for null society_id handling
+
+- [ ] **Update SignUp Use Case** (P0) #auth #members #tdd
+  - After creating auth.users, automatically create primary Member record
+  - Member fields: userId (from auth), name (from sign up), email (from auth), handicap (from sign up or default 0), role (null), society_id (null)
+  - Handle errors: if member creation fails, should we rollback auth.users? (discuss transaction handling)
+  - Tests: Verify member is created on sign up, verify member has null society_id
+
+- [ ] **Update CreateSociety Use Case** (P1) #societies #members #tdd
+  - After creating society, automatically add creator as captain member
+  - Get primary member by user_id
+  - Create society membership: same member, society_id = new society, role = 'captain'
+  - This creates a SECOND member record for the user (one primary + one society membership)
+  - Tests: Verify captain member is created, verify user now has 2 member records
 
 - [ ] **Create Member Use Cases** (P1) #members #tdd
-  - GetSocietyMembers (fetch members for a society, sorted by name)
-  - GetMemberCount (count members in a society)
-  - AddMember (validates email, role, handicap 0-54)
-  - UpdateMemberRole (captain only - validates permissions)
-  - RemoveMember (captain only - validates permissions)
-  - Tests: 15 tests covering validation, permissions, edge cases
+  - GetPrimaryMember (get user's primary member profile by userId)
+  - GetSocietyMembers (fetch members for a society where society_id = X, sorted by name)
+  - GetMemberCount (count members in a society where society_id = X)
+  - UpdatePrimaryMember (update user's primary profile: name, email, handicap, avatarUrl)
+  - JoinSociety (create society membership from primary member: validates society exists, creates member record with society_id)
+  - UpdateMemberRole (captain only - validates permissions, updates role for society member)
+  - LeaveSociety (remove society membership, cannot leave if captain and other members exist)
+  - Tests: 20+ tests covering validation, permissions, primary vs society members, edge cases
 
 - [ ] **Create Member BLoC** (P1) #members #tdd
   - Define MemberEvent (LoadRequested, AddRequested, UpdateRoleRequested, RemoveRequested)
