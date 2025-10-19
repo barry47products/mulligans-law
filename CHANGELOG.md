@@ -1,3 +1,15 @@
+## [0.13.0](https://github.com/barry47products/mulligans-law/compare/v0.12.0...v0.13.0) (2025-10-19)
+
+
+### Features
+
+* **members:** implement member data layer with TDD ([e4a8b71](https://github.com/barry47products/mulligans-law/commit/e4a8b718c1dbbdc7bc593590b540089ca45d15d2))
+
+
+### Documentation
+
+* **tasks:** replace dummy data approach with minimal real implementation ([f7d1090](https://github.com/barry47products/mulligans-law/commit/f7d10901e2ca063d690b1771d7ea1899b4a2877e))
+
 ## [0.12.0](https://github.com/barry47products/mulligans-law/compare/v0.11.0...v0.12.0) (2025-10-19)
 
 
