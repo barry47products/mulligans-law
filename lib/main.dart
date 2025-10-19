@@ -19,6 +19,14 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/auth/presentation/bloc/auth_state.dart';
 import 'features/auth/presentation/screens/screens.dart';
+import 'features/societies/data/repositories/society_repository_impl.dart';
+import 'features/societies/domain/entities/society.dart';
+import 'features/societies/domain/usecases/create_society.dart';
+import 'features/societies/domain/usecases/get_user_societies.dart';
+import 'features/societies/domain/usecases/update_society.dart';
+import 'features/societies/presentation/bloc/society_bloc.dart';
+import 'features/societies/presentation/screens/society_form_screen.dart';
+import 'features/societies/presentation/screens/society_list_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,22 +46,41 @@ class MulligansLawApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Create repository and use cases
+    // Create Supabase client
     final supabaseClient = Supabase.instance.client;
+
+    // Create auth repository and use cases
     final authRepository = AuthRepositoryImpl(supabase: supabaseClient);
     final signInUseCase = SignIn(authRepository);
     final signUpUseCase = SignUp(authRepository);
     final signOutUseCase = SignOut(authRepository);
     final getCurrentUserUseCase = GetCurrentUser(authRepository);
 
-    return BlocProvider(
-      create: (context) => AuthBloc(
-        signIn: signInUseCase,
-        signUp: signUpUseCase,
-        signOut: signOutUseCase,
-        getCurrentUser: getCurrentUserUseCase,
-        authRepository: authRepository,
-      )..add(AuthCheckRequested()),
+    // Create society repository and use cases
+    final societyRepository = SocietyRepositoryImpl(supabase: supabaseClient);
+    final createSocietyUseCase = CreateSociety(societyRepository);
+    final getUserSocietiesUseCase = GetUserSocieties(societyRepository);
+    final updateSocietyUseCase = UpdateSociety(societyRepository);
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AuthBloc(
+            signIn: signInUseCase,
+            signUp: signUpUseCase,
+            signOut: signOutUseCase,
+            getCurrentUser: getCurrentUserUseCase,
+            authRepository: authRepository,
+          )..add(AuthCheckRequested()),
+        ),
+        BlocProvider(
+          create: (context) => SocietyBloc(
+            createSociety: createSocietyUseCase,
+            getUserSocieties: getUserSocietiesUseCase,
+            updateSociety: updateSocietyUseCase,
+          ),
+        ),
+      ],
       child: MaterialApp(
         title: 'Mulligans Law',
         theme: AppTheme.lightTheme(),
@@ -73,6 +100,12 @@ class MulligansLawApp extends StatelessWidget {
             return VerifyEmailScreen(email: email);
           },
           '/home': (context) => const HomeScreen(),
+          '/societies': (context) => const SocietyListScreen(),
+          '/societies/create': (context) => const SocietyFormScreen(),
+          '/societies/edit': (context) {
+            final society = ModalRoute.of(context)?.settings.arguments;
+            return SocietyFormScreen(society: society as Society?);
+          },
         },
       ),
     );
@@ -153,6 +186,38 @@ class HomeScreen extends StatelessWidget {
                     style: AppTypography.bodyLarge.copyWith(
                       color: AppColors.textSecondary,
                     ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: AppSpacing.space8),
+
+            // Quick Actions Section
+            Text(
+              'Quick Actions',
+              style: AppTypography.headlineLarge.copyWith(
+                color: AppColors.textPrimary,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.space4),
+
+            AppCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AppButton(
+                    label: 'My Societies',
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/societies');
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.space3),
+                  AppButton(
+                    label: 'Start a Round',
+                    onPressed: () {
+                      // TODO: Navigate to round creation
+                    },
                   ),
                 ],
               ),

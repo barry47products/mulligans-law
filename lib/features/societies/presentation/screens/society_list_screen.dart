@@ -236,11 +236,12 @@ class _SocietyListScreenState extends State<SocietyListScreen> {
 
   void _onSocietyTapped(Society society) {
     context.read<SocietyBloc>().add(SocietySelected(society.id));
-    // TODO: Navigate to society details screen
+    // TODO: Navigate to society dashboard screen when implemented
+    // For now, navigate to edit screen
+    Navigator.pushNamed(context, '/societies/edit', arguments: society);
   }
 
   void _navigateToCreateSociety() {
-    // TODO: Navigate to society form screen
     Navigator.pushNamed(context, '/societies/create');
   }
 }

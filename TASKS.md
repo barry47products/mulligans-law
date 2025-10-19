@@ -282,6 +282,36 @@
   - [X] Widget tests (16 tests passing: 11 create mode + 5 edit mode) ✅
   - Note: Logo upload placeholder - will be implemented later
 
+- [X] **Wire Up Society Navigation** (P1) #societies #ui ✅
+  - [X] Add society routes to main.dart (/societies, /societies/create, /societies/edit) ✅
+  - [X] Set up SocietyBloc provider in MultiBlocProvider ✅
+  - [X] Add "My Societies" button to HomeScreen ✅
+  - [X] Wire FAB in SocietyListScreen to navigate to create form ✅
+  - [X] Wire society card tap to navigate to edit screen (temporary until dashboard exists) ✅
+  - [X] All navigation working end-to-end ✅
+
+### Society Dashboard & Additional Screens
+
+- [ ] **Create Society Dashboard Screen** (P1) #societies #ui
+  - Display society header with logo, name, description
+  - Tab navigation (Members, Events, Leaderboard, Profile)
+  - Next Event card (if upcoming round exists)
+  - Stats cards: total members, rounds played, active members
+  - Recent Activity feed (last 5 activities)
+  - "Invite Members" button (navigates to invite screen)
+  - "Settings" button (navigates to settings screen)
+  - Tests: Widget tests for all sections and tab navigation
+
+- [ ] **Create Society Settings Screen** (P1) #societies #ui
+  - Reuse existing SocietyFormScreen for basic info editing
+  - Privacy Settings section (make society public toggle)
+  - Notification Preferences (new members, score updates, event reminders)
+  - Handicap Limits configuration (min/max handicap sliders)
+  - Admin Management list (display admins, add/remove - captain only)
+  - Member Approval toggle (auto-approve vs manual approval)
+  - Delete Society button (captain only, with confirmation dialog)
+  - Tests: Widget tests for all settings options
+
 ### Member Management
 
 - [ ] **Create Member Data Layer** (P1) #members #tdd
@@ -306,19 +336,64 @@
   - Tests: State transitions
 
 - [ ] **Create Member List Screen** (P1) #members #ui
+  - Display society members with avatars, names, roles, handicaps
+  - Search members by name functionality
+  - Sort by: Name, Role, Handicap (dropdown selector)
+  - Filter by role chips (All, Captain, Member, Pending)
+  - Member card shows: avatar, name, role badge, handicap, last played date
+  - "Invite Member" button (navigates to invite screen)
+  - Tap member card to view member profile (future)
+  - Empty state when no members
+  - Tests: Widget tests for search, sort, filter, empty state
 
-  - Display society members
-  - Filter by role/status
-  - Add member button (captain only)
-  - Tests: Widget tests
+- [ ] **Create Invite to Society Screen** (P1) #members #ui
+  - Two tabs: "Search Players" and "Share Link"
+  - Search Players tab:
+    - Search input (by name or email)
+    - Suggested players list (based on app users)
+    - Player cards with avatar, name, email
+    - Checkboxes for multi-select
+    - Selected count indicator
+  - Share Link tab:
+    - Display shareable invite link
+    - Copy link button
+    - Share via system share sheet
+  - Custom message textarea (optional)
+  - "Send Invites" button (sends to selected players)
+  - Success/error feedback
+  - Tests: Widget tests for both tabs, search, selection, sending
 
 - [ ] **Create Member Form Screen** (P1) #members #ui
-
   - Name, email, phone inputs
-  - Handicap input
-  - Role selection (captain only)
-  - Photo upload (placeholder)
-  - Tests: Form validation
+  - Handicap input with validation (0-54)
+  - Role selection dropdown (captain only can change)
+  - Photo upload (placeholder for now)
+  - Save button with validation
+  - Tests: Form validation, role permissions
+
+### Member Invitations
+
+- [ ] **Create Invitation Data Layer** (P1) #invitations #tdd
+  - Define InvitationRepository interface
+  - Implement with Supabase
+  - Create invitations table migration (if not exists)
+  - RLS policies (society members can invite, invitees can view their invitations)
+  - Tests: CRUD operations, invitation status tracking
+
+- [ ] **Create Invitation Use Cases** (P1) #invitations #tdd
+  - CreateInvitation (send invite to email/user)
+  - GetPendingInvitations (for user)
+  - AcceptInvitation (join society)
+  - DeclineInvitation (reject invite)
+  - GenerateInviteLink (create shareable link)
+  - Tests: Validation, permission checks, link generation
+
+- [ ] **Create Invitation BLoC** (P1) #invitations #tdd
+  - Define events and states
+  - Implement bloc with event handlers
+  - Tests: State transitions
+
+### Handicap Management
 
 - [ ] **Create Handicap History** (P1) #members #tdd
   - HandicapHistory data model
