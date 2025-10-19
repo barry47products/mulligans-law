@@ -247,12 +247,12 @@
   - [X] Write repository unit tests (data transformation tests) ✅
   - Note: RLS policies tested at database level via migration
 
-- [ ] **Create Society Use Cases** (P1) #societies #tdd
+- [X] **Create Society Use Cases** (P1) #societies #tdd ✅
 
-  - CreateSociety
-  - GetUserSocieties
-  - UpdateSociety
-  - Tests: Business logic validation
+  - [X] CreateSociety - validates name, description length ✅
+  - [X] GetUserSocieties - fetches user's societies ✅
+  - [X] UpdateSociety - validates updates, ensures at least one field ✅
+  - [X] All tests passing (25 use case tests) ✅
 
 - [ ] **Create Society BLoC** (P1) #societies #tdd
 
