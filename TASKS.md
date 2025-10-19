@@ -238,18 +238,20 @@
 
 ### Create & Manage Societies
 
-- [ ] **Create Society Data Layer** (P1) #societies #tdd
+- [ ] **Create Society Data Layer** (P1) #societies #tdd (IN PROGRESS)
 
-  - Define SocietyRepository interface
-  - Implement with Supabase
-  - Write unit tests
-  - Tests: CRUD operations, RLS policies work
+  - [X] Define SocietyRepository interface ✅
+  - [X] Created Society entity and SocietyModel with tests ✅
+  - [X] Created exception classes and constants ✅
+  - [ ] Implement SocietyRepositoryImpl with Supabase
+  - [ ] Write repository unit tests
+  - [ ] Tests: CRUD operations, RLS policies work
 
 - [ ] **Create Society Use Cases** (P1) #societies #tdd
 
-  - CreateSocietyUseCase
-  - GetUserSocietiesUseCase
-  - UpdateSocietyUseCase
+  - CreateSociety
+  - GetUserSocieties
+  - UpdateSociety
   - Tests: Business logic validation
 
 - [ ] **Create Society BLoC** (P1) #societies #tdd
@@ -284,10 +286,10 @@
 
 - [ ] **Create Member Use Cases** (P1) #members #tdd
 
-  - AddMemberUseCase
-  - UpdateMemberUseCase
-  - UpdateMemberRoleUseCase (captain only)
-  - RemoveMemberUseCase (captain only)
+  - AddMember
+  - UpdateMember
+  - UpdateMemberRole (captain only)
+  - RemoveMember (captain only)
   - Tests: Permission checks, validation
 
 - [ ] **Create Member BLoC** (P1) #members #tdd
@@ -332,10 +334,10 @@
 
 - [ ] **Create Course Use Cases** (P1) #courses #tdd
 
-  - CreateCourseUseCase
-  - GetCoursesUseCase
-  - UpdateCourseUseCase
-  - DeleteCourseUseCase
+  - CreateCourse
+  - GetCourses
+  - UpdateCourse
+  - DeleteCourse
   - Tests: Validation (18 holes, valid par values)
 
 - [ ] **Create Course BLoC** (P1) #courses #tdd
@@ -380,11 +382,11 @@
 
 - [ ] **Create Round Use Cases** (P1) #rounds #tdd
 
-  - CreateRoundUseCase
-  - UpdateRoundUseCase
-  - DefineFieldUseCase (select members)
-  - CreatePairingsUseCase (auto + manual)
-  - LinkToTournamentUseCase
+  - CreateRound
+  - UpdateRound
+  - DefineField (select members)
+  - CreatePairings (auto + manual)
+  - LinkToTournament
   - Tests: Business rules, validation
 
 - [ ] **Create Round BLoC** (P1) #rounds #tdd
@@ -491,6 +493,7 @@
 
 - [ ] **Create Score Submission Use Case** (P1) #scores #tdd
 
+  - SubmitScore
   - Validate all 18 holes filled
   - Update status to SUBMITTED
   - Trigger approval flow if required
@@ -498,6 +501,7 @@
 
 - [ ] **Create Score Approval Use Case** (P1) #scores #tdd
 
+  - ApproveScore
   - Captains can approve any score
   - Markers can approve assigned scores
   - Update status to APPROVED
@@ -566,9 +570,9 @@
 
 - [ ] **Create Leaderboard Use Cases** (P2) #leaderboards #tdd
 
-  - GetRoundLeaderboardUseCase
-  - GetTournamentLeaderboardUseCase
-  - GetSeasonLeaderboardUseCase
+  - GetRoundLeaderboard
+  - GetTournamentLeaderboard
+  - GetSeasonLeaderboard
   - Tests: Correct data aggregation
 
 - [ ] **Create Leaderboard BLoC** (P2) #leaderboards #tdd
@@ -630,10 +634,10 @@
 
 - [ ] **Create Tournament Use Cases** (P2) #tournaments #tdd
 
-  - CreateTournamentUseCase
-  - LinkRoundToTournamentUseCase
-  - UnlinkRoundFromTournamentUseCase
-  - GetTournamentDetailsUseCase
+  - CreateTournament
+  - LinkRoundToTournament
+  - UnlinkRoundFromTournament
+  - GetTournamentDetails
   - Tests: Business logic
 
 - [ ] **Create Tournament BLoC** (P2) #tournaments #tdd
@@ -677,9 +681,9 @@
 
 - [ ] **Create Season Use Cases** (P2) #seasons #tdd
 
-  - CreateSeasonUseCase
-  - LinkTournamentToSeasonUseCase
-  - GetSeasonDetailsUseCase
+  - CreateSeason
+  - LinkTournamentToSeason
+  - GetSeasonDetails
   - Tests: Type-specific logic
 
 - [ ] **Create Season BLoC** (P2) #seasons #tdd
@@ -738,8 +742,8 @@
 
 - [ ] **Create Chat Use Cases** (P2) #social #tdd
 
-  - PostMessageUseCase
-  - GetMessagesUseCase (by context)
+  - PostMessage
+  - GetMessages (by context)
   - Tests: Context filtering
 
 - [ ] **Create Chat BLoC** (P2) #social #tdd
@@ -794,8 +798,8 @@
 
 - [ ] **Create Spot Prize Use Cases** (P3) #prizes #tdd
 
-  - CreateSpotPrizeUseCase (captain)
-  - RecordSpotPrizeWinnerUseCase
+  - CreateSpotPrize (captain)
+  - RecordSpotPrizeWinner
   - Tests: Validation
 
 - [ ] **Add Spot Prizes to Round Setup** (P3) #prizes #ui
@@ -870,8 +874,8 @@
 
 - [ ] **Create Match Result Use Cases** (P3) #knockout #tdd
 
-  - RecordMatchResultUseCase
-  - DetermineNextMatchUseCase
+  - RecordMatchResult
+  - DetermineNextMatch
   - Tests: Progression logic
 
 - [ ] **Create Bracket Display Widget** (P3) #knockout #ui
