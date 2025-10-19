@@ -1,3 +1,10 @@
+## [0.9.0](https://github.com/barry47products/mulligans-law/compare/v0.8.0...v0.9.0) (2025-10-19)
+
+
+### Features
+
+* **societies:** add society domain layer with TDD ([afc55f9](https://github.com/barry47products/mulligans-law/commit/afc55f9450fb39b2340c8329742278cbcca397fa))
+
 ## [0.8.0](https://github.com/barry47products/mulligans-law/compare/v0.7.2...v0.8.0) (2025-10-18)
 
 
