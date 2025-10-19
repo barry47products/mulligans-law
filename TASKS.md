@@ -261,12 +261,15 @@
   - [X] Write bloc tests (14 tests passing) ✅
   - [X] Tests: Load, Create, Update, Select operations ✅
 
-- [ ] **Create Society List Screen** (P1) #societies #ui
+- [X] **Create Society List Screen** (P1) #societies #ui ✅
 
-  - Display user's societies
-  - Navigate to society details
-  - Create new society button
-  - Tests: Widget tests
+  - [X] Display user's societies with logo/placeholder ✅
+  - [X] Empty state when no societies ✅
+  - [X] Error state with retry button ✅
+  - [X] Loading state with spinner ✅
+  - [X] Society selection on tap ✅
+  - [X] FAB to create new society ✅
+  - [X] Widget tests (9 tests passing) ✅
 
 - [ ] **Create Society Form Screen** (P1) #societies #ui
   - Society name input
