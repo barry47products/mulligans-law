@@ -271,12 +271,16 @@
   - [X] FAB to create new society ✅
   - [X] Widget tests (9 tests passing) ✅
 
-- [ ] **Create Society Form Screen** (P1) #societies #ui
-  - Society name input
-  - Logo upload (placeholder initially)
-  - Save button
-  - Validation
-  - Tests: Widget tests for form
+- [X] **Create Society Form Screen** (P1) #societies #ui ✅
+  - [X] Society name input with validation ✅
+  - [X] Description textarea (optional) with max length validation ✅
+  - [X] Supports both Create and Edit modes ✅
+  - [X] Save button (disabled during operations) ✅
+  - [X] Progress indicator during save ✅
+  - [X] Form validation (empty name, max lengths) ✅
+  - [X] Auto-navigation on success ✅
+  - [X] Widget tests (16 tests passing: 11 create mode + 5 edit mode) ✅
+  - Note: Logo upload placeholder - will be implemented later
 
 ### Member Management
 
