@@ -1,3 +1,12 @@
+## [0.12.0](https://github.com/barry47products/mulligans-law/compare/v0.11.0...v0.12.0) (2025-10-19)
+
+
+### Features
+
+* **societies:** implement society form screen with create/edit modes ([6a5e834](https://github.com/barry47products/mulligans-law/commit/6a5e834d75d6dee3e08beae3a5cb56b8a3f8b335))
+* **societies:** implement society list screen with widget tests ([fefbfb4](https://github.com/barry47products/mulligans-law/commit/fefbfb423d89b82f49396ba75e71aa425016bfad))
+* **societies:** wire up navigation and add comprehensive tasks ([095c088](https://github.com/barry47products/mulligans-law/commit/095c0881a87d5f36a232128be38af6f2afaf019f))
+
 ## [0.11.0](https://github.com/barry47products/mulligans-law/compare/v0.10.0...v0.11.0) (2025-10-19)
 
 
