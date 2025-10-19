@@ -290,116 +290,101 @@
   - [X] Wire society card tap to navigate to edit screen (temporary until dashboard exists) ✅
   - [X] All navigation working end-to-end ✅
 
-### Society Dashboard & Additional Screens
+### Society Dashboard & Screens (Phase 2 - Minimal Real Implementation)
 
-- [ ] **Create Society Dashboard Screen** (P1) #societies #ui
-  - Display society header with logo, name, description
-  - Tab navigation (Members, Events, Leaderboard, Profile)
-  - Next Event card (if upcoming round exists)
-  - Stats cards: total members, rounds played, active members
-  - Recent Activity feed (last 5 activities)
-  - "Invite Members" button (navigates to invite screen)
-  - "Settings" button (navigates to settings screen)
-  - Tests: Widget tests for all sections and tab navigation
+**Note:** Build only what's needed for each screen. Implement real backend functionality incrementally as screens require it. No dummy data - implement the minimal real features needed.
 
-- [ ] **Create Society Settings Screen** (P1) #societies #ui
-  - Reuse existing SocietyFormScreen for basic info editing
-  - Privacy Settings section (make society public toggle)
-  - Notification Preferences (new members, score updates, event reminders)
-  - Handicap Limits configuration (min/max handicap sliders)
-  - Admin Management list (display admins, add/remove - captain only)
-  - Member Approval toggle (auto-approve vs manual approval)
-  - Delete Society button (captain only, with confirmation dialog)
-  - Tests: Widget tests for all settings options
-
-### Member Management
+### Member Management (Required for Dashboard)
 
 - [ ] **Create Member Data Layer** (P1) #members #tdd
-
-  - Define MemberRepository interface
-  - Implement with Supabase
-  - Implement RLS policies for members
-  - Tests: CRUD operations, role validation
+  - Define Member entity (id, societyId, userId, name, email, avatarUrl, handicap, role, joinedAt, lastPlayedAt)
+  - Create MemberModel for JSON serialization
+  - Define MemberRepository interface (getSocietyMembers, getMemberCount, addMember, updateMember, removeMember)
+  - Implement MemberRepositoryImpl with Supabase (members table already exists)
+  - Tests: Model serialization (8 tests), repository data transformations (6 tests)
 
 - [ ] **Create Member Use Cases** (P1) #members #tdd
-
-  - AddMember
-  - UpdateMember
-  - UpdateMemberRole (captain only)
-  - RemoveMember (captain only)
-  - Tests: Permission checks, validation
+  - GetSocietyMembers (fetch members for a society, sorted by name)
+  - GetMemberCount (count members in a society)
+  - AddMember (validates email, role, handicap 0-54)
+  - UpdateMemberRole (captain only - validates permissions)
+  - RemoveMember (captain only - validates permissions)
+  - Tests: 15 tests covering validation, permissions, edge cases
 
 - [ ] **Create Member BLoC** (P1) #members #tdd
+  - Define MemberEvent (LoadRequested, AddRequested, UpdateRoleRequested, RemoveRequested)
+  - Define MemberState (Initial, Loading, Loaded, Error, OperationInProgress, OperationSuccess)
+  - Implement MemberBloc with event handlers
+  - Tests: 12 BLoC tests for all events and state transitions
 
-  - Define events and states
-  - Implement bloc
-  - Tests: State transitions
+### Society Dashboard Screens
 
-- [ ] **Create Member List Screen** (P1) #members #ui
-  - Display society members with avatars, names, roles, handicaps
-  - Search members by name functionality
-  - Sort by: Name, Role, Handicap (dropdown selector)
-  - Filter by role chips (All, Captain, Member, Pending)
-  - Member card shows: avatar, name, role badge, handicap, last played date
-  - "Invite Member" button (navigates to invite screen)
-  - Tap member card to view member profile (future)
-  - Empty state when no members
-  - Tests: Widget tests for search, sort, filter, empty state
+- [ ] **Enhance Society List Screen** (P1) #societies #ui
+  - Update SocietyCard component to display:
+    - Society name (large, bold)
+    - Member count badge (e.g., "24 members") - REAL from getMemberCount
+    - "View" button (green, rounded) instead of tap-to-edit
+  - Add search bar at top for filtering societies by name (local filter)
+  - Update navigation: "View" button navigates to dashboard (not edit screen)
+  - Tests: Widget tests for new card layout, search, member count integration
 
-- [ ] **Create Invite to Society Screen** (P1) #members #ui
-  - Two tabs: "Search Players" and "Share Link"
-  - Search Players tab:
-    - Search input (by name or email)
-    - Suggested players list (based on app users)
-    - Player cards with avatar, name, email
-    - Checkboxes for multi-select
-    - Selected count indicator
-  - Share Link tab:
-    - Display shareable invite link
-    - Copy link button
-    - Share via system share sheet
-  - Custom message textarea (optional)
-  - "Send Invites" button (sends to selected players)
-  - Success/error feedback
-  - Tests: Widget tests for both tabs, search, selection, sending
+- [ ] **Create Society Dashboard Screen** (P1) #societies #ui
+  - Route: `/societies/:id/dashboard`
+  - Header with society logo placeholder/name/description from Society entity
+  - Tab navigation: Overview, Members (other tabs show "Coming soon" placeholders)
+  - **Overview Tab Content:**
+    - StatisticsCard: Display member count (REAL from getMemberCount)
+    - StatisticsCard: "Events" - shows 0 with "Coming soon" subtitle
+    - QuickActions: "View Members" and "Settings" buttons
+  - **Members Tab:** Navigate to Society Members Screen
+  - Tests: Widget tests for tabs, navigation, member count display
 
-- [ ] **Create Member Form Screen** (P1) #members #ui
-  - Name, email, phone inputs
-  - Handicap input with validation (0-54)
-  - Role selection dropdown (captain only can change)
-  - Photo upload (placeholder for now)
-  - Save button with validation
-  - Tests: Form validation, role permissions
+- [ ] **Create Society Members Screen** (P1) #societies #ui
+  - Route: `/societies/:id/members`
+  - Use MemberBloc to load real members from database
+  - AppBar with title "Members (X)" showing real count and "Add Member" button
+  - Display list of members from GetSocietyMembers use case
+  - MemberCard widget shows: avatar placeholder, name, role badge, handicap
+  - Sort dropdown: Name Asc/Desc, Handicap Low/High (sort locally)
+  - Empty state when no members ("No members yet. Add your first member!")
+  - Tests: Widget tests with real BLoC integration
 
-### Member Invitations
+- [ ] **Create Member Card Widget** (P1) #societies #ui
+  - Create `member_card.dart` reusable widget
+  - Display: avatar (placeholder circle with initials), name, role badge, handicap
+  - Show chevron icon for future navigation
+  - Tests: Widget tests for display and interactions
 
-- [ ] **Create Invitation Data Layer** (P1) #invitations #tdd
-  - Define InvitationRepository interface
-  - Implement with Supabase
-  - Create invitations table migration (if not exists)
-  - RLS policies (society members can invite, invitees can view their invitations)
-  - Tests: CRUD operations, invitation status tracking
+- [ ] **Create Add Member Screen** (P1) #members #ui
+  - Route: `/societies/:id/members/add`
+  - Form fields: name (required), email (required, validated), handicap (0-54, required), role (dropdown: Member/Captain)
+  - Use AddMember use case to create member
+  - Validation: email format, handicap range, required fields
+  - Success: navigate back, show snackbar
+  - Tests: Widget tests for validation, form submission
 
-- [ ] **Create Invitation Use Cases** (P1) #invitations #tdd
-  - CreateInvitation (send invite to email/user)
-  - GetPendingInvitations (for user)
-  - AcceptInvitation (join society)
-  - DeclineInvitation (reject invite)
-  - GenerateInviteLink (create shareable link)
-  - Tests: Validation, permission checks, link generation
+- [ ] **Create Society Settings Screen** (P1) #societies #ui
+  - Route: `/societies/:id/settings`
+  - **Section 1: Society Details**
+    - ListTile "Edit society information" → Navigate to SocietyFormScreen (existing)
+  - **Section 2: Members**
+    - ListTile "View all members" → Navigate to Society Members Screen
+    - ListTile "Add member" → Navigate to Add Member Screen
+  - **Section 3: Danger Zone**
+    - Red outlined button "Delete Society" (uses existing delete use case from SocietyBloc)
+    - Confirmation dialog: "Are you sure? This cannot be undone."
+  - Tests: Widget tests for navigation, delete confirmation
 
-- [ ] **Create Invitation BLoC** (P1) #invitations #tdd
-  - Define events and states
-  - Implement bloc with event handlers
-  - Tests: State transitions
-
-### Handicap Management
-
-- [ ] **Create Handicap History** (P1) #members #tdd
-  - HandicapHistory data model
-  - Update handicap with history tracking
-  - Display history in member profile
-  - Tests: History correctly tracked
+- [ ] **Update Navigation Routes** (P1) #societies #ui
+  - Add MemberBloc to MultiBlocProvider in main.dart
+  - Add routes to main.dart:
+    - `/societies/:id/dashboard` → SocietyDashboardScreen
+    - `/societies/:id/members` → SocietyMembersScreen
+    - `/societies/:id/members/add` → AddMemberScreen
+    - `/societies/:id/settings` → SocietySettingsScreen
+  - Update SocietyListScreen: "View" button navigates to dashboard (not edit)
+  - Verify all navigation flows work end-to-end
+  - Tests: Navigation integration tests
 
 ---
 
