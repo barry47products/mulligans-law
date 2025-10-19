@@ -254,12 +254,12 @@
   - [X] UpdateSociety - validates updates, ensures at least one field ✅
   - [X] All tests passing (25 use case tests) ✅
 
-- [ ] **Create Society BLoC** (P1) #societies #tdd
+- [X] **Create Society BLoC** (P1) #societies #tdd ✅
 
-  - Define events and states
-  - Implement bloc
-  - Write bloc tests
-  - Tests: State management verified
+  - [X] Define events and states ✅
+  - [X] Implement bloc with event handlers ✅
+  - [X] Write bloc tests (14 tests passing) ✅
+  - [X] Tests: Load, Create, Update, Select operations ✅
 
 - [ ] **Create Society List Screen** (P1) #societies #ui
 
