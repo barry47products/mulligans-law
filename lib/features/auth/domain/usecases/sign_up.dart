@@ -1,12 +1,15 @@
 import '../entities/auth_session.dart';
 import '../repositories/auth_repository.dart';
 import '../../../../core/errors/auth_exceptions.dart';
+import '../../../members/domain/repositories/member_repository.dart';
 
 /// Signs up a new user with email and password.
 ///
 /// Validates input and delegates to the repository.
+/// After successful auth creation, automatically creates a primary member profile.
 class SignUp {
-  final AuthRepository _repository;
+  final AuthRepository _authRepository;
+  final MemberRepository _memberRepository;
 
   // Email validation regex
   static final _emailRegex = RegExp(
@@ -16,7 +19,10 @@ class SignUp {
   // Minimum password length
   static const int _minPasswordLength = 6;
 
-  SignUp(this._repository);
+  // Default handicap for new users
+  static const double _defaultHandicap = 0.0;
+
+  SignUp(this._authRepository, this._memberRepository);
 
   /// Executes the sign up operation.
   ///
@@ -27,6 +33,11 @@ class SignUp {
   /// - Password meets minimum length
   ///
   /// Optional [name] can be provided for the user profile.
+  /// Optional [handicap] can be provided (defaults to 0.0).
+  ///
+  /// Creates:
+  /// 1. Auth user account
+  /// 2. Primary member profile (societyId=null, role=null)
   ///
   /// Returns [AuthSession] on success.
   ///
@@ -35,10 +46,13 @@ class SignUp {
   /// - [EmailAlreadyExistsException] if email is taken
   /// - [WeakPasswordException] for weak passwords
   /// - [NetworkException] for network errors
+  /// - [MemberAlreadyExistsException] if member creation fails
+  /// - [MemberDatabaseException] for member database errors
   Future<AuthSession> call({
     required String email,
     required String password,
     String? name,
+    double? handicap,
   }) async {
     // Validate email
     if (email.trim().isEmpty) {
@@ -60,11 +74,21 @@ class SignUp {
       );
     }
 
-    // Delegate to repository
-    return await _repository.signUpWithEmail(
+    // Create auth user
+    final session = await _authRepository.signUpWithEmail(
       email: email.trim(),
       password: password,
       name: name?.trim(),
     );
+
+    // Create primary member profile
+    await _memberRepository.createPrimaryMember(
+      userId: session.user.id,
+      name: name?.trim() ?? email.trim(),
+      email: email.trim(),
+      handicap: handicap ?? _defaultHandicap,
+    );
+
+    return session;
   }
 }

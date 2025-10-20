@@ -86,12 +86,14 @@ class MockSignUp extends _i1.Mock implements _i6.SignUp {
     required String? email,
     required String? password,
     String? name,
+    double? handicap,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#call, [], {
               #email: email,
               #password: password,
               #name: name,
+              #handicap: handicap,
             }),
             returnValue: _i5.Future<_i2.AuthSession>.value(
               _FakeAuthSession_0(
@@ -100,6 +102,7 @@ class MockSignUp extends _i1.Mock implements _i6.SignUp {
                   #email: email,
                   #password: password,
                   #name: name,
+                  #handicap: handicap,
                 }),
               ),
             ),

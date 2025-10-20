@@ -18,6 +18,7 @@ import 'features/auth/domain/usecases/sign_up.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/auth/presentation/bloc/auth_state.dart';
+import 'features/members/data/repositories/member_repository_impl.dart';
 import 'features/auth/presentation/screens/screens.dart';
 import 'features/societies/data/repositories/society_repository_impl.dart';
 import 'features/societies/domain/entities/society.dart';
@@ -52,9 +53,14 @@ class MulligansLawApp extends StatelessWidget {
     // Create auth repository and use cases
     final authRepository = AuthRepositoryImpl(supabase: supabaseClient);
     final signInUseCase = SignIn(authRepository);
-    final signUpUseCase = SignUp(authRepository);
     final signOutUseCase = SignOut(authRepository);
     final getCurrentUserUseCase = GetCurrentUser(authRepository);
+
+    // Create member repository
+    final memberRepository = MemberRepositoryImpl(supabase: supabaseClient);
+
+    // Create SignUp use case (requires both auth and member repositories)
+    final signUpUseCase = SignUp(authRepository, memberRepository);
 
     // Create society repository and use cases
     final societyRepository = SocietyRepositoryImpl(supabase: supabaseClient);

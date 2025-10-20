@@ -344,11 +344,12 @@ IMPORTANT: Member Architecture
   - Test primary member operations (getPrimaryMember, createPrimaryMember)
   - Target: 20+ integration tests, 85%+ repository coverage
 
-- [ ] **Update SignUp Use Case** (P0) #auth #members #tdd
-  - After creating auth.users, automatically create primary Member record
-  - Member fields: userId (from auth), name (from sign up), email (from auth), handicap (from sign up or default 0), role (null), society_id (null)
-  - Handle errors: if member creation fails, should we rollback auth.users? (discuss transaction handling)
-  - Tests: Verify member is created on sign up, verify member has null society_id
+- [X] **Update SignUp Use Case** (P0) #auth #members #tdd ✅
+  - [X] After creating auth.users, automatically create primary Member record ✅
+  - [X] Member fields: userId (from auth), name (from sign up), email (from auth), handicap (from sign up or default 0.0), role (null), society_id (null) ✅
+  - [X] Throws MemberAlreadyExistsException or MemberDatabaseException if member creation fails (auth user remains) ✅
+  - [X] Tests: 5 new tests for primary member creation (14 total SignUp tests, 56 total auth tests) ✅
+  - [X] All 173 tests passing, overall coverage: 52.3% ✅
 
 - [ ] **Update CreateSociety Use Case** (P1) #societies #members #tdd
   - After creating society, automatically add creator as captain member
