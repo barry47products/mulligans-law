@@ -1,3 +1,9 @@
+## [0.20.0](https://github.com/barry47products/mulligans-law/compare/v0.19.0...v0.20.0) (2025-10-20)
+
+### Features
+
+* **societies:** implement Society Dashboard Screen with tabs and stats ([34aba79](https://github.com/barry47products/mulligans-law/commit/34aba79ddb61d58f0a34dcb7ecfac051b8666529))
+
 ## [0.19.0](https://github.com/barry47products/mulligans-law/compare/v0.18.0...v0.19.0) (2025-10-20)
 
 ### Features
