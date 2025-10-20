@@ -1,3 +1,9 @@
+## [0.19.0](https://github.com/barry47products/mulligans-law/compare/v0.18.0...v0.19.0) (2025-10-20)
+
+### Features
+
+* **societies:** enhance Society List Screen with search and member count ([b9c96ee](https://github.com/barry47products/mulligans-law/commit/b9c96ee212ee4b5778d6579166f1e84edb138ab0))
+
 ## [0.18.0](https://github.com/barry47products/mulligans-law/compare/v0.17.0...v0.18.0) (2025-10-20)
 
 ### Features
