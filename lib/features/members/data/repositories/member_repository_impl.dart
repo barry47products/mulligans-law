@@ -170,4 +170,70 @@ class MemberRepositoryImpl implements MemberRepository {
       throw MemberDatabaseException('Unexpected error fetching member: $e');
     }
   }
+
+  @override
+  Future<Member> getPrimaryMember(String userId) async {
+    try {
+      final response = await _supabase
+          .from(DatabaseTables.members)
+          .select()
+          .eq(DatabaseColumns.userId, userId)
+          .isFilter(DatabaseColumns.societyId, null)
+          .single();
+
+      return MemberModel.fromJson(response).toEntity();
+    } on PostgrestException catch (e) {
+      if (e.code == 'PGRST116') {
+        throw MemberNotFoundException('Primary member not found');
+      }
+      throw MemberDatabaseException(
+        'Failed to fetch primary member: ${e.message}',
+      );
+    } catch (e) {
+      throw MemberDatabaseException(
+        'Unexpected error fetching primary member: $e',
+      );
+    }
+  }
+
+  @override
+  Future<Member> createPrimaryMember({
+    required String userId,
+    required String name,
+    required String email,
+    required double handicap,
+    String? avatarUrl,
+  }) async {
+    try {
+      final data = {
+        DatabaseColumns.userId: userId,
+        DatabaseColumns.name: name,
+        DatabaseColumns.email: email,
+        DatabaseColumns.handicap: handicap,
+        if (avatarUrl != null) DatabaseColumns.avatarUrl: avatarUrl,
+        // societyId and role are null for primary members (not included in data)
+      };
+
+      final response = await _supabase
+          .from(DatabaseTables.members)
+          .insert(data)
+          .select()
+          .single();
+
+      return MemberModel.fromJson(response).toEntity();
+    } on PostgrestException catch (e) {
+      if (e.code == '23505') {
+        throw MemberAlreadyExistsException(
+          'Primary member already exists for this user',
+        );
+      }
+      throw MemberDatabaseException(
+        'Failed to create primary member: ${e.message}',
+      );
+    } catch (e) {
+      throw MemberDatabaseException(
+        'Unexpected error creating primary member: $e',
+      );
+    }
+  }
 }

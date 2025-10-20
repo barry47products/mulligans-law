@@ -34,4 +34,19 @@ abstract class MemberRepository {
 
   /// Gets a specific member by ID
   Future<Member> getMemberById(String memberId);
+
+  /// Gets the primary member profile for a user (where society_id IS NULL)
+  /// Throws [MemberNotFoundException] if primary member not found
+  Future<Member> getPrimaryMember(String userId);
+
+  /// Creates a primary member profile (society_id = NULL, role = NULL)
+  /// This is called during user registration to create the user's base profile
+  /// Throws [MemberAlreadyExistsException] if primary member already exists
+  Future<Member> createPrimaryMember({
+    required String userId,
+    required String name,
+    required String email,
+    required double handicap,
+    String? avatarUrl,
+  });
 }

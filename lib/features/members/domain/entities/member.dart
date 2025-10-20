@@ -6,7 +6,8 @@ class Member extends Equatable {
   final String id;
 
   /// ID of the society this member belongs to
-  final String societyId;
+  /// Null for primary member profiles, set for society memberships
+  final String? societyId;
 
   /// ID of the user account (from auth.users)
   final String userId;
@@ -23,8 +24,9 @@ class Member extends Equatable {
   /// Member's handicap index (0-54)
   final double handicap;
 
-  /// Member's role in the society (member, captain)
-  final String role;
+  /// Member's role in the society (CAPTAIN, MEMBER)
+  /// Null for primary member profiles, required for society memberships
+  final String? role;
 
   /// Timestamp when the member joined the society
   final DateTime joinedAt;
@@ -34,13 +36,13 @@ class Member extends Equatable {
 
   const Member({
     required this.id,
-    required this.societyId,
+    this.societyId,
     required this.userId,
     required this.name,
     required this.email,
     this.avatarUrl,
     required this.handicap,
-    required this.role,
+    this.role,
     required this.joinedAt,
     this.lastPlayedAt,
   });

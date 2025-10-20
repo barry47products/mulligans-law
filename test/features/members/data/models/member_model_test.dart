@@ -254,5 +254,79 @@ void main() {
         expect(decodedModel.lastPlayedAt, originalModel.lastPlayedAt);
       });
     });
+
+    group('Primary member profile support', () {
+      test('should handle null society_id for primary member', () {
+        // Arrange - Primary member JSON (no society association)
+        final primaryMemberJson = {
+          'id': 'member-primary-1',
+          'society_id': null,
+          'user_id': 'user-1',
+          'name': 'John Doe',
+          'email': 'john@example.com',
+          'avatar_url': null,
+          'handicap': 10.5,
+          'role': null,
+          'joined_at': '2025-01-15T10:30:00.000Z',
+          'last_played_at': null,
+        };
+
+        // Act
+        final result = MemberModel.fromJson(primaryMemberJson);
+
+        // Assert
+        expect(result.societyId, isNull);
+        expect(result.role, isNull);
+        expect(result.name, 'John Doe');
+        expect(result.userId, 'user-1');
+      });
+
+      test('should serialize null society_id correctly', () {
+        // Arrange - Primary member model
+        final primaryMember = MemberModel(
+          id: 'member-primary-1',
+          societyId: null,
+          userId: 'user-1',
+          name: 'John Doe',
+          email: 'john@example.com',
+          handicap: 10.5,
+          role: null,
+          joinedAt: testDateTime,
+        );
+
+        // Act
+        final json = primaryMember.toJson();
+
+        // Assert
+        expect(json['society_id'], isNull);
+        expect(json['role'], isNull);
+        expect(json['name'], 'John Doe');
+      });
+
+      test('should handle primary member with avatar', () {
+        // Arrange
+        final primaryMemberJson = {
+          'id': 'member-primary-2',
+          'society_id': null,
+          'user_id': 'user-2',
+          'name': 'Jane Smith',
+          'email': 'jane@example.com',
+          'avatar_url': 'https://example.com/jane.jpg',
+          'handicap': 15.0,
+          'role': null,
+          'joined_at': '2025-01-20T12:00:00.000Z',
+          'last_played_at': '2025-01-19T09:00:00.000Z',
+        };
+
+        // Act
+        final result = MemberModel.fromJson(primaryMemberJson);
+
+        // Assert
+        expect(result.societyId, isNull);
+        expect(result.role, isNull);
+        expect(result.avatarUrl, 'https://example.com/jane.jpg');
+        expect(result.lastPlayedAt, isNotNull);
+      });
+    });
   });
 }

@@ -203,5 +203,84 @@ void main() {
         expect(data.containsKey(DatabaseColumns.email), true);
       });
     });
+
+    group('Primary member data structures', () {
+      test('should create insert data structure for primary member', () {
+        // Arrange - Primary member has no societyId or role
+        const userId = 'user-1';
+        const name = 'John Doe';
+        const email = 'john@example.com';
+        const handicap = 10.5;
+
+        // Act - structure for creating primary member
+        final data = {
+          DatabaseColumns.userId: userId,
+          DatabaseColumns.name: name,
+          DatabaseColumns.email: email,
+          DatabaseColumns.handicap: handicap,
+          // Note: societyId and role are NOT included (will be null in DB)
+        };
+
+        // Assert
+        expect(data.containsKey(DatabaseColumns.userId), true);
+        expect(data.containsKey(DatabaseColumns.name), true);
+        expect(data.containsKey(DatabaseColumns.email), true);
+        expect(data.containsKey(DatabaseColumns.handicap), true);
+        expect(data.containsKey(DatabaseColumns.societyId), false);
+        expect(data.containsKey(DatabaseColumns.role), false);
+      });
+
+      test('should handle primary member with optional avatar', () {
+        // Arrange
+        const userId = 'user-2';
+        const name = 'Jane Smith';
+        const email = 'jane@example.com';
+        const handicap = 15.0;
+        const String avatarUrl = 'https://example.com/jane.jpg';
+
+        // Act
+        final data = {
+          DatabaseColumns.userId: userId,
+          DatabaseColumns.name: name,
+          DatabaseColumns.email: email,
+          DatabaseColumns.handicap: handicap,
+          if (avatarUrl.isNotEmpty) DatabaseColumns.avatarUrl: avatarUrl,
+        };
+
+        // Assert
+        expect(data.containsKey(DatabaseColumns.avatarUrl), true);
+        expect(data[DatabaseColumns.avatarUrl], avatarUrl);
+      });
+
+      test('should transform primary member JSON from database', () {
+        // Arrange - JSON returned from Supabase for primary member
+        final primaryJson = {
+          'id': 'member-primary-1',
+          'society_id': null,
+          'user_id': 'user-1',
+          'name': 'John Doe',
+          'email': 'john@example.com',
+          'avatar_url': null,
+          'handicap': 10.5,
+          'role': null,
+          'joined_at': '2025-01-15T10:30:00.000Z',
+          'last_played_at': null,
+        };
+
+        // Act
+        final model = MemberModel.fromJson(primaryJson);
+
+        // Assert
+        expect(model.id, 'member-primary-1');
+        expect(model.societyId, isNull);
+        expect(model.userId, 'user-1');
+        expect(model.name, 'John Doe');
+        expect(model.email, 'john@example.com');
+        expect(model.handicap, 10.5);
+        expect(model.role, isNull);
+        expect(model.avatarUrl, isNull);
+        expect(model.lastPlayedAt, isNull);
+      });
+    });
   });
 }

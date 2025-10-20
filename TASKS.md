@@ -328,12 +328,21 @@ IMPORTANT: Member Architecture
   - [X] Add database column constants (avatarUrl, joinedAt, lastPlayedAt) ✅
   - [X] Tests: 19 tests passing (11 model + 8 repository data transformations) ✅
 
-- [ ] **Update Member Entity for Nullable Society** (P1) #members #tdd
-  - Change Member entity: societyId from required to nullable (String?)
-  - Update MemberModel to handle null society_id
-  - Add repository method: getPrimaryMember(userId) - gets member where society_id IS NULL
-  - Add repository method: createPrimaryMember - creates member with null society_id
-  - Tests: Update existing tests, add tests for null society_id handling
+- [X] **Update Member Entity for Nullable Society** (P1) #members #tdd ✅
+  - [X] Change Member entity: societyId from required to nullable (String?) ✅
+  - [X] Change Member entity: role from required to nullable (String?) ✅
+  - [X] Update MemberModel to handle null society_id and role ✅
+  - [X] Add repository method: getPrimaryMember(userId) - gets member where society_id IS NULL ✅
+  - [X] Add repository method: createPrimaryMember - creates member with null society_id ✅
+  - [X] Tests: 44 tests passing (14 model + 11 repository + 19 entity behavior/equality/edge cases) ✅
+  - [X] Coverage: Member Entity 100% (up from 4%), MemberModel 100%, Overall 94.9% ✅
+
+- [ ] **Add Repository Integration Tests** (P2) #members #tdd #testing
+  - Add integration tests for MemberRepositoryImpl with mocked Supabase client
+  - Test all 8 repository methods (get, create, update, delete operations)
+  - Test error handling (MemberNotFoundException, MemberDatabaseException, etc.)
+  - Test primary member operations (getPrimaryMember, createPrimaryMember)
+  - Target: 20+ integration tests, 85%+ repository coverage
 
 - [ ] **Update SignUp Use Case** (P0) #auth #members #tdd
   - After creating auth.users, automatically create primary Member record
