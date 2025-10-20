@@ -1,3 +1,9 @@
+## [0.14.6](https://github.com/barry47products/mulligans-law/compare/v0.14.5...v0.14.6) (2025-10-20)
+
+### Bug Fixes
+
+* **security:** add explicit permissions to all CI jobs ([ff98500](https://github.com/barry47products/mulligans-law/commit/ff9850093eafd2b4bd87fd5a69a452e74b00a3c1)), closes [#1](https://github.com/barry47products/mulligans-law/issues/1) [#2](https://github.com/barry47products/mulligans-law/issues/2) [#3](https://github.com/barry47products/mulligans-law/issues/3)
+
 ## [0.14.5](https://github.com/barry47products/mulligans-law/compare/v0.14.4...v0.14.5) (2025-10-20)
 
 ### Bug Fixes
