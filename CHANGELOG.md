@@ -1,3 +1,9 @@
+## [0.16.0](https://github.com/barry47products/mulligans-law/compare/v0.15.0...v0.16.0) (2025-10-20)
+
+### Features
+
+* **auth:** automatically create primary member on sign up ([9951a3f](https://github.com/barry47products/mulligans-law/commit/9951a3fe27c744294b3971d788bd5e04cb6aa043))
+
 ## [0.15.0](https://github.com/barry47products/mulligans-law/compare/v0.14.7...v0.15.0) (2025-10-20)
 
 ### ⚠ BREAKING CHANGES
