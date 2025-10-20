@@ -385,14 +385,17 @@ IMPORTANT: Member Architecture
 
 ### Society Dashboard Screens
 
-- [ ] **Enhance Society List Screen** (P1) #societies #ui
-  - Update SocietyCard component to display:
-    - Society name (large, bold)
-    - Member count badge (e.g., "24 members") - REAL from getMemberCount
-    - "View" button (green, rounded) instead of tap-to-edit
-  - Add search bar at top for filtering societies by name (local filter)
-  - Update navigation: "View" button navigates to dashboard (not edit screen)
-  - Tests: Widget tests for new card layout, search, member count integration
+- [X] **Enhance Society List Screen** (P1) #societies #ui ✅
+  - [X] Update SocietyCard component to display:
+    - [X] Society name (large, bold) ✅
+    - [X] Member count badge (e.g., "24 members") - REAL from getMemberCount ✅
+    - [X] "View" button (green, rounded) instead of tap-to-edit ✅
+  - [X] Add search bar at top for filtering societies by name (local filter) ✅
+  - [X] Update navigation: "View" button navigates to dashboard route ✅
+  - [X] Tests: Comprehensive widget tests ✅
+    - 13 tests for SocietyCard widget (including member count display)
+    - 22 tests for SocietyListScreen (including search + member count integration)
+    - All tests passing (total test suite: 130+ tests passing)
 
 - [ ] **Create Society Dashboard Screen** (P1) #societies #ui
   - Route: `/societies/:id/dashboard`

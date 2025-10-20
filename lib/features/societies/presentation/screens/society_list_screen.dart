@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../members/domain/usecases/get_member_count.dart';
 import '../../domain/entities/society.dart';
 import '../bloc/society_bloc.dart';
 import '../bloc/society_event.dart';
 import '../bloc/society_state.dart';
+import '../widgets/society_card.dart';
 
 /// Screen displaying list of user's societies
 class SocietyListScreen extends StatefulWidget {
@@ -19,11 +21,50 @@ class SocietyListScreen extends StatefulWidget {
 }
 
 class _SocietyListScreenState extends State<SocietyListScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+  final Map<String, int> _memberCounts = {};
+  late final GetMemberCount _getMemberCount;
+
   @override
   void initState() {
     super.initState();
+    _getMemberCount = context.read<GetMemberCount>();
     // Load societies on init
     context.read<SocietyBloc>().add(const SocietyLoadRequested());
+    _searchController.addListener(() {
+      setState(() {
+        _searchQuery = _searchController.text;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadMemberCounts(List<Society> societies) async {
+    for (final society in societies) {
+      if (!_memberCounts.containsKey(society.id)) {
+        try {
+          final count = await _getMemberCount(society.id);
+          if (mounted) {
+            setState(() {
+              _memberCounts[society.id] = count;
+            });
+          }
+        } catch (e) {
+          // If we can't load member count, default to 0
+          if (mounted) {
+            setState(() {
+              _memberCounts[society.id] = 0;
+            });
+          }
+        }
+      }
+    }
   }
 
   @override
@@ -81,89 +122,117 @@ class _SocietyListScreenState extends State<SocietyListScreen> {
   }
 
   Widget _buildSocietyList(List<Society> societies) {
-    return ListView.separated(
-      padding: const EdgeInsets.all(AppSpacing.screenPaddingHorizontal),
-      itemCount: societies.length,
-      separatorBuilder: (context, index) =>
-          const SizedBox(height: AppSpacing.listItemSpacing),
-      itemBuilder: (context, index) {
-        final society = societies[index];
-        return _buildSocietyCard(society);
-      },
+    // Schedule member counts to load after build completes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadMemberCounts(societies);
+    });
+
+    final filteredSocieties = _filterSocieties(societies);
+
+    return Column(
+      children: [
+        _buildSearchBar(),
+        Expanded(
+          child: filteredSocieties.isEmpty
+              ? _buildNoResultsState()
+              : ListView.separated(
+                  padding: const EdgeInsets.all(
+                    AppSpacing.screenPaddingHorizontal,
+                  ),
+                  itemCount: filteredSocieties.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: AppSpacing.listItemSpacing),
+                  itemBuilder: (context, index) {
+                    final society = filteredSocieties[index];
+                    return _buildSocietyCard(society);
+                  },
+                ),
+        ),
+      ],
     );
   }
 
-  Widget _buildSocietyCard(Society society) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppSpacing.space2),
-      ),
-      child: InkWell(
-        onTap: () => _onSocietyTapped(society),
-        borderRadius: BorderRadius.circular(AppSpacing.space2),
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.cardPadding),
-          child: Row(
-            children: [
-              // Society logo or placeholder
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryLight,
-                  borderRadius: BorderRadius.circular(AppSpacing.space2),
-                ),
-                child: society.logoUrl != null
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(AppSpacing.space2),
-                        child: Image.network(
-                          society.logoUrl!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              _buildLogoPlaceholder(),
-                        ),
-                      )
-                    : _buildLogoPlaceholder(),
-              ),
-              const SizedBox(width: AppSpacing.space4),
-              // Society details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      society.name,
-                      style: AppTypography.headlineMedium.copyWith(
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    if (society.description != null) ...[
-                      const SizedBox(height: AppSpacing.space1),
-                      Text(
-                        society.description!,
-                        style: AppTypography.bodyMedium.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              // Chevron icon
-              Icon(Icons.chevron_right, color: AppColors.textSecondary),
-            ],
+  List<Society> _filterSocieties(List<Society> societies) {
+    if (_searchQuery.isEmpty) {
+      return societies;
+    }
+    return societies
+        .where(
+          (society) =>
+              society.name.toLowerCase().contains(_searchQuery.toLowerCase()),
+        )
+        .toList();
+  }
+
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(AppSpacing.screenPaddingHorizontal),
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          hintText: _searchHintText,
+          prefixIcon: const Icon(Icons.search),
+          suffixIcon: _searchQuery.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    _searchController.clear();
+                  },
+                )
+              : null,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppSpacing.space2),
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space3,
           ),
         ),
       ),
     );
   }
 
-  Widget _buildLogoPlaceholder() {
+  Widget _buildNoResultsState() {
     return Center(
-      child: Icon(Icons.golf_course, size: 32, color: AppColors.primary),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.screenPaddingHorizontal),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.search_off,
+              size: _emptyStateIconSize,
+              color: AppColors.textSecondary,
+            ),
+            const SizedBox(height: AppSpacing.space6),
+            Text(
+              _noResultsMessage,
+              style: AppTypography.headlineLarge.copyWith(
+                color: AppColors.textPrimary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppSpacing.space3),
+            Text(
+              'Try adjusting your search',
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSocietyCard(Society society) {
+    final memberCount = _memberCounts[society.id] ?? 0;
+
+    return SocietyCard(
+      society: society,
+      memberCount: memberCount,
+      onViewPressed: () => _onSocietyTapped(society),
     );
   }
 
@@ -236,12 +305,17 @@ class _SocietyListScreenState extends State<SocietyListScreen> {
 
   void _onSocietyTapped(Society society) {
     context.read<SocietyBloc>().add(SocietySelected(society.id));
-    // TODO: Navigate to society dashboard screen when implemented
-    // For now, navigate to edit screen
-    Navigator.pushNamed(context, '/societies/edit', arguments: society);
+    // Navigate to society dashboard
+    // TODO: Implement dashboard screen - for now this will show error/404
+    Navigator.pushNamed(context, '/societies/${society.id}/dashboard');
   }
 
   void _navigateToCreateSociety() {
     Navigator.pushNamed(context, '/societies/create');
   }
+
+  // Constants
+  static const String _searchHintText = 'Search societies...';
+  static const String _noResultsMessage = 'No societies found';
+  static const double _emptyStateIconSize = 80.0;
 }
