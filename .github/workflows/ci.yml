@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main ]
 
+# Explicit permissions for security best practices
+permissions:
+  contents: read  # To checkout code
+  checks: write   # To create/update check runs (if needed)
+
 jobs:
   analyze:
     name: Analyze and Test
