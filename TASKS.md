@@ -376,11 +376,12 @@ IMPORTANT: Member Architecture
   - [X] Added InvalidMemberOperationException for business rule violations ✅
   - [X] Total: 28 use case tests, all passing ✅
 
-- [ ] **Create Member BLoC** (P1) #members #tdd
-  - Define MemberEvent (LoadRequested, AddRequested, UpdateRoleRequested, RemoveRequested)
-  - Define MemberState (Initial, Loading, Loaded, Error, OperationInProgress, OperationSuccess)
-  - Implement MemberBloc with event handlers
-  - Tests: 12 BLoC tests for all events and state transitions
+- [X] **Create Member BLoC** (P1) #members #tdd ✅
+  - [X] Define MemberEvent (LoadRequested, AddRequested, UpdateRoleRequested, RemoveRequested) ✅
+  - [X] Define MemberState (Initial, Loading, Loaded, Error, OperationInProgress, OperationSuccess) ✅
+  - [X] Implement MemberBloc with event handlers ✅
+  - [X] Tests: 10 BLoC tests for all events and state transitions (all passing) ✅
+  - [X] Proper exception handling with MemberException catch clauses ✅
 
 ### Society Dashboard Screens
 
