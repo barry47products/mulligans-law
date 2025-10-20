@@ -1,3 +1,10 @@
+## [0.14.2](https://github.com/barry47products/mulligans-law/compare/v0.14.1...v0.14.2) (2025-10-20)
+
+
+### Bug Fixes
+
+* **cd:** update CD workflow to use Java 21 ([c6ee7ae](https://github.com/barry47products/mulligans-law/commit/c6ee7aeff105695d01de4277a1082300b07bce73))
+
 ## [0.14.1](https://github.com/barry47products/mulligans-law/compare/v0.14.0...v0.14.1) (2025-10-20)
 
 
