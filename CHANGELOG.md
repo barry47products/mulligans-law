@@ -1,3 +1,9 @@
+## [0.21.0](https://github.com/barry47products/mulligans-law/compare/v0.20.0...v0.21.0) (2025-10-20)
+
+### Features
+
+* **societies:** implement Society Members Screen and MemberCard widget ([82d1ec9](https://github.com/barry47products/mulligans-law/commit/82d1ec9eff79c114c014523f1e1384520df20521))
+
 ## [0.20.0](https://github.com/barry47products/mulligans-law/compare/v0.19.0...v0.20.0) (2025-10-20)
 
 ### Features
