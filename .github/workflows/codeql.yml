@@ -1,44 +1,45 @@
-name: "CodeQL"
+name: "CodeQL Advanced"
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
   schedule:
-    - cron: '0 0 * * 0'  # Run weekly on Sundays
-
-permissions:
-  security-events: write  # To upload CodeQL results
-  contents: read          # To checkout code
-  actions: read           # To read workflow info
+    - cron: '19 0 * * 1'  # Weekly on Mondays
 
 jobs:
   analyze:
-    name: Analyze
+    name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write  # Required for all workflows
+      packages: read          # Required to fetch internal or private CodeQL packs
+      actions: read           # Only required for workflows in private repositories
+      contents: read          # To checkout code
 
     strategy:
       fail-fast: false
       matrix:
-        # Only scan languages that exist in the project
-        language: [ 'javascript-typescript' ]
+        include:
+        # Only scan JavaScript/TypeScript (from Docusaurus docs)
+        # Exclude: actions, java-kotlin, ruby, swift (not present in repo)
+        - language: javascript-typescript
+          build-mode: none
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
-        # Queries: security-extended (more thorough than default)
+        build-mode: ${{ matrix.build-mode }}
+        # Use security-extended queries for thorough analysis
         queries: security-extended
-
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v3
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
-        category: "/language:${{ matrix.language }}"
+        category: "/language:${{matrix.language}}"
