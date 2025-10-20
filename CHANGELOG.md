@@ -1,3 +1,10 @@
+## [0.18.0](https://github.com/barry47products/mulligans-law/compare/v0.17.0...v0.18.0) (2025-10-20)
+
+### Features
+
+* **members:** implement 7 member use cases with 28 tests ([076a9db](https://github.com/barry47products/mulligans-law/commit/076a9db5d9da3735611bf9b66e7d6be53742be95))
+* **members:** implement MemberBloc with 10 comprehensive tests ([d89a155](https://github.com/barry47products/mulligans-law/commit/d89a155f7b7206700aa6272e3def533260c6abab))
+
 ## [0.17.0](https://github.com/barry47products/mulligans-law/compare/v0.16.0...v0.17.0) (2025-10-20)
 
 ### Features
