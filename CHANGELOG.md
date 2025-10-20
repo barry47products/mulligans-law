@@ -1,3 +1,10 @@
+## [0.14.0](https://github.com/barry47products/mulligans-law/compare/v0.13.0...v0.14.0) (2025-10-20)
+
+
+### Features
+
+* **database:** update members table for primary member profiles ([2f0543f](https://github.com/barry47products/mulligans-law/commit/2f0543f0e0f964c4479f38e1de7fdbefe01a8073))
+
 ## [0.13.0](https://github.com/barry47products/mulligans-law/compare/v0.12.0...v0.13.0) (2025-10-19)
 
 
