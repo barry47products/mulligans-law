@@ -1,3 +1,9 @@
+## [0.14.4](https://github.com/barry47products/mulligans-law/compare/v0.14.3...v0.14.4) (2025-10-20)
+
+### Bug Fixes
+
+* **security:** add custom CodeQL workflow for JavaScript/TypeScript only ([c56f2bc](https://github.com/barry47products/mulligans-law/commit/c56f2bccf6a1f2ba458f250eb4c3fb81d10e9fba))
+
 ## [0.14.3](https://github.com/barry47products/mulligans-law/compare/v0.14.2...v0.14.3) (2025-10-20)
 
 ### Bug Fixes
