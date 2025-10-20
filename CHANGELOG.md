@@ -1,3 +1,9 @@
+## [0.14.7](https://github.com/barry47products/mulligans-law/compare/v0.14.6...v0.14.7) (2025-10-20)
+
+### Bug Fixes
+
+* **security:** add explicit permissions to all CD jobs ([deffb34](https://github.com/barry47products/mulligans-law/commit/deffb34c8948028f6b8c87dd605b964a56562645))
+
 ## [0.14.6](https://github.com/barry47products/mulligans-law/compare/v0.14.5...v0.14.6) (2025-10-20)
 
 ### Bug Fixes
