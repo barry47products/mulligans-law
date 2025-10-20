@@ -2,7 +2,7 @@
   "permissions": {
     "allow": [
       "Bash(git push origin main)",
-      "Bash(flutter test test/features/societies/domain/usecases/create_society_test.dart)"
+      "Bash(flutter test *)"
     ],
     "deny": [],
     "ask": []

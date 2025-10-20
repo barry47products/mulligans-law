@@ -26,8 +26,10 @@ import 'features/societies/domain/usecases/create_society.dart';
 import 'features/societies/domain/usecases/get_user_societies.dart';
 import 'features/societies/domain/usecases/update_society.dart';
 import 'features/societies/presentation/bloc/society_bloc.dart';
+import 'features/societies/presentation/screens/society_dashboard_screen.dart';
 import 'features/societies/presentation/screens/society_form_screen.dart';
 import 'features/societies/presentation/screens/society_list_screen.dart';
+import 'features/members/domain/usecases/get_member_count.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,51 +74,75 @@ class MulligansLawApp extends StatelessWidget {
     final getUserSocietiesUseCase = GetUserSocieties(societyRepository);
     final updateSocietyUseCase = UpdateSociety(societyRepository);
 
-    return MultiBlocProvider(
+    // Create member use cases
+    final getMemberCountUseCase = GetMemberCount(memberRepository);
+
+    return MultiRepositoryProvider(
       providers: [
-        BlocProvider(
-          create: (context) => AuthBloc(
-            signIn: signInUseCase,
-            signUp: signUpUseCase,
-            signOut: signOutUseCase,
-            getCurrentUser: getCurrentUserUseCase,
-            authRepository: authRepository,
-          )..add(AuthCheckRequested()),
-        ),
-        BlocProvider(
-          create: (context) => SocietyBloc(
-            createSociety: createSocietyUseCase,
-            getUserSocieties: getUserSocietiesUseCase,
-            updateSociety: updateSocietyUseCase,
-          ),
-        ),
+        RepositoryProvider<GetMemberCount>.value(value: getMemberCountUseCase),
       ],
-      child: MaterialApp(
-        title: 'Mulligans Law',
-        theme: AppTheme.lightTheme(),
-        debugShowCheckedModeBanner: false,
-        home: const AuthGate(),
-        routes: {
-          WelcomeScreen.routeName: (context) => const WelcomeScreen(),
-          SignInScreen.routeName: (context) => const SignInScreen(),
-          SignUpScreen.routeName: (context) => const SignUpScreen(),
-          ForgotPasswordScreen.routeName: (context) =>
-              const ForgotPasswordScreen(),
-          VerifyEmailScreen.routeName: (context) {
-            // Extract email from route arguments
-            final email =
-                ModalRoute.of(context)?.settings.arguments as String? ??
-                'your@email.com';
-            return VerifyEmailScreen(email: email);
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AuthBloc(
+              signIn: signInUseCase,
+              signUp: signUpUseCase,
+              signOut: signOutUseCase,
+              getCurrentUser: getCurrentUserUseCase,
+              authRepository: authRepository,
+            )..add(AuthCheckRequested()),
+          ),
+          BlocProvider(
+            create: (context) => SocietyBloc(
+              createSociety: createSocietyUseCase,
+              getUserSocieties: getUserSocietiesUseCase,
+              updateSociety: updateSocietyUseCase,
+            ),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Mulligans Law',
+          theme: AppTheme.lightTheme(),
+          debugShowCheckedModeBanner: false,
+          home: const AuthGate(),
+          routes: {
+            WelcomeScreen.routeName: (context) => const WelcomeScreen(),
+            SignInScreen.routeName: (context) => const SignInScreen(),
+            SignUpScreen.routeName: (context) => const SignUpScreen(),
+            ForgotPasswordScreen.routeName: (context) =>
+                const ForgotPasswordScreen(),
+            VerifyEmailScreen.routeName: (context) {
+              // Extract email from route arguments
+              final email =
+                  ModalRoute.of(context)?.settings.arguments as String? ??
+                  'your@email.com';
+              return VerifyEmailScreen(email: email);
+            },
+            '/home': (context) => const HomeScreen(),
+            '/societies': (context) => const SocietyListScreen(),
+            '/societies/create': (context) => const SocietyFormScreen(),
+            '/societies/edit': (context) {
+              final society = ModalRoute.of(context)?.settings.arguments;
+              return SocietyFormScreen(society: society as Society?);
+            },
           },
-          '/home': (context) => const HomeScreen(),
-          '/societies': (context) => const SocietyListScreen(),
-          '/societies/create': (context) => const SocietyFormScreen(),
-          '/societies/edit': (context) {
-            final society = ModalRoute.of(context)?.settings.arguments;
-            return SocietyFormScreen(society: society as Society?);
+          onGenerateRoute: (settings) {
+            // Handle dynamic routes like /societies/:id/dashboard
+            if (settings.name?.startsWith('/societies/') == true &&
+                settings.name?.endsWith('/dashboard') == true) {
+              final society = settings.arguments as Society?;
+              if (society != null) {
+                return MaterialPageRoute(
+                  builder: (context) => SocietyDashboardScreen(
+                    society: society,
+                    getMemberCount: getMemberCountUseCase,
+                  ),
+                );
+              }
+            }
+            return null;
           },
-        },
+        ),
       ),
     );
   }
