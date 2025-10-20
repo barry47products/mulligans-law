@@ -1,3 +1,39 @@
+## [0.15.0](https://github.com/barry47products/mulligans-law/compare/v0.14.7...v0.15.0) (2025-10-20)
+
+### ⚠ BREAKING CHANGES
+
+* **members:** Member.societyId and Member.role are now nullable (String?)
+
+Changes:
+- Update Member entity: societyId and role now nullable to support primary profiles
+- Update MemberModel: handle null society_id and role in JSON serialization
+- Add MemberRepository.getPrimaryMember(userId) - fetch primary member profile
+- Add MemberRepository.createPrimaryMember() - create profile with null societyId/role
+- Add comprehensive entity behavior tests (copyWith, equality, edge cases)
+- Add primary member profile tests for model and repository
+
+Tests:
+- 44 tests passing (up from 25)
+- Coverage: Member Entity 100% (up from 4%), Overall 94.9% (up from 64.6%)
+- Added 19 entity behavior tests (copyWith, equality, edge cases)
+- Added 3 primary member profile tests
+
+Also fixes:
+- Android Gradle configuration for Flutter plugin compatibility
+- Added SDK version defaults to prevent plugin build errors
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+
+### Features
+
+* **members:** add nullable society support for primary member profiles ([74ade79](https://github.com/barry47products/mulligans-law/commit/74ade79719c0dd7e76573b5fe6eb9bc2d47ab6ef))
+
+### Documentation
+
+* **security:** add comprehensive security policy ([aba188a](https://github.com/barry47products/mulligans-law/commit/aba188ac1576521302b51b5398217c1b4b712c5c))
+
 ## [0.14.7](https://github.com/barry47products/mulligans-law/compare/v0.14.6...v0.14.7) (2025-10-20)
 
 ### Bug Fixes
