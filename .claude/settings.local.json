@@ -5,7 +5,8 @@
       "Bash(gh run list --limit 5)",
       "Bash(gh run view 18615583065)",
       "Bash(gh run view --job=53079675977 --log)",
-      "Bash(gh run watch 18615583065)"
+      "Bash(gh run watch 18615583065)",
+      "Bash(gh run view 18644278137 --log-failed)"
     ],
     "deny": [],
     "ask": []
