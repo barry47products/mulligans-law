@@ -306,12 +306,18 @@ IMPORTANT: Member Architecture
 - When member joins society → gets 'member' role in that society
 - society_id is nullable to support primary member profile before joining societies
 
-- [ ] **Update Members Table Migration** (P0) #database #members
-  - Make society_id column nullable in members table
-  - Update RLS policies to handle null society_id (primary member profiles)
-  - Add unique constraint: one primary member per user (WHERE society_id IS NULL)
-  - Update existing test data if needed
-  - Tests: Migration applies successfully
+- [X] **Update Members Table Migration** (P0) #database #members ✅
+  - [X] Make society_id column nullable in members table ✅
+  - [X] Update RLS policies to handle null society_id (primary member profiles) ✅
+  - [X] Add unique constraint: one primary member per user (WHERE society_id IS NULL) ✅
+  - [X] Add unique constraint: one membership per society per user (WHERE society_id IS NOT NULL) ✅
+  - [X] Change handicap from INTEGER to DECIMAL(4,1) for precision ✅
+  - [X] Make role nullable for primary members ✅
+  - [X] Add check constraint: society members must have role set ✅
+  - [X] Add avatar_url, joined_at, last_played_at columns ✅
+  - [X] Add index for primary member lookups ✅
+  - [X] Update comments and documentation ✅
+  - [X] Migration applied successfully ✅
 
 - [X] **Create Member Data Layer** (P1) #members #tdd ✅
   - [X] Define Member entity with all fields (id, societyId, userId, name, email, avatarUrl, handicap, role, joinedAt, lastPlayedAt) ✅
