@@ -1,3 +1,17 @@
+## [0.17.0](https://github.com/barry47products/mulligans-law/compare/v0.16.0...v0.17.0) (2025-10-20)
+
+### Features
+
+* **societies:** add creator as captain member on society creation ([2a13cdc](https://github.com/barry47products/mulligans-law/commit/2a13cdc10e95fab6db3d48e846801b395887c469))
+
+### Bug Fixes
+
+* **ci:** remove docker dependabot config for supabase ([47740c1](https://github.com/barry47products/mulligans-law/commit/47740c16091dacc8b62672cfd74f2d72aafbadcb))
+
+### Documentation
+
+* **tasks:** mark repository integration tests as complete ([a6bef56](https://github.com/barry47products/mulligans-law/commit/a6bef56708afe3ba58e5b8479559d1e3a7fbcf5b))
+
 ## [0.16.0](https://github.com/barry47products/mulligans-law/compare/v0.15.0...v0.16.0) (2025-10-20)
 
 ### Features
