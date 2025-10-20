@@ -1,3 +1,9 @@
+## [0.14.3](https://github.com/barry47products/mulligans-law/compare/v0.14.2...v0.14.3) (2025-10-20)
+
+### Bug Fixes
+
+* **ci:** add explicit workflow permissions for security ([c4cc5d8](https://github.com/barry47products/mulligans-law/commit/c4cc5d80b06dc87c1c2efb9869b467eeef321738))
+
 ## [0.14.2](https://github.com/barry47products/mulligans-law/compare/v0.14.1...v0.14.2) (2025-10-20)
 
 
