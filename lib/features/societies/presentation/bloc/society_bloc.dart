@@ -51,6 +51,7 @@ class SocietyBloc extends Bloc<SocietyEvent, SocietyState> {
     emit(const SocietyOperationInProgress('Creating society...'));
     try {
       await _createSociety(
+        userId: event.userId,
         name: event.name,
         description: event.description,
         logoUrl: event.logoUrl,

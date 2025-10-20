@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/validation_constants.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../domain/entities/society.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_state.dart' as auth;
 import '../bloc/society_bloc.dart';
 import '../bloc/society_event.dart';
 import '../bloc/society_state.dart';
@@ -144,12 +146,17 @@ class _SocietyFormScreenState extends State<SocietyFormScreen> {
         ),
       );
     } else {
-      context.read<SocietyBloc>().add(
-        SocietyCreateRequested(
-          name: name,
-          description: description.isEmpty ? null : description,
-        ),
-      );
+      // Get current user ID from AuthBloc
+      final authState = context.read<AuthBloc>().state;
+      if (authState is auth.AuthAuthenticated) {
+        context.read<SocietyBloc>().add(
+          SocietyCreateRequested(
+            userId: authState.user.id,
+            name: name,
+            description: description.isEmpty ? null : description,
+          ),
+        );
+      }
     }
   }
 }

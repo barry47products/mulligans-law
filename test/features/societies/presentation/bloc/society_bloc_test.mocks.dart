@@ -44,12 +44,14 @@ class MockCreateSociety extends _i1.Mock implements _i3.CreateSociety {
 
   @override
   _i4.Future<_i2.Society> call({
+    required String? userId,
     required String? name,
     String? description,
     String? logoUrl,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#call, [], {
+              #userId: userId,
               #name: name,
               #description: description,
               #logoUrl: logoUrl,
@@ -58,6 +60,7 @@ class MockCreateSociety extends _i1.Mock implements _i3.CreateSociety {
               _FakeSociety_0(
                 this,
                 Invocation.method(#call, [], {
+                  #userId: userId,
                   #name: name,
                   #description: description,
                   #logoUrl: logoUrl,

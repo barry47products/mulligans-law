@@ -352,12 +352,17 @@ IMPORTANT: Member Architecture
   - [X] Tests: 5 new tests for primary member creation (14 total SignUp tests, 56 total auth tests) ✅
   - [X] All 173 tests passing, overall coverage: 52.3% ✅
 
-- [ ] **Update CreateSociety Use Case** (P1) #societies #members #tdd
-  - After creating society, automatically add creator as captain member
-  - Get primary member by user_id
-  - Create society membership: same member, society_id = new society, role = 'captain'
-  - This creates a SECOND member record for the user (one primary + one society membership)
-  - Tests: Verify captain member is created, verify user now has 2 member records
+- [X] **Update CreateSociety Use Case** (P1) #societies #members #tdd ✅
+  - [X] After creating society, automatically add creator as captain member ✅
+  - [X] Get primary member by user_id ✅
+  - [X] Create society membership: same member, society_id = new society, role = 'captain' ✅
+  - [X] This creates a SECOND member record for the user (one primary + one society membership) ✅
+  - [X] Tests: 4 new tests for captain member creation, updated all 11 existing tests with userId (15 total CreateSociety tests) ✅
+  - [X] Updated SocietyCreateRequested event with userId field ✅
+  - [X] Updated SocietyBloc to pass userId from event to use case ✅
+  - [X] Updated society_form_screen to get userId from AuthBloc ✅
+  - [X] Updated all presentation layer tests (SocietyBloc + society_form_screen) ✅
+  - [X] All 188 tests passing ✅
 
 - [ ] **Create Member Use Cases** (P1) #members #tdd
   - GetPrimaryMember (get user's primary member profile by userId)

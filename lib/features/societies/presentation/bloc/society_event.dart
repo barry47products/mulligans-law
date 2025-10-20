@@ -15,18 +15,20 @@ class SocietyLoadRequested extends SocietyEvent {
 
 /// Event to create a new society
 class SocietyCreateRequested extends SocietyEvent {
+  final String userId;
   final String name;
   final String? description;
   final String? logoUrl;
 
   const SocietyCreateRequested({
+    required this.userId,
     required this.name,
     this.description,
     this.logoUrl,
   });
 
   @override
-  List<Object?> get props => [name, description, logoUrl];
+  List<Object?> get props => [userId, name, description, logoUrl];
 }
 
 /// Event to update an existing society

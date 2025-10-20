@@ -113,6 +113,7 @@ void main() {
         build: () {
           when(
             mockCreateSociety(
+              userId: anyNamed('userId'),
               name: anyNamed('name'),
               description: anyNamed('description'),
               logoUrl: anyNamed('logoUrl'),
@@ -123,6 +124,7 @@ void main() {
         },
         act: (bloc) => bloc.add(
           const SocietyCreateRequested(
+            userId: "test-user",
             name: 'Mulligans Golf Society',
             description: 'A friendly golf society',
           ),
@@ -137,6 +139,7 @@ void main() {
         verify: (_) {
           verify(
             mockCreateSociety(
+              userId: 'test-user',
               name: 'Mulligans Golf Society',
               description: 'A friendly golf society',
               logoUrl: null,
@@ -151,6 +154,7 @@ void main() {
         build: () {
           when(
             mockCreateSociety(
+              userId: anyNamed('userId'),
               name: anyNamed('name'),
               description: anyNamed('description'),
               logoUrl: anyNamed('logoUrl'),
@@ -160,7 +164,9 @@ void main() {
           );
           return bloc;
         },
-        act: (bloc) => bloc.add(const SocietyCreateRequested(name: '')),
+        act: (bloc) => bloc.add(
+          const SocietyCreateRequested(userId: "test-user", name: ''),
+        ),
         expect: () => [
           const SocietyOperationInProgress('Creating society...'),
           const SocietyError(message: 'Society name cannot be empty'),
@@ -172,6 +178,7 @@ void main() {
         build: () {
           when(
             mockCreateSociety(
+              userId: anyNamed('userId'),
               name: anyNamed('name'),
               description: anyNamed('description'),
               logoUrl: anyNamed('logoUrl'),
@@ -179,7 +186,9 @@ void main() {
           ).thenThrow(const SocietyDatabaseException('Database error'));
           return bloc;
         },
-        act: (bloc) => bloc.add(const SocietyCreateRequested(name: 'Test')),
+        act: (bloc) => bloc.add(
+          const SocietyCreateRequested(userId: "test-user", name: 'Test'),
+        ),
         expect: () => [
           const SocietyOperationInProgress('Creating society...'),
           const SocietyError(message: 'Database error'),

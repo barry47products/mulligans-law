@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:mulligans_law/features/auth/domain/entities/auth_user.dart';
+import 'package:mulligans_law/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:mulligans_law/features/auth/presentation/bloc/auth_state.dart'
+    as auth;
 import 'package:mulligans_law/features/societies/domain/entities/society.dart';
 import 'package:mulligans_law/features/societies/presentation/bloc/society_bloc.dart';
 import 'package:mulligans_law/features/societies/presentation/bloc/society_event.dart';
@@ -10,17 +14,24 @@ import 'package:mulligans_law/features/societies/presentation/screens/society_fo
 
 class MockSocietyBloc extends Mock implements SocietyBloc {}
 
+class MockAuthBloc extends Mock implements AuthBloc {}
+
 void main() {
   late MockSocietyBloc mockBloc;
+  late MockAuthBloc mockAuthBloc;
 
   setUpAll(() {
-    registerFallbackValue(const SocietyCreateRequested(name: ''));
+    registerFallbackValue(
+      const SocietyCreateRequested(userId: 'test-user', name: ''),
+    );
     registerFallbackValue(const SocietyUpdateRequested(id: '', name: ''));
   });
 
   setUp(() {
     mockBloc = MockSocietyBloc();
+    mockAuthBloc = MockAuthBloc();
     when(() => mockBloc.close()).thenAnswer((_) async {});
+    when(() => mockAuthBloc.close()).thenAnswer((_) async {});
   });
 
   final testDateTime = DateTime.parse('2025-01-15T10:30:00.000Z');
@@ -34,10 +45,26 @@ void main() {
     updatedAt: testDateTime,
   );
 
+  const testUserId = 'test-user-id';
+  final testAuthUser = AuthUser(
+    id: testUserId,
+    email: 'test@example.com',
+    createdAt: testDateTime,
+  );
+
   Widget createWidgetUnderTest({Society? society}) {
+    // Setup auth state with authenticated user
+    when(
+      () => mockAuthBloc.state,
+    ).thenReturn(auth.AuthAuthenticated(testAuthUser));
+    when(() => mockAuthBloc.stream).thenAnswer((_) => const Stream.empty());
+
     return MaterialApp(
-      home: BlocProvider<SocietyBloc>(
-        create: (_) => mockBloc,
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider<SocietyBloc>(create: (_) => mockBloc),
+          BlocProvider<AuthBloc>(create: (_) => mockAuthBloc),
+        ],
         child: SocietyFormScreen(society: society),
       ),
     );
@@ -166,6 +193,7 @@ void main() {
       verify(
         () => mockBloc.add(
           const SocietyCreateRequested(
+            userId: testUserId,
             name: 'Test Society',
             description: 'Test Description',
           ),
@@ -190,7 +218,11 @@ void main() {
       // Assert
       verify(
         () => mockBloc.add(
-          const SocietyCreateRequested(name: 'Test Society', description: null),
+          const SocietyCreateRequested(
+            userId: testUserId,
+            name: 'Test Society',
+            description: null,
+          ),
         ),
       ).called(1);
     });

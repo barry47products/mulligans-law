@@ -3,13 +3,17 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mulligans_law/features/members/domain/entities/member.dart'
+    as _i3;
+import 'package:mulligans_law/features/members/domain/repositories/member_repository.dart'
+    as _i6;
 import 'package:mulligans_law/features/societies/domain/entities/society.dart'
     as _i2;
 import 'package:mulligans_law/features/societies/domain/repositories/society_repository.dart'
-    as _i3;
+    as _i4;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -30,16 +34,21 @@ class _FakeSociety_0 extends _i1.SmartFake implements _i2.Society {
     : super(parent, parentInvocation);
 }
 
+class _FakeMember_1 extends _i1.SmartFake implements _i3.Member {
+  _FakeMember_1(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
 /// A class which mocks [SocietyRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSocietyRepository extends _i1.Mock implements _i3.SocietyRepository {
+class MockSocietyRepository extends _i1.Mock implements _i4.SocietyRepository {
   MockSocietyRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.Society> createSociety({
+  _i5.Future<_i2.Society> createSociety({
     required String? name,
     String? description,
     String? logoUrl,
@@ -50,7 +59,7 @@ class MockSocietyRepository extends _i1.Mock implements _i3.SocietyRepository {
               #description: description,
               #logoUrl: logoUrl,
             }),
-            returnValue: _i4.Future<_i2.Society>.value(
+            returnValue: _i5.Future<_i2.Society>.value(
               _FakeSociety_0(
                 this,
                 Invocation.method(#createSociety, [], {
@@ -61,28 +70,28 @@ class MockSocietyRepository extends _i1.Mock implements _i3.SocietyRepository {
               ),
             ),
           )
-          as _i4.Future<_i2.Society>);
+          as _i5.Future<_i2.Society>);
 
   @override
-  _i4.Future<List<_i2.Society>> getUserSocieties() =>
+  _i5.Future<List<_i2.Society>> getUserSocieties() =>
       (super.noSuchMethod(
             Invocation.method(#getUserSocieties, []),
-            returnValue: _i4.Future<List<_i2.Society>>.value(<_i2.Society>[]),
+            returnValue: _i5.Future<List<_i2.Society>>.value(<_i2.Society>[]),
           )
-          as _i4.Future<List<_i2.Society>>);
+          as _i5.Future<List<_i2.Society>>);
 
   @override
-  _i4.Future<_i2.Society> getSocietyById(String? id) =>
+  _i5.Future<_i2.Society> getSocietyById(String? id) =>
       (super.noSuchMethod(
             Invocation.method(#getSocietyById, [id]),
-            returnValue: _i4.Future<_i2.Society>.value(
+            returnValue: _i5.Future<_i2.Society>.value(
               _FakeSociety_0(this, Invocation.method(#getSocietyById, [id])),
             ),
           )
-          as _i4.Future<_i2.Society>);
+          as _i5.Future<_i2.Society>);
 
   @override
-  _i4.Future<_i2.Society> updateSociety({
+  _i5.Future<_i2.Society> updateSociety({
     required String? id,
     String? name,
     String? description,
@@ -95,7 +104,7 @@ class MockSocietyRepository extends _i1.Mock implements _i3.SocietyRepository {
               #description: description,
               #logoUrl: logoUrl,
             }),
-            returnValue: _i4.Future<_i2.Society>.value(
+            returnValue: _i5.Future<_i2.Society>.value(
               _FakeSociety_0(
                 this,
                 Invocation.method(#updateSociety, [], {
@@ -107,22 +116,184 @@ class MockSocietyRepository extends _i1.Mock implements _i3.SocietyRepository {
               ),
             ),
           )
-          as _i4.Future<_i2.Society>);
+          as _i5.Future<_i2.Society>);
 
   @override
-  _i4.Future<void> deleteSociety(String? id) =>
+  _i5.Future<void> deleteSociety(String? id) =>
       (super.noSuchMethod(
             Invocation.method(#deleteSociety, [id]),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
           )
-          as _i4.Future<void>);
+          as _i5.Future<void>);
 
   @override
-  _i4.Stream<List<_i2.Society>> watchUserSocieties() =>
+  _i5.Stream<List<_i2.Society>> watchUserSocieties() =>
       (super.noSuchMethod(
             Invocation.method(#watchUserSocieties, []),
-            returnValue: _i4.Stream<List<_i2.Society>>.empty(),
+            returnValue: _i5.Stream<List<_i2.Society>>.empty(),
           )
-          as _i4.Stream<List<_i2.Society>>);
+          as _i5.Stream<List<_i2.Society>>);
+}
+
+/// A class which mocks [MemberRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockMemberRepository extends _i1.Mock implements _i6.MemberRepository {
+  MockMemberRepository() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<List<_i3.Member>> getSocietyMembers(String? societyId) =>
+      (super.noSuchMethod(
+            Invocation.method(#getSocietyMembers, [societyId]),
+            returnValue: _i5.Future<List<_i3.Member>>.value(<_i3.Member>[]),
+          )
+          as _i5.Future<List<_i3.Member>>);
+
+  @override
+  _i5.Future<int> getMemberCount(String? societyId) =>
+      (super.noSuchMethod(
+            Invocation.method(#getMemberCount, [societyId]),
+            returnValue: _i5.Future<int>.value(0),
+          )
+          as _i5.Future<int>);
+
+  @override
+  _i5.Future<_i3.Member> addMember({
+    required String? societyId,
+    required String? userId,
+    required String? name,
+    required String? email,
+    String? avatarUrl,
+    required double? handicap,
+    required String? role,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#addMember, [], {
+              #societyId: societyId,
+              #userId: userId,
+              #name: name,
+              #email: email,
+              #avatarUrl: avatarUrl,
+              #handicap: handicap,
+              #role: role,
+            }),
+            returnValue: _i5.Future<_i3.Member>.value(
+              _FakeMember_1(
+                this,
+                Invocation.method(#addMember, [], {
+                  #societyId: societyId,
+                  #userId: userId,
+                  #name: name,
+                  #email: email,
+                  #avatarUrl: avatarUrl,
+                  #handicap: handicap,
+                  #role: role,
+                }),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.Member>);
+
+  @override
+  _i5.Future<_i3.Member> updateMember({
+    required String? memberId,
+    String? name,
+    String? email,
+    String? avatarUrl,
+    double? handicap,
+    String? role,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateMember, [], {
+              #memberId: memberId,
+              #name: name,
+              #email: email,
+              #avatarUrl: avatarUrl,
+              #handicap: handicap,
+              #role: role,
+            }),
+            returnValue: _i5.Future<_i3.Member>.value(
+              _FakeMember_1(
+                this,
+                Invocation.method(#updateMember, [], {
+                  #memberId: memberId,
+                  #name: name,
+                  #email: email,
+                  #avatarUrl: avatarUrl,
+                  #handicap: handicap,
+                  #role: role,
+                }),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.Member>);
+
+  @override
+  _i5.Future<void> removeMember(String? memberId) =>
+      (super.noSuchMethod(
+            Invocation.method(#removeMember, [memberId]),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
+          )
+          as _i5.Future<void>);
+
+  @override
+  _i5.Future<_i3.Member> getMemberById(String? memberId) =>
+      (super.noSuchMethod(
+            Invocation.method(#getMemberById, [memberId]),
+            returnValue: _i5.Future<_i3.Member>.value(
+              _FakeMember_1(
+                this,
+                Invocation.method(#getMemberById, [memberId]),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.Member>);
+
+  @override
+  _i5.Future<_i3.Member> getPrimaryMember(String? userId) =>
+      (super.noSuchMethod(
+            Invocation.method(#getPrimaryMember, [userId]),
+            returnValue: _i5.Future<_i3.Member>.value(
+              _FakeMember_1(
+                this,
+                Invocation.method(#getPrimaryMember, [userId]),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.Member>);
+
+  @override
+  _i5.Future<_i3.Member> createPrimaryMember({
+    required String? userId,
+    required String? name,
+    required String? email,
+    required double? handicap,
+    String? avatarUrl,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#createPrimaryMember, [], {
+              #userId: userId,
+              #name: name,
+              #email: email,
+              #handicap: handicap,
+              #avatarUrl: avatarUrl,
+            }),
+            returnValue: _i5.Future<_i3.Member>.value(
+              _FakeMember_1(
+                this,
+                Invocation.method(#createPrimaryMember, [], {
+                  #userId: userId,
+                  #name: name,
+                  #email: email,
+                  #handicap: handicap,
+                  #avatarUrl: avatarUrl,
+                }),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.Member>);
 }

@@ -64,7 +64,11 @@ class MulligansLawApp extends StatelessWidget {
 
     // Create society repository and use cases
     final societyRepository = SocietyRepositoryImpl(supabase: supabaseClient);
-    final createSocietyUseCase = CreateSociety(societyRepository);
+    // CreateSociety requires both society and member repositories
+    final createSocietyUseCase = CreateSociety(
+      societyRepository,
+      memberRepository,
+    );
     final getUserSocietiesUseCase = GetUserSocieties(societyRepository);
     final updateSocietyUseCase = UpdateSociety(societyRepository);
 
