@@ -1,3 +1,9 @@
+## [0.14.5](https://github.com/barry47products/mulligans-law/compare/v0.14.4...v0.14.5) (2025-10-20)
+
+### Bug Fixes
+
+* **security:** update CodeQL workflow to Advanced format for JS/TS only ([f371e17](https://github.com/barry47products/mulligans-law/commit/f371e175d01722c7c817d4a1c0631ab21c3ad975))
+
 ## [0.14.4](https://github.com/barry47products/mulligans-law/compare/v0.14.3...v0.14.4) (2025-10-20)
 
 ### Bug Fixes
