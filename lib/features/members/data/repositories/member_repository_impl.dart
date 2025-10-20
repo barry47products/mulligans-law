@@ -236,4 +236,95 @@ class MemberRepositoryImpl implements MemberRepository {
       );
     }
   }
+
+  @override
+  Future<Member> updatePrimaryMember({
+    required String userId,
+    String? name,
+    String? email,
+    double? handicap,
+    String? avatarUrl,
+  }) async {
+    try {
+      final data = <String, dynamic>{
+        if (name != null) DatabaseColumns.name: name,
+        if (email != null) DatabaseColumns.email: email,
+        if (handicap != null) DatabaseColumns.handicap: handicap,
+        if (avatarUrl != null) DatabaseColumns.avatarUrl: avatarUrl,
+      };
+
+      if (data.isEmpty) {
+        throw InvalidMemberDataException(
+          'At least one field must be provided for update',
+        );
+      }
+
+      final response = await _supabase
+          .from(DatabaseTables.members)
+          .update(data)
+          .eq(DatabaseColumns.userId, userId)
+          .isFilter(DatabaseColumns.societyId, null)
+          .select()
+          .single();
+
+      return MemberModel.fromJson(response).toEntity();
+    } on PostgrestException catch (e) {
+      if (e.code == 'PGRST116') {
+        throw MemberNotFoundException('Primary member not found');
+      }
+      throw MemberDatabaseException(
+        'Failed to update primary member: ${e.message}',
+      );
+    } catch (e) {
+      if (e is InvalidMemberDataException) rethrow;
+      throw MemberDatabaseException(
+        'Unexpected error updating primary member: $e',
+      );
+    }
+  }
+
+  @override
+  Future<Member> updateMemberRole({
+    required String memberId,
+    required String role,
+  }) async {
+    try {
+      final response = await _supabase
+          .from(DatabaseTables.members)
+          .update({DatabaseColumns.role: role})
+          .eq(DatabaseColumns.id, memberId)
+          .select()
+          .single();
+
+      return MemberModel.fromJson(response).toEntity();
+    } on PostgrestException catch (e) {
+      if (e.code == 'PGRST116') {
+        throw MemberNotFoundException('Member not found');
+      }
+      throw MemberDatabaseException(
+        'Failed to update member role: ${e.message}',
+      );
+    } catch (e) {
+      throw MemberDatabaseException(
+        'Unexpected error updating member role: $e',
+      );
+    }
+  }
+
+  @override
+  Future<void> removeSocietyMember(String memberId) async {
+    try {
+      await _supabase
+          .from(DatabaseTables.members)
+          .delete()
+          .eq(DatabaseColumns.id, memberId);
+    } on PostgrestException catch (e) {
+      if (e.code == 'PGRST116') {
+        throw MemberNotFoundException('Member not found');
+      }
+      throw MemberDatabaseException('Failed to remove member: ${e.message}');
+    } catch (e) {
+      throw MemberDatabaseException('Unexpected error removing member: $e');
+    }
+  }
 }

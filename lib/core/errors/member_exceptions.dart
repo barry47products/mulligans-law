@@ -40,6 +40,14 @@ class MemberPermissionDeniedException extends MemberException {
   String toString() => 'MemberPermissionDeniedException: $message';
 }
 
+/// Thrown when a member operation cannot be completed due to business rules
+class InvalidMemberOperationException extends MemberException {
+  InvalidMemberOperationException(super.message);
+
+  @override
+  String toString() => 'InvalidMemberOperationException: $message';
+}
+
 /// Thrown when a database operation fails
 class MemberDatabaseException extends MemberException {
   MemberDatabaseException(super.message);

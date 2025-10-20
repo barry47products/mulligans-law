@@ -323,4 +323,66 @@ class MockMemberRepository extends _i1.Mock implements _i7.MemberRepository {
             ),
           )
           as _i6.Future<_i4.Member>);
+
+  @override
+  _i6.Future<_i4.Member> updatePrimaryMember({
+    required String? userId,
+    String? name,
+    String? email,
+    double? handicap,
+    String? avatarUrl,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#updatePrimaryMember, [], {
+              #userId: userId,
+              #name: name,
+              #email: email,
+              #handicap: handicap,
+              #avatarUrl: avatarUrl,
+            }),
+            returnValue: _i6.Future<_i4.Member>.value(
+              _FakeMember_2(
+                this,
+                Invocation.method(#updatePrimaryMember, [], {
+                  #userId: userId,
+                  #name: name,
+                  #email: email,
+                  #handicap: handicap,
+                  #avatarUrl: avatarUrl,
+                }),
+              ),
+            ),
+          )
+          as _i6.Future<_i4.Member>);
+
+  @override
+  _i6.Future<_i4.Member> updateMemberRole({
+    required String? memberId,
+    required String? role,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateMemberRole, [], {
+              #memberId: memberId,
+              #role: role,
+            }),
+            returnValue: _i6.Future<_i4.Member>.value(
+              _FakeMember_2(
+                this,
+                Invocation.method(#updateMemberRole, [], {
+                  #memberId: memberId,
+                  #role: role,
+                }),
+              ),
+            ),
+          )
+          as _i6.Future<_i4.Member>);
+
+  @override
+  _i6.Future<void> removeSocietyMember(String? memberId) =>
+      (super.noSuchMethod(
+            Invocation.method(#removeSocietyMember, [memberId]),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
 }

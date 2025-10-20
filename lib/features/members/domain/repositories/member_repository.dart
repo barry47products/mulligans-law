@@ -49,4 +49,30 @@ abstract class MemberRepository {
     required double handicap,
     String? avatarUrl,
   });
+
+  /// Updates a user's primary member profile
+  /// Only provided fields will be updated
+  /// Throws [MemberNotFoundException] if primary member not found
+  Future<Member> updatePrimaryMember({
+    required String userId,
+    String? name,
+    String? email,
+    double? handicap,
+    String? avatarUrl,
+  });
+
+  /// Updates a member's role in a society
+  /// Can only be called by a CAPTAIN
+  /// Throws [MemberNotFoundException] if member not found
+  /// Throws [InvalidMemberOperationException] if operation not allowed
+  Future<Member> updateMemberRole({
+    required String memberId,
+    required String role,
+  });
+
+  /// Removes a member from a society
+  /// Cannot remove a CAPTAIN if other members exist
+  /// Throws [MemberNotFoundException] if member not found
+  /// Throws [InvalidMemberOperationException] if operation not allowed
+  Future<void> removeSocietyMember(String memberId);
 }

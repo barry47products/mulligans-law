@@ -364,15 +364,17 @@ IMPORTANT: Member Architecture
   - [X] Updated all presentation layer tests (SocietyBloc + society_form_screen) ✅
   - [X] All 188 tests passing ✅
 
-- [ ] **Create Member Use Cases** (P1) #members #tdd
-  - GetPrimaryMember (get user's primary member profile by userId)
-  - GetSocietyMembers (fetch members for a society where society_id = X, sorted by name)
-  - GetMemberCount (count members in a society where society_id = X)
-  - UpdatePrimaryMember (update user's primary profile: name, email, handicap, avatarUrl)
-  - JoinSociety (create society membership from primary member: validates society exists, creates member record with society_id)
-  - UpdateMemberRole (captain only - validates permissions, updates role for society member)
-  - LeaveSociety (remove society membership, cannot leave if captain and other members exist)
-  - Tests: 20+ tests covering validation, permissions, primary vs society members, edge cases
+- [X] **Create Member Use Cases** (P1) #members #tdd ✅
+  - [X] GetPrimaryMember (4 tests) - Gets user's primary member profile by userId ✅
+  - [X] GetSocietyMembers (5 tests) - Fetches members for a society, sorted by name ✅
+  - [X] GetMemberCount (3 tests) - Counts members in a society ✅
+  - [X] UpdatePrimaryMember (5 tests) - Updates primary profile: name, email, handicap, avatarUrl ✅
+  - [X] JoinSociety (4 tests) - Creates society membership from primary member, validates society exists ✅
+  - [X] UpdateMemberRole (3 tests) - Captain only, updates role for society member ✅
+  - [X] LeaveSociety (4 tests) - Removes society membership, captain restrictions apply ✅
+  - [X] Added 3 new repository methods: updatePrimaryMember, updateMemberRole, removeSocietyMember ✅
+  - [X] Added InvalidMemberOperationException for business rule violations ✅
+  - [X] Total: 28 use case tests, all passing ✅
 
 - [ ] **Create Member BLoC** (P1) #members #tdd
   - Define MemberEvent (LoadRequested, AddRequested, UpdateRoleRequested, RemoveRequested)
