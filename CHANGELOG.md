@@ -1,3 +1,10 @@
+## [0.14.1](https://github.com/barry47products/mulligans-law/compare/v0.14.0...v0.14.1) (2025-10-20)
+
+
+### Bug Fixes
+
+* **ci:** update GitHub Actions to use Java 21 and fix gradle configuration ([c6b1cf5](https://github.com/barry47products/mulligans-law/commit/c6b1cf51bafe892f8de19605ef2a18dee5de28e4))
+
 ## [0.14.0](https://github.com/barry47products/mulligans-law/compare/v0.13.0...v0.14.0) (2025-10-20)
 
 
