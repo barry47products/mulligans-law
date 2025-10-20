@@ -15,6 +15,9 @@ jobs:
   analyze:
     name: Analyze and Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read  # To checkout code
+      checks: write   # To create/update check runs
 
     steps:
       - name: Checkout code
@@ -50,6 +53,8 @@ jobs:
   build-ios:
     name: Build iOS
     runs-on: macos-latest
+    permissions:
+      contents: read  # To checkout code
 
     steps:
       - name: Checkout code
@@ -71,6 +76,8 @@ jobs:
   build-android:
     name: Build Android
     runs-on: ubuntu-latest
+    permissions:
+      contents: read  # To checkout code
 
     steps:
       - name: Checkout code
