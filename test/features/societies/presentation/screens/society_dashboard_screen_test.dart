@@ -231,11 +231,22 @@ void main() {
         expect(find.text('Settings'), findsOneWidget);
       });
 
-      testWidgets('View Members button switches to Members tab', (
+      testWidgets('View Members button navigates to members screen', (
         tester,
       ) async {
         // Arrange
-        await tester.pumpWidget(createWidgetUnderTest());
+        await tester.pumpWidget(
+          MaterialApp(
+            home: SocietyDashboardScreen(
+              society: testSociety,
+              getMemberCount: mockGetMemberCount,
+            ),
+            routes: {
+              '/societies/society-1/members': (context) =>
+                  const Scaffold(body: Text('Members Screen')),
+            },
+          ),
+        );
         await tester.pumpAndSettle();
 
         // Act - scroll to button and tap it
@@ -243,9 +254,8 @@ void main() {
         await tester.tap(find.text('View Members'));
         await tester.pumpAndSettle();
 
-        // Assert - should be on Members tab
-        final TabBar tabBar = tester.widget(find.byType(TabBar));
-        expect(tabBar.controller?.index, 1);
+        // Assert - should navigate to members screen
+        expect(find.text('Members Screen'), findsOneWidget);
       });
 
       testWidgets('Settings button navigates to edit screen', (tester) async {

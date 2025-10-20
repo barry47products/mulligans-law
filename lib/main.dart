@@ -29,6 +29,7 @@ import 'features/societies/presentation/bloc/society_bloc.dart';
 import 'features/societies/presentation/screens/society_dashboard_screen.dart';
 import 'features/societies/presentation/screens/society_form_screen.dart';
 import 'features/societies/presentation/screens/society_list_screen.dart';
+import 'features/societies/presentation/screens/society_members_screen.dart';
 import 'features/members/domain/usecases/get_member_count.dart';
 
 Future<void> main() async {
@@ -137,6 +138,16 @@ class MulligansLawApp extends StatelessWidget {
                     society: society,
                     getMemberCount: getMemberCountUseCase,
                   ),
+                );
+              }
+            }
+            // Handle /societies/:id/members route
+            if (settings.name?.startsWith('/societies/') == true &&
+                settings.name?.endsWith('/members') == true) {
+              final society = settings.arguments as Society?;
+              if (society != null) {
+                return MaterialPageRoute(
+                  builder: (context) => SocietyMembersScreen(society: society),
                 );
               }
             }

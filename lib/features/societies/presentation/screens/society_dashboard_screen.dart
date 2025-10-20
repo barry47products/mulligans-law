@@ -198,7 +198,11 @@ class _SocietyDashboardScreenState extends State<SocietyDashboardScreen>
             label: _viewMembersLabel,
             icon: Icons.people,
             onPressed: () {
-              _tabController.animateTo(1);
+              Navigator.pushNamed(
+                context,
+                '/societies/${widget.society.id}/members',
+                arguments: widget.society,
+              );
             },
           ),
           const SizedBox(height: AppSpacing.space3),

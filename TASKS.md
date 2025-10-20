@@ -413,21 +413,22 @@ IMPORTANT: Member Architecture
     - Actions: Button display, navigation functionality
   - All tests passing (147+ total across codebase)
 
-- [ ] **Create Society Members Screen** (P1) #societies #ui
-  - Route: `/societies/:id/members`
-  - Use MemberBloc to load real members from database
-  - AppBar with title "Members (X)" showing real count and "Add Member" button
-  - Display list of members from GetSocietyMembers use case
-  - MemberCard widget shows: avatar placeholder, name, role badge, handicap
-  - Sort dropdown: Name Asc/Desc, Handicap Low/High (sort locally)
-  - Empty state when no members ("No members yet. Add your first member!")
-  - Tests: Widget tests with real BLoC integration
+- [X] **Create Society Members Screen** (P1) #societies #ui ✅
+  - [X] Route: `/societies/:id/members` ✅
+  - [X] Use MemberBloc to load real members from database ✅
+  - [X] AppBar with title "Members (X)" showing real count and "Add Member" button ✅
+  - [X] Display list of members from GetSocietyMembers use case ✅
+  - [X] MemberCard widget shows: avatar placeholder, name, role badge, handicap ✅
+  - [X] Sort dropdown: Name Asc/Desc, Handicap Low/High (sort locally) ✅
+  - [X] Empty state when no members ("No members yet. Add your first member!") ✅
+  - [X] Tests: Comprehensive widget tests (15 tests passing) ✅
+  - All 175+ tests passing across entire codebase
 
-- [ ] **Create Member Card Widget** (P1) #societies #ui
-  - Create `member_card.dart` reusable widget
-  - Display: avatar (placeholder circle with initials), name, role badge, handicap
-  - Show chevron icon for future navigation
-  - Tests: Widget tests for display and interactions
+- [X] **Create Member Card Widget** (P1) #societies #ui ✅
+  - [X] Create `member_card.dart` reusable widget ✅
+  - [X] Display: avatar (placeholder circle with initials), name, role badge, handicap ✅
+  - [X] Show chevron icon for future navigation ✅
+  - [X] Tests: Comprehensive widget tests (12 tests passing) ✅
 
 - [ ] **Create Add Member Screen** (P1) #members #ui
   - Route: `/societies/:id/members/add`
