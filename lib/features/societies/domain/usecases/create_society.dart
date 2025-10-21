@@ -2,17 +2,15 @@ import '../../../../core/constants/validation_constants.dart';
 import '../../../../core/errors/society_exceptions.dart';
 import '../entities/society.dart';
 import '../repositories/society_repository.dart';
-import '../../../members/domain/repositories/member_repository.dart';
 
 /// Creates a new golf society.
 ///
 /// Validates input and delegates to the repository.
-/// After creating the society, automatically adds the creator as a captain member.
+/// The repository uses a database function that automatically adds the creator as a captain member.
 class CreateSociety {
   final SocietyRepository _societyRepository;
-  final MemberRepository _memberRepository;
 
-  CreateSociety(this._societyRepository, this._memberRepository);
+  CreateSociety(this._societyRepository);
 
   /// Executes the create society operation.
   ///
@@ -21,9 +19,9 @@ class CreateSociety {
   /// - Name does not exceed max length
   /// - Description (if provided) does not exceed max length
   ///
-  /// After creating the society:
-  /// 1. Fetches the creator's primary member profile
-  /// 2. Creates a captain member record (second member record for the user)
+  /// The repository uses a database function that atomically:
+  /// 1. Creates the society record
+  /// 2. Automatically adds the creator as a captain member
   ///
   /// Returns the created [Society] with generated ID and timestamps.
   ///
@@ -31,8 +29,6 @@ class CreateSociety {
   /// - [InvalidSocietyDataException] for validation errors
   /// - [NetworkException] for network errors
   /// - [SocietyDatabaseException] for database errors
-  /// - [MemberNotFoundException] if primary member not found
-  /// - [MemberDatabaseException] for member creation errors
   Future<Society> call({
     required String userId,
     required String name,
@@ -74,23 +70,13 @@ class CreateSociety {
     }
 
     // Create the society
+    // Note: The repository's createSociety now uses a database function
+    // that automatically adds the creator as a captain member,
+    // so we don't need to do it here anymore.
     final society = await _societyRepository.createSociety(
       name: trimmedName,
       description: finalDescription,
       logoUrl: finalLogoUrl,
-    );
-
-    // Get the creator's primary member profile
-    final primaryMember = await _memberRepository.getPrimaryMember(userId);
-
-    // Create captain member record (second member record for this user)
-    await _memberRepository.addMember(
-      societyId: society.id,
-      userId: userId,
-      name: primaryMember.name,
-      email: primaryMember.email,
-      handicap: primaryMember.handicap,
-      role: 'CAPTAIN',
     );
 
     return society;

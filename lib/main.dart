@@ -27,6 +27,11 @@ import 'features/societies/domain/usecases/get_user_societies.dart';
 import 'features/societies/domain/usecases/update_society.dart';
 import 'features/societies/presentation/bloc/society_bloc.dart';
 import 'features/members/domain/usecases/get_member_count.dart';
+import 'features/members/domain/usecases/get_society_members.dart';
+import 'features/members/domain/usecases/join_society.dart';
+import 'features/members/domain/usecases/update_member_role.dart';
+import 'features/members/domain/usecases/leave_society.dart';
+import 'features/members/presentation/bloc/member_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,16 +68,17 @@ class MulligansLawApp extends StatelessWidget {
 
     // Create society repository and use cases
     final societyRepository = SocietyRepositoryImpl(supabase: supabaseClient);
-    // CreateSociety requires both society and member repositories
-    final createSocietyUseCase = CreateSociety(
-      societyRepository,
-      memberRepository,
-    );
+    // CreateSociety now uses a database function that handles member creation
+    final createSocietyUseCase = CreateSociety(societyRepository);
     final getUserSocietiesUseCase = GetUserSocieties(societyRepository);
     final updateSocietyUseCase = UpdateSociety(societyRepository);
 
     // Create member use cases
     final getMemberCountUseCase = GetMemberCount(memberRepository);
+    final getSocietyMembersUseCase = GetSocietyMembers(memberRepository);
+    final joinSocietyUseCase = JoinSociety(memberRepository, societyRepository);
+    final updateMemberRoleUseCase = UpdateMemberRole(memberRepository);
+    final leaveSocietyUseCase = LeaveSociety(memberRepository);
 
     return MultiRepositoryProvider(
       providers: [
@@ -94,6 +100,14 @@ class MulligansLawApp extends StatelessWidget {
               createSociety: createSocietyUseCase,
               getUserSocieties: getUserSocietiesUseCase,
               updateSociety: updateSocietyUseCase,
+            ),
+          ),
+          BlocProvider(
+            create: (context) => MemberBloc(
+              getSocietyMembers: getSocietyMembersUseCase,
+              joinSociety: joinSocietyUseCase,
+              updateMemberRole: updateMemberRoleUseCase,
+              leaveSociety: leaveSocietyUseCase,
             ),
           ),
         ],

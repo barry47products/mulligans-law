@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -23,22 +24,55 @@ class SocietyRepositoryImpl implements SocietyRepository {
     String? logoUrl,
   }) async {
     try {
-      final data = {
-        DatabaseColumns.name: name,
-        if (description != null) DatabaseColumns.description: description,
-        if (logoUrl != null) DatabaseColumns.logoUrl: logoUrl,
+      developer.log('Creating society: $name', name: 'SocietyRepository');
+
+      // Use RPC function to create society and add creator as captain
+      final response = await _supabase.rpc(
+        'create_society_with_captain',
+        params: {
+          'p_name': name,
+          if (description != null) 'p_description': description,
+          if (logoUrl != null) 'p_logo_url': logoUrl,
+        },
+      );
+
+      developer.log('RPC response: $response', name: 'SocietyRepository');
+
+      // The RPC function returns a single row, access it from the list
+      final result = (response as List).first;
+
+      // Convert the response which has prefixed column names
+      final societyData = {
+        DatabaseColumns.id: result['society_id'],
+        DatabaseColumns.name: result['society_name'],
+        if (result['society_description'] != null)
+          DatabaseColumns.description: result['society_description'],
+        if (result['society_logo_url'] != null)
+          DatabaseColumns.logoUrl: result['society_logo_url'],
+        DatabaseColumns.createdAt: result['society_created_at'],
+        DatabaseColumns.updatedAt: result['society_updated_at'],
       };
 
-      final response = await _supabase
-          .from(DatabaseTables.societies)
-          .insert(data)
-          .select()
-          .single();
+      developer.log(
+        'Society created successfully: ${result['society_id']}',
+        name: 'SocietyRepository',
+      );
 
-      return SocietyModel.fromJson(response);
-    } on SocketException {
+      return SocietyModel.fromJson(societyData);
+    } on SocketException catch (e) {
+      developer.log(
+        'Network error creating society',
+        name: 'SocietyRepository',
+        error: e,
+      );
       throw const NetworkException();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      developer.log(
+        'Error creating society',
+        name: 'SocietyRepository',
+        error: e,
+        stackTrace: stackTrace,
+      );
       throw SocietyDatabaseException(
         'Failed to create society: ${e.toString()}',
       );

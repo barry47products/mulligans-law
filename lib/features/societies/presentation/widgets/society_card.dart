@@ -104,17 +104,20 @@ class SocietyCard extends StatelessWidget {
   }
 
   Widget _buildViewButton() {
-    return ElevatedButton(
-      onPressed: onViewPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.space4,
-          vertical: AppSpacing.space2,
+    return SizedBox(
+      width: 80,
+      child: ElevatedButton(
+        onPressed: onViewPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space2,
+          ),
         ),
+        child: const Text(_viewButtonText),
       ),
-      child: const Text(_viewButtonText),
     );
   }
 
