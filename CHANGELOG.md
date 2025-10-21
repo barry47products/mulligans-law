@@ -1,3 +1,9 @@
+## [0.23.0](https://github.com/barry47products/mulligans-law/compare/v0.22.0...v0.23.0) (2025-10-21)
+
+### Features
+
+* **home:** implement dashboard home screen with statistics and quick actions ([350cf9a](https://github.com/barry47products/mulligans-law/commit/350cf9af2703a298d1ddf8f2aecfae509fc81ce4))
+
 ## [0.22.0](https://github.com/barry47products/mulligans-law/compare/v0.21.0...v0.22.0) (2025-10-21)
 
 ### Features
