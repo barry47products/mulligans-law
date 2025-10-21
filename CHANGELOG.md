@@ -1,3 +1,9 @@
+## [0.22.0](https://github.com/barry47products/mulligans-law/compare/v0.21.0...v0.22.0) (2025-10-21)
+
+### Features
+
+* **navigation:** implement main bottom navigation with 5 tabs ([e7c1c67](https://github.com/barry47products/mulligans-law/commit/e7c1c67225b05790a55422d2efd2cba58092d46f))
+
 ## [0.21.0](https://github.com/barry47products/mulligans-law/compare/v0.20.0...v0.21.0) (2025-10-20)
 
 ### Features
