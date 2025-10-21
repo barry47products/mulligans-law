@@ -486,17 +486,19 @@ IMPORTANT: Member Architecture
   - [X] Tests: Widget tests for display, sign out functionality (15 tests passing) ✅
   - [X] Update MainScaffold to use ProfileScreen ✅
 
-- [ ] **Update Societies Tab Navigation** (P1) #societies #navigation
-  - [ ] Move SocietyListScreen to Societies tab Navigator
-  - [ ] Ensure existing routes work within nested Navigator:
-    - [ ] `/societies` → SocietyListScreen (root of Societies tab)
-    - [ ] `/societies/create` → SocietyFormScreen
-    - [ ] `/societies/edit` → SocietyFormScreen with society argument
-    - [ ] `/societies/:id/dashboard` → SocietyDashboardScreen
-    - [ ] `/societies/:id/members` → SocietyMembersScreen
-  - [ ] Verify back button navigation works correctly within tab
-  - [ ] Verify tab switching preserves Societies navigation stack
-  - [ ] Tests: Navigation integration tests within Societies tab
+- [X] **Update Societies Tab Navigation** (P1) #societies #navigation ✅
+  - [X] Move SocietyListScreen to Societies tab Navigator ✅
+  - [X] Ensure existing routes work within nested Navigator: ✅
+    - [X] `/` → SocietyListScreen (root of Societies tab) ✅
+    - [X] `/create` → SocietyFormScreen ✅
+    - [X] `/edit` → SocietyFormScreen with society argument ✅
+    - [X] `/:id/dashboard` → SocietyDashboardScreen ✅
+    - [X] `/:id/members` → SocietyMembersScreen ✅
+  - [X] Updated navigation calls in society screens to use relative paths ✅
+  - [X] Removed society routes from main.dart app router ✅
+  - [X] Verify back button navigation works correctly within tab ✅
+  - [X] Verify tab switching preserves Societies navigation stack ✅
+  - [X] Tests: All 11 main_scaffold navigation tests passing ✅
 
 - [ ] **Create Add Member Screen** (P1) #members #ui
   - Note: This task will be revised after bottom navigation implementation

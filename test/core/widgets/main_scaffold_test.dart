@@ -6,24 +6,45 @@ import 'package:mockito/mockito.dart';
 import 'package:mulligans_law/core/widgets/main_scaffold.dart';
 import 'package:mulligans_law/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mulligans_law/features/auth/presentation/bloc/auth_state.dart';
+import 'package:mulligans_law/features/societies/presentation/bloc/society_bloc.dart';
+import 'package:mulligans_law/features/societies/presentation/bloc/society_state.dart';
+import 'package:mulligans_law/features/members/domain/usecases/get_member_count.dart';
 
 import 'main_scaffold_test.mocks.dart';
 
-@GenerateMocks([AuthBloc])
+@GenerateMocks([AuthBloc, SocietyBloc, GetMemberCount])
 void main() {
   group('MainScaffold', () {
     late MockAuthBloc mockAuthBloc;
+    late MockSocietyBloc mockSocietyBloc;
+    late MockGetMemberCount mockGetMemberCount;
 
     setUp(() {
       mockAuthBloc = MockAuthBloc();
+      mockSocietyBloc = MockSocietyBloc();
+      mockGetMemberCount = MockGetMemberCount();
+
       when(mockAuthBloc.stream).thenAnswer((_) => const Stream.empty());
       when(mockAuthBloc.state).thenReturn(const AuthInitial());
+
+      when(mockSocietyBloc.stream).thenAnswer((_) => const Stream.empty());
+      when(mockSocietyBloc.state).thenReturn(const SocietyInitial());
+
+      when(mockGetMemberCount.call(any)).thenAnswer((_) async => 0);
     });
 
     Widget buildTestWidget() {
-      return BlocProvider<AuthBloc>.value(
-        value: mockAuthBloc,
-        child: const MaterialApp(home: MainScaffold()),
+      return MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider<GetMemberCount>.value(value: mockGetMemberCount),
+        ],
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<AuthBloc>.value(value: mockAuthBloc),
+            BlocProvider<SocietyBloc>.value(value: mockSocietyBloc),
+          ],
+          child: const MaterialApp(home: MainScaffold()),
+        ),
       );
     }
 
@@ -71,10 +92,9 @@ void main() {
       expect(find.text('Quick Actions'), findsOneWidget);
 
       // Other tabs should not be visible
-      expect(find.text('Societies Tab'), findsNothing);
       expect(find.text('Events coming soon'), findsNothing);
       expect(find.text('Leaderboards coming soon'), findsNothing);
-      expect(find.text('Profile Tab'), findsNothing);
+      expect(find.text('Not authenticated'), findsNothing); // Profile screen
     });
 
     testWidgets('switches to Societies tab when tapped', (tester) async {
@@ -89,8 +109,9 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Societies tab should be displayed
-      expect(find.text('Societies Tab'), findsOneWidget);
+      // Societies tab should be displayed (SocietyListScreen)
+      // The SocietyListScreen has "My Societies" in its AppBar
+      expect(find.text('My Societies'), findsOneWidget);
 
       // Home tab should not be visible
       expect(find.text('Quick Stats'), findsNothing);
@@ -150,7 +171,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.text('Societies Tab'), findsOneWidget);
+      expect(find.text('My Societies'), findsOneWidget);
 
       // Switch to Events
       await tester.tap(
@@ -184,7 +205,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Societies tab should still be there (state preserved)
-      expect(find.text('Societies Tab'), findsOneWidget);
+      expect(find.text('My Societies'), findsOneWidget);
     });
 
     testWidgets('each tab has its own scaffold and app bar', (tester) async {
@@ -203,7 +224,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Societies tab has its own app bar
-      expect(find.widgetWithText(AppBar, 'Societies'), findsOneWidget);
+      expect(find.widgetWithText(AppBar, 'My Societies'), findsOneWidget);
       expect(find.widgetWithText(AppBar, 'Mulligans Law'), findsNothing);
     });
 

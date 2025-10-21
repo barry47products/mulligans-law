@@ -203,7 +203,7 @@ void main() {
             ),
           ),
           routes: {
-            '/societies/society-1/dashboard': (context) =>
+            '/society-1/dashboard': (context) =>
                 const Scaffold(body: Text('Dashboard Screen')),
           },
         ),

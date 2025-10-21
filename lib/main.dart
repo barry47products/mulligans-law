@@ -22,15 +22,10 @@ import 'features/auth/presentation/bloc/auth_state.dart';
 import 'features/members/data/repositories/member_repository_impl.dart';
 import 'features/auth/presentation/screens/screens.dart';
 import 'features/societies/data/repositories/society_repository_impl.dart';
-import 'features/societies/domain/entities/society.dart';
 import 'features/societies/domain/usecases/create_society.dart';
 import 'features/societies/domain/usecases/get_user_societies.dart';
 import 'features/societies/domain/usecases/update_society.dart';
 import 'features/societies/presentation/bloc/society_bloc.dart';
-import 'features/societies/presentation/screens/society_dashboard_screen.dart';
-import 'features/societies/presentation/screens/society_form_screen.dart';
-import 'features/societies/presentation/screens/society_list_screen.dart';
-import 'features/societies/presentation/screens/society_members_screen.dart';
 import 'features/members/domain/usecases/get_member_count.dart';
 
 Future<void> main() async {
@@ -121,38 +116,6 @@ class MulligansLawApp extends StatelessWidget {
               return VerifyEmailScreen(email: email);
             },
             '/home': (context) => const HomeScreen(),
-            '/societies': (context) => const SocietyListScreen(),
-            '/societies/create': (context) => const SocietyFormScreen(),
-            '/societies/edit': (context) {
-              final society = ModalRoute.of(context)?.settings.arguments;
-              return SocietyFormScreen(society: society as Society?);
-            },
-          },
-          onGenerateRoute: (settings) {
-            // Handle dynamic routes like /societies/:id/dashboard
-            if (settings.name?.startsWith('/societies/') == true &&
-                settings.name?.endsWith('/dashboard') == true) {
-              final society = settings.arguments as Society?;
-              if (society != null) {
-                return MaterialPageRoute(
-                  builder: (context) => SocietyDashboardScreen(
-                    society: society,
-                    getMemberCount: getMemberCountUseCase,
-                  ),
-                );
-              }
-            }
-            // Handle /societies/:id/members route
-            if (settings.name?.startsWith('/societies/') == true &&
-                settings.name?.endsWith('/members') == true) {
-              final society = settings.arguments as Society?;
-              if (society != null) {
-                return MaterialPageRoute(
-                  builder: (context) => SocietyMembersScreen(society: society),
-                );
-              }
-            }
-            return null;
           },
         ),
       ),

@@ -305,13 +305,17 @@ class _SocietyListScreenState extends State<SocietyListScreen> {
 
   void _onSocietyTapped(Society society) {
     context.read<SocietyBloc>().add(SocietySelected(society.id));
-    // Navigate to society dashboard
-    // TODO: Implement dashboard screen - for now this will show error/404
-    Navigator.pushNamed(context, '/societies/${society.id}/dashboard');
+    // Navigate to society dashboard (relative path within Societies tab)
+    Navigator.pushNamed(
+      context,
+      '/${society.id}/dashboard',
+      arguments: society,
+    );
   }
 
   void _navigateToCreateSociety() {
-    Navigator.pushNamed(context, '/societies/create');
+    // Navigate to create form (relative path within Societies tab)
+    Navigator.pushNamed(context, '/create');
   }
 
   // Constants

@@ -242,7 +242,7 @@ void main() {
               getMemberCount: mockGetMemberCount,
             ),
             routes: {
-              '/societies/society-1/members': (context) =>
+              '/society-1/members': (context) =>
                   const Scaffold(body: Text('Members Screen')),
             },
           ),
@@ -267,8 +267,7 @@ void main() {
               getMemberCount: mockGetMemberCount,
             ),
             routes: {
-              '/societies/edit': (context) =>
-                  const Scaffold(body: Text('Edit Screen')),
+              '/edit': (context) => const Scaffold(body: Text('Edit Screen')),
             },
           ),
         );

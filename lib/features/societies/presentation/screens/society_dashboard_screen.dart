@@ -200,7 +200,7 @@ class _SocietyDashboardScreenState extends State<SocietyDashboardScreen>
             onPressed: () {
               Navigator.pushNamed(
                 context,
-                '/societies/${widget.society.id}/members',
+                '/${widget.society.id}/members',
                 arguments: widget.society,
               );
             },
@@ -210,11 +210,7 @@ class _SocietyDashboardScreenState extends State<SocietyDashboardScreen>
             label: _settingsLabel,
             icon: Icons.settings,
             onPressed: () {
-              Navigator.pushNamed(
-                context,
-                '/societies/edit',
-                arguments: widget.society,
-              );
+              Navigator.pushNamed(context, '/edit', arguments: widget.society);
             },
           ),
         ],

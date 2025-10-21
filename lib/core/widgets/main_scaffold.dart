@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/home/presentation/screens/dashboard_screen.dart';
 import '../../features/events/presentation/screens/events_screen.dart';
 import '../../features/leaderboard/presentation/screens/leaderboard_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/societies/domain/entities/society.dart';
+import '../../features/societies/presentation/screens/society_list_screen.dart';
+import '../../features/societies/presentation/screens/society_form_screen.dart';
+import '../../features/societies/presentation/screens/society_dashboard_screen.dart';
+import '../../features/societies/presentation/screens/society_members_screen.dart';
+import '../../features/members/domain/usecases/get_member_count.dart';
 
 /// Main application scaffold with bottom navigation bar
 ///
@@ -125,9 +132,57 @@ class _MainScaffoldState extends State<MainScaffold> {
     return Navigator(
       key: _societiesNavigatorKey,
       onGenerateRoute: (settings) {
+        // Root of Societies tab
+        if (settings.name == Navigator.defaultRouteName ||
+            settings.name == '/') {
+          return MaterialPageRoute(
+            builder: (context) => const SocietyListScreen(),
+          );
+        }
+
+        // Create society
+        if (settings.name == '/create') {
+          return MaterialPageRoute(
+            builder: (context) => const SocietyFormScreen(),
+          );
+        }
+
+        // Edit society
+        if (settings.name == '/edit') {
+          final society = settings.arguments as Society?;
+          return MaterialPageRoute(
+            builder: (context) => SocietyFormScreen(society: society),
+          );
+        }
+
+        // Society dashboard
+        if (settings.name?.endsWith('/dashboard') == true) {
+          final society = settings.arguments as Society?;
+          if (society != null) {
+            // Get GetMemberCount use case from context
+            final getMemberCount = context.read<GetMemberCount>();
+            return MaterialPageRoute(
+              builder: (context) => SocietyDashboardScreen(
+                society: society,
+                getMemberCount: getMemberCount,
+              ),
+            );
+          }
+        }
+
+        // Society members
+        if (settings.name?.endsWith('/members') == true) {
+          final society = settings.arguments as Society?;
+          if (society != null) {
+            return MaterialPageRoute(
+              builder: (context) => SocietyMembersScreen(society: society),
+            );
+          }
+        }
+
+        // Fallback to society list
         return MaterialPageRoute(
-          builder: (context) =>
-              _buildPlaceholderScreen('Societies', Icons.groups),
+          builder: (context) => const SocietyListScreen(),
         );
       },
     );
@@ -162,29 +217,6 @@ class _MainScaffoldState extends State<MainScaffold> {
       onGenerateRoute: (settings) {
         return MaterialPageRoute(builder: (context) => const ProfileScreen());
       },
-    );
-  }
-
-  /// Temporary placeholder screen for each tab
-  /// Will be replaced with actual screens in subsequent tasks
-  Widget _buildPlaceholderScreen(String title, IconData icon) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 64),
-            const SizedBox(height: 16),
-            Text(
-              '$title Tab',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            const Text('Coming soon'),
-          ],
-        ),
-      ),
     );
   }
 }
