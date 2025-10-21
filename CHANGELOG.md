@@ -1,3 +1,9 @@
+## [0.25.0](https://github.com/barry47products/mulligans-law/compare/v0.24.0...v0.25.0) (2025-10-21)
+
+### Features
+
+* **leaderboard:** implement leaderboard landing screen with placeholder content ([b507ae6](https://github.com/barry47products/mulligans-law/commit/b507ae6c4c39c63ef1a2ee5ce4b99e70090ed603))
+
 ## [0.24.0](https://github.com/barry47products/mulligans-law/compare/v0.23.0...v0.24.0) (2025-10-21)
 
 ### Features
