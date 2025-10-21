@@ -1,3 +1,9 @@
+## [0.26.0](https://github.com/barry47products/mulligans-law/compare/v0.25.0...v0.26.0) (2025-10-21)
+
+### Features
+
+* **profile:** implement profile landing screen with user info and sign out ([fbe6708](https://github.com/barry47products/mulligans-law/commit/fbe67086bb05a5798921e31b2f71e17fbac4963b))
+
 ## [0.25.0](https://github.com/barry47products/mulligans-law/compare/v0.24.0...v0.25.0) (2025-10-21)
 
 ### Features
