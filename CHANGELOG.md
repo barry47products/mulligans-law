@@ -1,3 +1,9 @@
+## [0.27.0](https://github.com/barry47products/mulligans-law/compare/v0.26.0...v0.27.0) (2025-10-21)
+
+### Features
+
+* **navigation:** move societies navigation to nested Societies tab Navigator ([96f3c5a](https://github.com/barry47products/mulligans-law/commit/96f3c5a68ee3f815b33addf1df1659822f43ac92))
+
 ## [0.26.0](https://github.com/barry47products/mulligans-law/compare/v0.25.0...v0.26.0) (2025-10-21)
 
 ### Features
