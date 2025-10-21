@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../features/home/presentation/screens/dashboard_screen.dart';
+import '../../features/events/presentation/screens/events_screen.dart';
 
 /// Main application scaffold with bottom navigation bar
 ///
@@ -135,9 +136,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     return Navigator(
       key: _eventsNavigatorKey,
       onGenerateRoute: (settings) {
-        return MaterialPageRoute(
-          builder: (context) => _buildPlaceholderScreen('Events', Icons.event),
-        );
+        return MaterialPageRoute(builder: (context) => const EventsScreen());
       },
     );
   }

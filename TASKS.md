@@ -456,12 +456,14 @@ IMPORTANT: Member Architecture
   - [X] Tests: Widget tests for header, stats display, quick actions navigation (21 tests) ✅
   - All 335 tests passing across entire codebase
 
-- [ ] **Create Events Landing Screen** (P1) #events #ui
-  - [ ] Create `lib/features/events/presentation/screens/events_screen.dart`
-  - [ ] AppBar with title "Events"
-  - [ ] Placeholder empty state: "Events coming soon" with info icon
-  - [ ] Placeholder text: "Track society events, book tee times, and manage tournaments"
-  - [ ] Tests: Basic widget test for screen rendering
+- [X] **Create Events Landing Screen** (P1) #events #ui ✅
+  - [X] Create `lib/features/events/presentation/screens/events_screen.dart` ✅
+  - [X] AppBar with title "Events" ✅
+  - [X] Placeholder empty state: "Events coming soon" with event icon ✅
+  - [X] Placeholder text: "Track society events, book tee times, and manage tournaments" ✅
+  - [X] Tests: Basic widget test for screen rendering (6 tests) ✅
+  - [X] Update MainScaffold to use EventsScreen ✅
+  - All 341 tests passing across entire codebase
 
 - [ ] **Create Leaderboard Landing Screen** (P1) #leaderboard #ui
   - [ ] Create `lib/features/leaderboard/presentation/screens/leaderboard_screen.dart`
