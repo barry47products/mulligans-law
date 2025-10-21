@@ -474,16 +474,17 @@ IMPORTANT: Member Architecture
   - [X] Update MainScaffold to use LeaderboardScreen ✅
   - All 347 tests passing across entire codebase
 
-- [ ] **Create Profile Landing Screen** (P1) #profile #ui
-  - [ ] Create `lib/features/profile/presentation/screens/profile_screen.dart`
-  - [ ] AppBar with title "Profile"
-  - [ ] Placeholder avatar circle with user initials (get from AuthBloc current user)
-  - [ ] Display: Name, email (from AuthBloc)
-  - [ ] Display: Handicap (placeholder: "Not set" for now - primary member profile coming later)
-  - [ ] ListTile "Edit Profile" (placeholder, shows "Coming soon" snackbar)
-  - [ ] ListTile "Settings" (placeholder, shows "Coming soon" snackbar)
-  - [ ] Sign Out button (uses existing AuthBloc sign out)
-  - [ ] Tests: Widget tests for display, sign out functionality
+- [X] **Create Profile Landing Screen** (P1) #profile #ui ✅
+  - [X] Create `lib/features/profile/presentation/screens/profile_screen.dart` ✅
+  - [X] AppBar with title "Profile" ✅
+  - [X] Placeholder avatar circle with user initials (get from AuthBloc current user) ✅
+  - [X] Display: Name, email (from AuthBloc) ✅
+  - [X] Display: Handicap (placeholder: "Not set" for now - primary member profile coming later) ✅
+  - [X] ListTile "Edit Profile" (placeholder, shows "Coming soon" snackbar) ✅
+  - [X] ListTile "Settings" (placeholder, shows "Coming soon" snackbar) ✅
+  - [X] Sign Out button (uses existing AuthBloc sign out) ✅
+  - [X] Tests: Widget tests for display, sign out functionality (15 tests passing) ✅
+  - [X] Update MainScaffold to use ProfileScreen ✅
 
 - [ ] **Update Societies Tab Navigation** (P1) #societies #navigation
   - [ ] Move SocietyListScreen to Societies tab Navigator

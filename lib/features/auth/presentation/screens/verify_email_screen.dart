@@ -67,8 +67,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
 
       if (!mounted) return;
 
-      // Navigate to home screen on success
-      Navigator.pushReplacementNamed(context, '/home');
+      // Pop back to AuthGate which will show MainScaffold
+      Navigator.of(context).popUntil((route) => route.isFirst);
     } catch (e) {
       if (!mounted) return;
 

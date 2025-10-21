@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../features/home/presentation/screens/dashboard_screen.dart';
 import '../../features/events/presentation/screens/events_screen.dart';
 import '../../features/leaderboard/presentation/screens/leaderboard_screen.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
 
 /// Main application scaffold with bottom navigation bar
 ///
@@ -159,10 +160,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     return Navigator(
       key: _profileNavigatorKey,
       onGenerateRoute: (settings) {
-        return MaterialPageRoute(
-          builder: (context) =>
-              _buildPlaceholderScreen('Profile', Icons.person),
-        );
+        return MaterialPageRoute(builder: (context) => const ProfileScreen());
       },
     );
   }

@@ -50,58 +50,60 @@ jobs:
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
 
-  build-ios:
-    name: Build iOS
-    runs-on: macos-latest
-    permissions:
-      contents: read  # To checkout code
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.35.6'
-          channel: 'stable'
-          cache: true
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build iOS (no codesign)
-        run: flutter build ios --release --no-codesign
-
-  build-android:
-    name: Build Android
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read  # To checkout code
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.35.6'
-          channel: 'stable'
-          cache: true
-
-      - name: Set up Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-          cache: 'gradle'
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build Android APK
-        run: flutter build apk --release
-
-      - name: Build Android App Bundle
-        run: flutter build appbundle --release
+  # Disabled to save GitHub Actions minutes during development
+  # Uncomment when ready for deployment
+  # build-ios:
+  #   name: Build iOS
+  #   runs-on: macos-latest
+  #   permissions:
+  #     contents: read  # To checkout code
+  #
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v5
+  #
+  #     - name: Set up Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: '3.35.6'
+  #         channel: 'stable'
+  #         cache: true
+  #
+  #     - name: Install dependencies
+  #       run: flutter pub get
+  #
+  #     - name: Build iOS (no codesign)
+  #       run: flutter build ios --release --no-codesign
+  #
+  # build-android:
+  #   name: Build Android
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: read  # To checkout code
+  #
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v5
+  #
+  #     - name: Set up Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: '3.35.6'
+  #         channel: 'stable'
+  #         cache: true
+  #
+  #     - name: Set up Java
+  #       uses: actions/setup-java@v5
+  #       with:
+  #         distribution: 'temurin'
+  #         java-version: '21'
+  #         cache: 'gradle'
+  #
+  #     - name: Install dependencies
+  #       run: flutter pub get
+  #
+  #     - name: Build Android APK
+  #       run: flutter build apk --release
+  #
+  #     - name: Build Android App Bundle
+  #       run: flutter build appbundle --release

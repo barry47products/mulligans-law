@@ -58,8 +58,8 @@ class _SignInScreenState extends State<SignInScreen> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
-            // Navigate to home screen
-            Navigator.pushReplacementNamed(context, '/home');
+            // Pop back to AuthGate which will show MainScaffold
+            Navigator.of(context).popUntil((route) => route.isFirst);
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

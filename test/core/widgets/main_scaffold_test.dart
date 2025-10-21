@@ -130,8 +130,10 @@ void main() {
       await tester.tap(find.text('Profile'));
       await tester.pumpAndSettle();
 
-      // Profile tab should be displayed
-      expect(find.text('Profile Tab'), findsOneWidget);
+      // Profile tab (ProfileScreen) should be displayed
+      // Since ProfileScreen requires AuthBloc and will show "Not authenticated"
+      // when there's no authenticated user in the test
+      expect(find.text('Not authenticated'), findsOneWidget);
     });
 
     testWidgets('preserves state when switching tabs', (tester) async {
