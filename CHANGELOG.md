@@ -1,3 +1,9 @@
+## [0.24.0](https://github.com/barry47products/mulligans-law/compare/v0.23.0...v0.24.0) (2025-10-21)
+
+### Features
+
+* **events:** implement events landing screen with placeholder content ([e90e67c](https://github.com/barry47products/mulligans-law/commit/e90e67cb4947e207246b796b48805365eeaddb81))
+
 ## [0.23.0](https://github.com/barry47products/mulligans-law/compare/v0.22.0...v0.23.0) (2025-10-21)
 
 ### Features
