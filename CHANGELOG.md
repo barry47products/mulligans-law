@@ -1,3 +1,9 @@
+## [0.27.1](https://github.com/barry47products/mulligans-law/compare/v0.27.0...v0.27.1) (2025-10-21)
+
+### Bug Fixes
+
+* **database:** resolve RLS infinite recursion and implement atomic society creation ([3b912c4](https://github.com/barry47products/mulligans-law/commit/3b912c4b9f575af72d8940e5fa150c8f027e2c28))
+
 ## [0.27.0](https://github.com/barry47products/mulligans-law/compare/v0.26.0...v0.27.0) (2025-10-21)
 
 ### Features
