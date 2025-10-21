@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../features/home/presentation/screens/dashboard_screen.dart';
 
 /// Main application scaffold with bottom navigation bar
 ///
@@ -111,9 +112,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     return Navigator(
       key: _homeNavigatorKey,
       onGenerateRoute: (settings) {
-        return MaterialPageRoute(
-          builder: (context) => _buildPlaceholderScreen('Home', Icons.home),
-        );
+        return MaterialPageRoute(builder: (context) => const DashboardScreen());
       },
     );
   }

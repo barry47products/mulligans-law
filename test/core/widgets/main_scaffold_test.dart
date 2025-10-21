@@ -1,11 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 import 'package:mulligans_law/core/widgets/main_scaffold.dart';
+import 'package:mulligans_law/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:mulligans_law/features/auth/presentation/bloc/auth_state.dart';
 
+import 'main_scaffold_test.mocks.dart';
+
+@GenerateMocks([AuthBloc])
 void main() {
   group('MainScaffold', () {
+    late MockAuthBloc mockAuthBloc;
+
+    setUp(() {
+      mockAuthBloc = MockAuthBloc();
+      when(mockAuthBloc.stream).thenAnswer((_) => const Stream.empty());
+      when(mockAuthBloc.state).thenReturn(const AuthInitial());
+    });
+
+    Widget buildTestWidget() {
+      return BlocProvider<AuthBloc>.value(
+        value: mockAuthBloc,
+        child: const MaterialApp(home: MainScaffold()),
+      );
+    }
+
     testWidgets('renders with bottom navigation bar', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: MainScaffold()));
+      await tester.pumpWidget(buildTestWidget());
 
       // Verify bottom navigation bar exists
       expect(find.byType(BottomNavigationBar), findsOneWidget);
@@ -25,7 +48,7 @@ void main() {
     });
 
     testWidgets('displays correct icons for each tab', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: MainScaffold()));
+      await tester.pumpWidget(buildTestWidget());
 
       // Get the bottom navigation bar
       final bottomNav = tester.widget<BottomNavigationBar>(
@@ -41,11 +64,11 @@ void main() {
     });
 
     testWidgets('starts with Home tab selected', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: MainScaffold()));
+      await tester.pumpWidget(buildTestWidget());
 
-      // Home tab should be displayed
-      expect(find.text('Home Tab'), findsOneWidget);
-      expect(find.text('Coming soon'), findsOneWidget);
+      // Home tab (DashboardScreen) should be displayed
+      expect(find.text('Quick Stats'), findsOneWidget);
+      expect(find.text('Quick Actions'), findsOneWidget);
 
       // Other tabs should not be visible
       expect(find.text('Societies Tab'), findsNothing);
@@ -55,24 +78,34 @@ void main() {
     });
 
     testWidgets('switches to Societies tab when tapped', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: MainScaffold()));
+      await tester.pumpWidget(buildTestWidget());
 
-      // Tap Societies tab
-      await tester.tap(find.text('Societies'));
+      // Tap Societies tab in bottom nav
+      await tester.tap(
+        find.descendant(
+          of: find.byType(BottomNavigationBar),
+          matching: find.text('Societies'),
+        ),
+      );
       await tester.pumpAndSettle();
 
       // Societies tab should be displayed
       expect(find.text('Societies Tab'), findsOneWidget);
 
       // Home tab should not be visible
-      expect(find.text('Home Tab'), findsNothing);
+      expect(find.text('Quick Stats'), findsNothing);
     });
 
     testWidgets('switches to Events tab when tapped', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: MainScaffold()));
+      await tester.pumpWidget(buildTestWidget());
 
-      // Tap Events tab
-      await tester.tap(find.text('Events'));
+      // Tap Events tab in bottom nav
+      await tester.tap(
+        find.descendant(
+          of: find.byType(BottomNavigationBar),
+          matching: find.text('Events'),
+        ),
+      );
       await tester.pumpAndSettle();
 
       // Events tab should be displayed
@@ -80,7 +113,7 @@ void main() {
     });
 
     testWidgets('switches to Leaderboard tab when tapped', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: MainScaffold()));
+      await tester.pumpWidget(buildTestWidget());
 
       // Tap Leaderboard tab
       await tester.tap(find.text('Leaderboard'));
@@ -91,7 +124,7 @@ void main() {
     });
 
     testWidgets('switches to Profile tab when tapped', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: MainScaffold()));
+      await tester.pumpWidget(buildTestWidget());
 
       // Tap Profile tab
       await tester.tap(find.text('Profile'));
@@ -102,30 +135,50 @@ void main() {
     });
 
     testWidgets('preserves state when switching tabs', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: MainScaffold()));
+      await tester.pumpWidget(buildTestWidget());
 
-      // Start on Home tab
-      expect(find.text('Home Tab'), findsOneWidget);
+      // Start on Home tab (DashboardScreen)
+      expect(find.text('Quick Stats'), findsOneWidget);
 
       // Switch to Societies
-      await tester.tap(find.text('Societies'));
+      await tester.tap(
+        find.descendant(
+          of: find.byType(BottomNavigationBar),
+          matching: find.text('Societies'),
+        ),
+      );
       await tester.pumpAndSettle();
       expect(find.text('Societies Tab'), findsOneWidget);
 
       // Switch to Events
-      await tester.tap(find.text('Events'));
+      await tester.tap(
+        find.descendant(
+          of: find.byType(BottomNavigationBar),
+          matching: find.text('Events'),
+        ),
+      );
       await tester.pumpAndSettle();
       expect(find.text('Events Tab'), findsOneWidget);
 
       // Switch back to Home
-      await tester.tap(find.text('Home'));
+      await tester.tap(
+        find.descendant(
+          of: find.byType(BottomNavigationBar),
+          matching: find.text('Home'),
+        ),
+      );
       await tester.pumpAndSettle();
 
-      // Home tab should still be there (state preserved)
-      expect(find.text('Home Tab'), findsOneWidget);
+      // Home tab (DashboardScreen) should still be there (state preserved)
+      expect(find.text('Quick Stats'), findsOneWidget);
 
       // Switch back to Societies
-      await tester.tap(find.text('Societies'));
+      await tester.tap(
+        find.descendant(
+          of: find.byType(BottomNavigationBar),
+          matching: find.text('Societies'),
+        ),
+      );
       await tester.pumpAndSettle();
 
       // Societies tab should still be there (state preserved)
@@ -133,24 +186,29 @@ void main() {
     });
 
     testWidgets('each tab has its own scaffold and app bar', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: MainScaffold()));
+      await tester.pumpWidget(buildTestWidget());
 
-      // Home tab has its own app bar
-      expect(find.widgetWithText(AppBar, 'Home'), findsOneWidget);
+      // Home tab (DashboardScreen) has its own app bar
+      expect(find.widgetWithText(AppBar, 'Mulligans Law'), findsOneWidget);
 
       // Switch to Societies
-      await tester.tap(find.text('Societies'));
+      await tester.tap(
+        find.descendant(
+          of: find.byType(BottomNavigationBar),
+          matching: find.text('Societies'),
+        ),
+      );
       await tester.pumpAndSettle();
 
       // Societies tab has its own app bar
       expect(find.widgetWithText(AppBar, 'Societies'), findsOneWidget);
-      expect(find.widgetWithText(AppBar, 'Home'), findsNothing);
+      expect(find.widgetWithText(AppBar, 'Mulligans Law'), findsNothing);
     });
 
     testWidgets('IndexedStack is used to preserve all tabs in memory', (
       tester,
     ) async {
-      await tester.pumpWidget(const MaterialApp(home: MainScaffold()));
+      await tester.pumpWidget(buildTestWidget());
 
       // Verify IndexedStack is present
       expect(find.byType(IndexedStack), findsOneWidget);
@@ -163,7 +221,7 @@ void main() {
     });
 
     testWidgets('bottom navigation highlights correct tab', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: MainScaffold()));
+      await tester.pumpWidget(buildTestWidget());
 
       // Get BottomNavigationBar
       final bottomNav = tester.widget<BottomNavigationBar>(
@@ -173,8 +231,13 @@ void main() {
       // Initially, Home (index 0) should be selected
       expect(bottomNav.currentIndex, 0);
 
-      // Tap Societies
-      await tester.tap(find.text('Societies'));
+      // Tap Societies in bottom nav
+      await tester.tap(
+        find.descendant(
+          of: find.byType(BottomNavigationBar),
+          matching: find.text('Societies'),
+        ),
+      );
       await tester.pumpAndSettle();
 
       // Now Societies (index 1) should be selected
@@ -183,8 +246,13 @@ void main() {
       );
       expect(updatedBottomNav.currentIndex, 1);
 
-      // Tap Profile
-      await tester.tap(find.text('Profile'));
+      // Tap Profile in bottom nav
+      await tester.tap(
+        find.descendant(
+          of: find.byType(BottomNavigationBar),
+          matching: find.text('Profile'),
+        ),
+      );
       await tester.pumpAndSettle();
 
       // Now Profile (index 4) should be selected

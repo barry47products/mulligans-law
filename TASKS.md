@@ -441,19 +441,20 @@ IMPORTANT: Member Architecture
   - [X] Tests: Widget tests for tab switching, state preservation, navigation stack per tab (11 tests) ✅
   - All 186 tests passing across entire codebase
 
-- [ ] **Create Dashboard Home Screen** (P1) #home #ui
-  - [ ] Create `lib/features/home/presentation/screens/dashboard_screen.dart`
-  - [ ] Move current HomeScreen content (remove design system demo section)
-  - [ ] **Welcome Header:** "Welcome back, [Name]!", user avatar, current handicap display
-  - [ ] **Quick Stats Section:** 2x2 grid of statistic cards
-    - [ ] Total Societies count (from GetUserSocieties use case)
-    - [ ] Upcoming Events count (placeholder: 0 for now)
-    - [ ] Recent Rounds count (placeholder: 0 for now)
-    - [ ] Current Rank display (placeholder: "N/A" for now)
-  - [ ] **Recent Activity Section:** Scrollable list (placeholder empty state: "No recent activity")
-  - [ ] **Quick Actions:** "My Societies" button, "Start a Round" button (existing functionality)
-  - [ ] AppBar with title "Mulligans Law" and sign out button
-  - [ ] Tests: Widget tests for header, stats display, quick actions navigation
+- [X] **Create Dashboard Home Screen** (P1) #home #ui ✅
+  - [X] Create `lib/features/home/presentation/screens/dashboard_screen.dart` ✅
+  - [X] Move current HomeScreen content (remove design system demo section) ✅
+  - [X] **Welcome Header:** "Welcome back, [Name]!", user avatar, current handicap display ✅
+  - [X] **Quick Stats Section:** 2x2 grid of statistic cards ✅
+    - [X] Total Societies count (placeholder: 0 for now) ✅
+    - [X] Upcoming Events count (placeholder: 0 for now) ✅
+    - [X] Recent Rounds count (placeholder: 0 for now) ✅
+    - [X] Current Rank display (placeholder: "N/A" for now) ✅
+  - [X] **Recent Activity Section:** Scrollable list (placeholder empty state: "No recent activity") ✅
+  - [X] **Quick Actions:** "My Societies" button, "Start a Round" button (existing functionality) ✅
+  - [X] AppBar with title "Mulligans Law" and sign out button ✅
+  - [X] Tests: Widget tests for header, stats display, quick actions navigation (21 tests) ✅
+  - All 335 tests passing across entire codebase
 
 - [ ] **Create Events Landing Screen** (P1) #events #ui
   - [ ] Create `lib/features/events/presentation/screens/events_screen.dart`
