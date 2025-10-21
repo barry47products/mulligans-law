@@ -10,6 +10,7 @@ import 'core/theme/app_spacing.dart';
 import 'core/widgets/app_card.dart';
 import 'core/widgets/app_button.dart';
 import 'core/widgets/app_text_field.dart';
+import 'core/widgets/main_scaffold.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/usecases/get_current_user.dart';
 import 'features/auth/domain/usecases/sign_in.dart';
@@ -173,8 +174,8 @@ class AuthGate extends StatelessWidget {
             body: Center(child: CircularProgressIndicator()),
           );
         } else if (state is AuthAuthenticated) {
-          // User is authenticated, show home screen
-          return const HomeScreen();
+          // User is authenticated, show main scaffold with bottom nav
+          return const MainScaffold();
         } else {
           // User is not authenticated, show welcome screen
           return const WelcomeScreen();

@@ -430,36 +430,90 @@ IMPORTANT: Member Architecture
   - [X] Show chevron icon for future navigation ✅
   - [X] Tests: Comprehensive widget tests (12 tests passing) ✅
 
+- [X] **Implement Main Bottom Navigation** (P1) #navigation #ui ✅
+  - [X] Create `lib/core/widgets/main_scaffold.dart` with bottom navigation ✅
+  - [X] Use IndexedStack to preserve state across tab switches ✅
+  - [X] Implement 5 nested Navigators (one per tab: Home, Societies, Events, Leaderboard, Profile) ✅
+  - [X] Bottom nav items: Home (Icons.home), Societies (Icons.groups), Events (Icons.event), Leaderboard (Icons.leaderboard), Profile (Icons.person) ✅
+  - [X] Each tab maintains its own navigation stack (detail screens don't hide bottom nav) ✅
+  - [X] Update AuthGate in main.dart to navigate to MainScaffold instead of HomeScreen ✅
+  - [X] Configure route handling for each tab's Navigator ✅
+  - [X] Tests: Widget tests for tab switching, state preservation, navigation stack per tab (11 tests) ✅
+  - All 186 tests passing across entire codebase
+
+- [ ] **Create Dashboard Home Screen** (P1) #home #ui
+  - [ ] Create `lib/features/home/presentation/screens/dashboard_screen.dart`
+  - [ ] Move current HomeScreen content (remove design system demo section)
+  - [ ] **Welcome Header:** "Welcome back, [Name]!", user avatar, current handicap display
+  - [ ] **Quick Stats Section:** 2x2 grid of statistic cards
+    - [ ] Total Societies count (from GetUserSocieties use case)
+    - [ ] Upcoming Events count (placeholder: 0 for now)
+    - [ ] Recent Rounds count (placeholder: 0 for now)
+    - [ ] Current Rank display (placeholder: "N/A" for now)
+  - [ ] **Recent Activity Section:** Scrollable list (placeholder empty state: "No recent activity")
+  - [ ] **Quick Actions:** "My Societies" button, "Start a Round" button (existing functionality)
+  - [ ] AppBar with title "Mulligans Law" and sign out button
+  - [ ] Tests: Widget tests for header, stats display, quick actions navigation
+
+- [ ] **Create Events Landing Screen** (P1) #events #ui
+  - [ ] Create `lib/features/events/presentation/screens/events_screen.dart`
+  - [ ] AppBar with title "Events"
+  - [ ] Placeholder empty state: "Events coming soon" with info icon
+  - [ ] Placeholder text: "Track society events, book tee times, and manage tournaments"
+  - [ ] Tests: Basic widget test for screen rendering
+
+- [ ] **Create Leaderboard Landing Screen** (P1) #leaderboard #ui
+  - [ ] Create `lib/features/leaderboard/presentation/screens/leaderboard_screen.dart`
+  - [ ] AppBar with title "Leaderboard"
+  - [ ] Placeholder empty state: "Leaderboards coming soon" with trophy icon
+  - [ ] Placeholder text: "View rankings, statistics, and compete with society members"
+  - [ ] Tests: Basic widget test for screen rendering
+
+- [ ] **Create Profile Landing Screen** (P1) #profile #ui
+  - [ ] Create `lib/features/profile/presentation/screens/profile_screen.dart`
+  - [ ] AppBar with title "Profile"
+  - [ ] Placeholder avatar circle with user initials (get from AuthBloc current user)
+  - [ ] Display: Name, email (from AuthBloc)
+  - [ ] Display: Handicap (placeholder: "Not set" for now - primary member profile coming later)
+  - [ ] ListTile "Edit Profile" (placeholder, shows "Coming soon" snackbar)
+  - [ ] ListTile "Settings" (placeholder, shows "Coming soon" snackbar)
+  - [ ] Sign Out button (uses existing AuthBloc sign out)
+  - [ ] Tests: Widget tests for display, sign out functionality
+
+- [ ] **Update Societies Tab Navigation** (P1) #societies #navigation
+  - [ ] Move SocietyListScreen to Societies tab Navigator
+  - [ ] Ensure existing routes work within nested Navigator:
+    - [ ] `/societies` → SocietyListScreen (root of Societies tab)
+    - [ ] `/societies/create` → SocietyFormScreen
+    - [ ] `/societies/edit` → SocietyFormScreen with society argument
+    - [ ] `/societies/:id/dashboard` → SocietyDashboardScreen
+    - [ ] `/societies/:id/members` → SocietyMembersScreen
+  - [ ] Verify back button navigation works correctly within tab
+  - [ ] Verify tab switching preserves Societies navigation stack
+  - [ ] Tests: Navigation integration tests within Societies tab
+
 - [ ] **Create Add Member Screen** (P1) #members #ui
-  - Route: `/societies/:id/members/add`
+  - Note: This task will be revised after bottom navigation implementation
+  - Route: Within Societies tab Navigator: `/societies/:id/members/add`
   - Form fields: name (required), email (required, validated), handicap (0-54, required), role (dropdown: Member/Captain)
   - Use AddMember use case to create member
   - Validation: email format, handicap range, required fields
-  - Success: navigate back, show snackbar
+  - Success: navigate back within tab, show snackbar
   - Tests: Widget tests for validation, form submission
 
 - [ ] **Create Society Settings Screen** (P1) #societies #ui
-  - Route: `/societies/:id/settings`
+  - Note: Updated for bottom navigation architecture
+  - Route: Within Societies tab Navigator: `/societies/:id/settings`
   - **Section 1: Society Details**
-    - ListTile "Edit society information" → Navigate to SocietyFormScreen (existing)
+    - ListTile "Edit society information" → Navigate to SocietyFormScreen (within Societies tab)
   - **Section 2: Members**
-    - ListTile "View all members" → Navigate to Society Members Screen
-    - ListTile "Add member" → Navigate to Add Member Screen
+    - ListTile "View all members" → Navigate to Society Members Screen (within Societies tab)
+    - ListTile "Add member" → Navigate to Add Member Screen (within Societies tab)
   - **Section 3: Danger Zone**
     - Red outlined button "Delete Society" (uses existing delete use case from SocietyBloc)
     - Confirmation dialog: "Are you sure? This cannot be undone."
+    - On delete success: pop back to SocietyListScreen within Societies tab
   - Tests: Widget tests for navigation, delete confirmation
-
-- [ ] **Update Navigation Routes** (P1) #societies #ui
-  - Add MemberBloc to MultiBlocProvider in main.dart
-  - Add routes to main.dart:
-    - `/societies/:id/dashboard` → SocietyDashboardScreen
-    - `/societies/:id/members` → SocietyMembersScreen
-    - `/societies/:id/members/add` → AddMemberScreen
-    - `/societies/:id/settings` → SocietySettingsScreen
-  - Update SocietyListScreen: "View" button navigates to dashboard (not edit)
-  - Verify all navigation flows work end-to-end
-  - Tests: Navigation integration tests
 
 ---
 
