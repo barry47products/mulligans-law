@@ -73,7 +73,7 @@ void main() {
       // Other tabs should not be visible
       expect(find.text('Societies Tab'), findsNothing);
       expect(find.text('Events coming soon'), findsNothing);
-      expect(find.text('Leaderboard Tab'), findsNothing);
+      expect(find.text('Leaderboards coming soon'), findsNothing);
       expect(find.text('Profile Tab'), findsNothing);
     });
 
@@ -119,8 +119,8 @@ void main() {
       await tester.tap(find.text('Leaderboard'));
       await tester.pumpAndSettle();
 
-      // Leaderboard tab should be displayed
-      expect(find.text('Leaderboard Tab'), findsOneWidget);
+      // Leaderboard tab (LeaderboardScreen) should be displayed
+      expect(find.text('Leaderboards coming soon'), findsOneWidget);
     });
 
     testWidgets('switches to Profile tab when tapped', (tester) async {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../features/home/presentation/screens/dashboard_screen.dart';
 import '../../features/events/presentation/screens/events_screen.dart';
+import '../../features/leaderboard/presentation/screens/leaderboard_screen.dart';
 
 /// Main application scaffold with bottom navigation bar
 ///
@@ -147,8 +148,7 @@ class _MainScaffoldState extends State<MainScaffold> {
       key: _leaderboardNavigatorKey,
       onGenerateRoute: (settings) {
         return MaterialPageRoute(
-          builder: (context) =>
-              _buildPlaceholderScreen('Leaderboard', Icons.leaderboard),
+          builder: (context) => const LeaderboardScreen(),
         );
       },
     );

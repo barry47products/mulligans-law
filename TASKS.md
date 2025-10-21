@@ -465,12 +465,14 @@ IMPORTANT: Member Architecture
   - [X] Update MainScaffold to use EventsScreen ✅
   - All 341 tests passing across entire codebase
 
-- [ ] **Create Leaderboard Landing Screen** (P1) #leaderboard #ui
-  - [ ] Create `lib/features/leaderboard/presentation/screens/leaderboard_screen.dart`
-  - [ ] AppBar with title "Leaderboard"
-  - [ ] Placeholder empty state: "Leaderboards coming soon" with trophy icon
-  - [ ] Placeholder text: "View rankings, statistics, and compete with society members"
-  - [ ] Tests: Basic widget test for screen rendering
+- [X] **Create Leaderboard Landing Screen** (P1) #leaderboard #ui ✅
+  - [X] Create `lib/features/leaderboard/presentation/screens/leaderboard_screen.dart` ✅
+  - [X] AppBar with title "Leaderboard" ✅
+  - [X] Placeholder empty state: "Leaderboards coming soon" with leaderboard icon ✅
+  - [X] Placeholder text: "View rankings, statistics, and compete with society members" ✅
+  - [X] Tests: Basic widget test for screen rendering (6 tests) ✅
+  - [X] Update MainScaffold to use LeaderboardScreen ✅
+  - All 347 tests passing across entire codebase
 
 - [ ] **Create Profile Landing Screen** (P1) #profile #ui
   - [ ] Create `lib/features/profile/presentation/screens/profile_screen.dart`
