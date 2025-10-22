@@ -18,6 +18,7 @@ class CreateSociety {
   /// - Name is not empty
   /// - Name does not exceed max length
   /// - Description (if provided) does not exceed max length
+  /// - Handicap range is valid (min <= max, within -8 to 36)
   ///
   /// The repository uses a database function that atomically:
   /// 1. Creates the society record
@@ -34,6 +35,12 @@ class CreateSociety {
     required String name,
     String? description,
     String? logoUrl,
+    bool isPublic = false,
+    bool handicapLimitEnabled = false,
+    int? handicapMin,
+    int? handicapMax,
+    String? location,
+    String? rules,
   }) async {
     // Trim and validate name
     final trimmedName = name.trim();
@@ -69,6 +76,47 @@ class CreateSociety {
       finalLogoUrl = null;
     }
 
+    // Validate and process location
+    String? finalLocation = location?.trim();
+    if (finalLocation != null && finalLocation.isEmpty) {
+      finalLocation = null;
+    }
+
+    // Validate and process rules
+    String? finalRules = rules?.trim();
+    if (finalRules != null && finalRules.isEmpty) {
+      finalRules = null;
+    }
+
+    // Validate handicap limits if enabled
+    if (handicapLimitEnabled) {
+      if (handicapMin == null || handicapMax == null) {
+        throw const InvalidSocietyDataException(
+          'Handicap min and max must be provided when handicap limits are enabled',
+        );
+      }
+
+      // Validate handicap range (-8 to 36)
+      if (handicapMin < -8 || handicapMin > 36) {
+        throw const InvalidSocietyDataException(
+          'Handicap minimum must be between -8 and 36',
+        );
+      }
+
+      if (handicapMax < -8 || handicapMax > 36) {
+        throw const InvalidSocietyDataException(
+          'Handicap maximum must be between -8 and 36',
+        );
+      }
+
+      // Validate min <= max
+      if (handicapMin > handicapMax) {
+        throw const InvalidSocietyDataException(
+          'Handicap minimum must be less than or equal to maximum',
+        );
+      }
+    }
+
     // Create the society
     // Note: The repository's createSociety now uses a database function
     // that automatically adds the creator as a captain member,
@@ -77,6 +125,12 @@ class CreateSociety {
       name: trimmedName,
       description: finalDescription,
       logoUrl: finalLogoUrl,
+      isPublic: isPublic,
+      handicapLimitEnabled: handicapLimitEnabled,
+      handicapMin: handicapLimitEnabled ? handicapMin : null,
+      handicapMax: handicapLimitEnabled ? handicapMax : null,
+      location: finalLocation,
+      rules: finalRules,
     );
 
     return society;

@@ -20,6 +20,13 @@ void main() {
     'name': 'Mulligans Golf Society',
     'description': 'A friendly golf society',
     'logo_url': 'https://example.com/logo.png',
+    'is_public': false,
+    'handicap_limit_enabled': false,
+    'handicap_min': null,
+    'handicap_max': null,
+    'location': null,
+    'rules': null,
+    'deleted_at': null,
     'created_at': '2025-01-15T10:30:00.000Z',
     'updated_at': '2025-01-15T10:30:00.000Z',
   };

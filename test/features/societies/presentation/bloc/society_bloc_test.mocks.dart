@@ -48,6 +48,12 @@ class MockCreateSociety extends _i1.Mock implements _i3.CreateSociety {
     required String? name,
     String? description,
     String? logoUrl,
+    bool? isPublic = false,
+    bool? handicapLimitEnabled = false,
+    int? handicapMin,
+    int? handicapMax,
+    String? location,
+    String? rules,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#call, [], {
@@ -55,6 +61,12 @@ class MockCreateSociety extends _i1.Mock implements _i3.CreateSociety {
               #name: name,
               #description: description,
               #logoUrl: logoUrl,
+              #isPublic: isPublic,
+              #handicapLimitEnabled: handicapLimitEnabled,
+              #handicapMin: handicapMin,
+              #handicapMax: handicapMax,
+              #location: location,
+              #rules: rules,
             }),
             returnValue: _i4.Future<_i2.Society>.value(
               _FakeSociety_0(
@@ -64,6 +76,12 @@ class MockCreateSociety extends _i1.Mock implements _i3.CreateSociety {
                   #name: name,
                   #description: description,
                   #logoUrl: logoUrl,
+                  #isPublic: isPublic,
+                  #handicapLimitEnabled: handicapLimitEnabled,
+                  #handicapMin: handicapMin,
+                  #handicapMax: handicapMax,
+                  #location: location,
+                  #rules: rules,
                 }),
               ),
             ),
@@ -102,6 +120,12 @@ class MockUpdateSociety extends _i1.Mock implements _i6.UpdateSociety {
     String? name,
     String? description,
     String? logoUrl,
+    bool? isPublic,
+    bool? handicapLimitEnabled,
+    int? handicapMin,
+    int? handicapMax,
+    String? location,
+    String? rules,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#call, [], {
@@ -109,6 +133,12 @@ class MockUpdateSociety extends _i1.Mock implements _i6.UpdateSociety {
               #name: name,
               #description: description,
               #logoUrl: logoUrl,
+              #isPublic: isPublic,
+              #handicapLimitEnabled: handicapLimitEnabled,
+              #handicapMin: handicapMin,
+              #handicapMax: handicapMax,
+              #location: location,
+              #rules: rules,
             }),
             returnValue: _i4.Future<_i2.Society>.value(
               _FakeSociety_0(
@@ -118,6 +148,12 @@ class MockUpdateSociety extends _i1.Mock implements _i6.UpdateSociety {
                   #name: name,
                   #description: description,
                   #logoUrl: logoUrl,
+                  #isPublic: isPublic,
+                  #handicapLimitEnabled: handicapLimitEnabled,
+                  #handicapMin: handicapMin,
+                  #handicapMax: handicapMax,
+                  #location: location,
+                  #rules: rules,
                 }),
               ),
             ),

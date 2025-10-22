@@ -92,8 +92,9 @@ void main() {
       await tester.pumpWidget(createWidgetUnderTest());
 
       // Assert
-      expect(find.byType(TextFormField), findsNWidgets(2));
-      expect(find.text('Society Name'), findsOneWidget);
+      // Now has 4 TextFormFields: name, description, location (disabled), rules
+      expect(find.byType(TextFormField), findsNWidgets(4));
+      expect(find.text('Society Name *'), findsOneWidget);
       expect(find.text('Description (Optional)'), findsOneWidget);
     });
 
@@ -107,7 +108,7 @@ void main() {
 
       // Assert
       expect(
-        find.widgetWithText(ElevatedButton, 'Create Society'),
+        find.widgetWithText(ElevatedButton, 'Save Society'),
         findsOneWidget,
       );
     });
@@ -119,11 +120,11 @@ void main() {
 
       // Act
       await tester.pumpWidget(createWidgetUnderTest());
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Create Society'));
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Save Society'));
       await tester.pump();
 
       // Assert
-      expect(find.text('Please enter a society name'), findsOneWidget);
+      expect(find.text('Society name is required'), findsOneWidget);
     });
 
     testWidgets('shows validation error when name exceeds max length', (
@@ -139,7 +140,7 @@ void main() {
         find.byType(TextFormField).first,
         'A' * 101, // Exceeds 100 character limit
       );
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Create Society'));
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Save Society'));
       await tester.pump();
 
       // Assert
@@ -160,10 +161,10 @@ void main() {
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.enterText(find.byType(TextFormField).first, 'Valid Name');
       await tester.enterText(
-        find.byType(TextFormField).last,
+        find.byType(TextFormField).at(1), // Description field (second field)
         'A' * 501, // Exceeds 500 character limit
       );
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Create Society'));
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Save Society'));
       await tester.pump();
 
       // Assert
@@ -183,10 +184,10 @@ void main() {
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.enterText(find.byType(TextFormField).first, 'Test Society');
       await tester.enterText(
-        find.byType(TextFormField).last,
+        find.byType(TextFormField).at(1), // Description field
         'Test Description',
       );
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Create Society'));
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Save Society'));
       await tester.pump();
 
       // Assert
@@ -212,7 +213,7 @@ void main() {
       // Act
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.enterText(find.byType(TextFormField).first, 'Test Society');
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Create Society'));
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Save Society'));
       await tester.pump();
 
       // Assert
@@ -341,6 +342,12 @@ void main() {
             id: 'society-1',
             name: 'Updated Name',
             description: 'A friendly golf society',
+            isPublic: false,
+            handicapLimitEnabled: false,
+            handicapMin: null,
+            handicapMax: null,
+            location: null,
+            rules: null,
           ),
         ),
       ).called(1);
@@ -358,7 +365,7 @@ void main() {
       await tester.pump();
 
       // Assert
-      expect(find.text('Please enter a society name'), findsOneWidget);
+      expect(find.text('Society name is required'), findsOneWidget);
     });
   });
 }

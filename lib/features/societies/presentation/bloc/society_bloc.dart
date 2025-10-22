@@ -55,6 +55,12 @@ class SocietyBloc extends Bloc<SocietyEvent, SocietyState> {
         name: event.name,
         description: event.description,
         logoUrl: event.logoUrl,
+        isPublic: event.isPublic,
+        handicapLimitEnabled: event.handicapLimitEnabled,
+        handicapMin: event.handicapMin,
+        handicapMax: event.handicapMax,
+        location: event.location,
+        rules: event.rules,
       );
 
       // Reload societies after creation
@@ -84,6 +90,12 @@ class SocietyBloc extends Bloc<SocietyEvent, SocietyState> {
         name: event.name,
         description: event.description,
         logoUrl: event.logoUrl,
+        isPublic: event.isPublic,
+        handicapLimitEnabled: event.handicapLimitEnabled,
+        handicapMin: event.handicapMin,
+        handicapMax: event.handicapMax,
+        location: event.location,
+        rules: event.rules,
       );
 
       // Reload societies after update

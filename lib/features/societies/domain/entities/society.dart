@@ -18,6 +18,27 @@ class Society extends Equatable {
   /// URL to society logo image in Supabase Storage
   final String? logoUrl;
 
+  /// Whether the society is publicly visible and searchable
+  final bool isPublic;
+
+  /// Whether handicap limits are enforced for membership
+  final bool handicapLimitEnabled;
+
+  /// Minimum handicap allowed when limits are enabled (+8 to 36)
+  final int? handicapMin;
+
+  /// Maximum handicap allowed when limits are enabled (+8 to 36)
+  final int? handicapMax;
+
+  /// Optional location text (city or course name)
+  final String? location;
+
+  /// Optional society rules and guidelines
+  final String? rules;
+
+  /// When the society was soft-deleted (null if active)
+  final DateTime? deletedAt;
+
   /// When the society was created
   final DateTime createdAt;
 
@@ -29,6 +50,13 @@ class Society extends Equatable {
     required this.name,
     this.description,
     this.logoUrl,
+    this.isPublic = false,
+    this.handicapLimitEnabled = false,
+    this.handicapMin,
+    this.handicapMax,
+    this.location,
+    this.rules,
+    this.deletedAt,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -39,6 +67,13 @@ class Society extends Equatable {
     name,
     description,
     logoUrl,
+    isPublic,
+    handicapLimitEnabled,
+    handicapMin,
+    handicapMax,
+    location,
+    rules,
+    deletedAt,
     createdAt,
     updatedAt,
   ];
@@ -49,6 +84,13 @@ class Society extends Equatable {
     String? name,
     String? description,
     String? logoUrl,
+    bool? isPublic,
+    bool? handicapLimitEnabled,
+    int? handicapMin,
+    int? handicapMax,
+    String? location,
+    String? rules,
+    DateTime? deletedAt,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -57,6 +99,13 @@ class Society extends Equatable {
       name: name ?? this.name,
       description: description ?? this.description,
       logoUrl: logoUrl ?? this.logoUrl,
+      isPublic: isPublic ?? this.isPublic,
+      handicapLimitEnabled: handicapLimitEnabled ?? this.handicapLimitEnabled,
+      handicapMin: handicapMin ?? this.handicapMin,
+      handicapMax: handicapMax ?? this.handicapMax,
+      location: location ?? this.location,
+      rules: rules ?? this.rules,
+      deletedAt: deletedAt ?? this.deletedAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

@@ -500,28 +500,551 @@ IMPORTANT: Member Architecture
   - [X] Verify tab switching preserves Societies navigation stack ✅
   - [X] Tests: All 11 main_scaffold navigation tests passing ✅
 
-- [ ] **Create Add Member Screen** (P1) #members #ui
-  - Note: This task will be revised after bottom navigation implementation
-  - Route: Within Societies tab Navigator: `/societies/:id/members/add`
-  - Form fields: name (required), email (required, validated), handicap (0-54, required), role (dropdown: Member/Captain)
-  - Use AddMember use case to create member
-  - Validation: email format, handicap range, required fields
-  - Success: navigate back within tab, show snackbar
-  - Tests: Widget tests for validation, form submission
+### Society & Member Management - Business Rules
 
-- [ ] **Create Society Settings Screen** (P1) #societies #ui
-  - Note: Updated for bottom navigation architecture
+**Role Hierarchy & Permissions (Cumulative):**
+
+- **Member**: Basic access, can view society data
+- **Captain**: Can add/remove members (change status to RESIGNED), manage day-to-day operations, all member permissions
+- **Owner**: Original creator, can promote/demote captains, promote captains to co-owner, delete society, all captain permissions
+- **Co-Owner**: Additional owners promoted by existing owners, same permissions as Owner (used to indicate primary responsible person vs co-opted owners)
+- **Validation**: Must always have at least one Owner in a society
+
+**Member Status Lifecycle:**
+
+- User invited → **PENDING** (7-day expiry) → accepts → **ACTIVE**
+- User invited → **PENDING** → declines/expires/rejected → record deleted
+- User requests to join public society → **PENDING** → captain approves → **ACTIVE**
+- User requests to join public society → **PENDING** → captain rejects → record deleted (with optional rejection message)
+- **ACTIVE** member removed by captain → **RESIGNED** (data preserved, hidden from active lists)
+- **ACTIVE** member leaves voluntarily → **RESIGNED**
+
+**Invitation & Join Flow:**
+
+- Can only invite existing app users (link sharing for non-users comes later)
+- Invitations expire after **7 days** (background job deletes expired PENDING records)
+- Handicap validation happens **before** invite/join request is allowed
+- Private societies: Only invited members can join (requires captain/owner approval)
+- Public societies: Anyone can request to join (requires captain/owner approval)
+- Pending requests shown at top of members list for approval/rejection
+
+**Handicap Limits:**
+
+- Toggle: "Enforce handicap limits" (OFF by default)
+- When **OFF**: No handicap restrictions on membership
+- When **ON**: RangeSlider for min (+8 to 36, default 0) and max (+8 to 36, default 24)
+- Members with handicaps outside the range **cannot join** (validation before invite/join)
+- TODO: Handle handicap changes for existing members (future feature)
+
+**Society Deletion:**
+
+- Only **Owners** can delete society
+- **Soft delete**: Set `deleted_at` timestamp, data preserved
+- Former members retain **read-only access** to historical data (dashboard, past rounds, leaderboards)
+- Deleted societies filtered out of active society lists
+- All action buttons disabled (no new rounds, no member changes, no edits)
+
+**Activity Events:**
+
+- Events automatically published as actions occur
+- Examples: memberInvited, invitationAccepted, joinRequestApproved, memberPromoted, memberResigned, societyDeleted, etc.
+
+---
+
+- [X] **Update Database Schema for Roles, Status, and Soft Delete** (P1) #database #migration #societies #members ✅
+  - Note: **MUST BE COMPLETED FIRST** - Required for all other Society/Member features
+  - Create new migration: `supabase migration new update_societies_members_schema`
+  - **Update members table:**
+    - Update `role` enum to add: OWNER, CO_OWNER (existing: MEMBER, CAPTAIN)
+    - Update `status` enum values: PENDING, ACTIVE, RESIGNED (remove INACTIVE if exists)
+    - Add `expires_at` TIMESTAMPTZ field (nullable) - for PENDING invitations (7 days from created_at)
+    - Add `rejection_message` TEXT field (nullable) - captain's message when rejecting join request
+    - Add index: `idx_members_status_expires_at` ON members(status, expires_at) WHERE status = 'PENDING'
+  - **Update societies table:**
+    - Add `deleted_at` TIMESTAMPTZ field (nullable) - for soft delete
+    - Add `handicap_limit_enabled` BOOLEAN field (default: false)
+    - Add `handicap_min` INT field (nullable) - minimum handicap when limits enabled
+    - Add `handicap_max` INT field (nullable) - maximum handicap when limits enabled
+    - Add index: `idx_societies_deleted_at` ON societies(deleted_at)
+    - Add constraint: CHECK (handicap_min <= handicap_max)
+    - Add constraint: CHECK (handicap_min >= -8 AND handicap_min <= 36)
+    - Add constraint: CHECK (handicap_max >= -8 AND handicap_max <= 36)
+  - **Update RLS Policies:**
+    - Filter soft-deleted societies: Add `AND deleted_at IS NULL` to existing SELECT policies
+    - Owners can soft-delete: Add policy for UPDATE where user is OWNER/CO_OWNER
+    - Members can view deleted societies they belonged to: Add SELECT policy for deleted societies
+  - **Data Migration:**
+    - Set all existing members with role='CAPTAIN' who created the society to role='OWNER'
+    - Set handicap_limit_enabled=false for all existing societies
+  - Apply migration: `supabase db reset`
+  - Tests: Verify table updates, constraints, RLS policies, indexes
+
+- [X] **Enhance Society Form Screen (Create/Edit)** (P1) #societies #ui ✅ COMPLETED
+  - Note: Add advanced fields from design flows
+  - Route: Within Societies tab Navigator: `/societies/create` or `/societies/edit`
+  - **Step 1: Generate Screen Design (AI Prompt for Miro/Figma)** ✅
+    - Created AI design prompt including existing app design system
+    - Generated screen mockup with all required sections
+    - Design reviewed and approved
+  - **New Fields Added:** ✅
+    - Privacy toggle (default: OFF/Private) - Implemented with SwitchListTile
+    - **Handicap Limits Section:** - Implemented with progressive disclosure
+      - Toggle: "Enforce handicap limits" (default: OFF)
+      - RangeSlider shown only when ON
+      - Range: +8 to 36 with proper formatting
+      - Labels at key points: +8, 0, 18, 36
+      - Current range displayed below slider
+    - Location field (text input, disabled with TODO) - Placeholder added
+    - Society rules (multi-line text area, 3 lines) - Implemented
+    - Society profile image upload - Placeholder section added
+  - **Business Rules:** ✅ All implemented
+    - Privacy: default OFF (private society)
+    - Handicap limit toggle: default OFF
+    - Handicap validation in CreateSociety and UpdateSociety use cases
+    - Default handicap range: 0 to 24
+    - Full range available: -8 (stored as +8) to 36
+    - Creator automatically becomes CAPTAIN via RPC function
+  - **Validation:** ✅ Implemented
+    - Name required with proper error message
+    - Handicap range validation (min <= max, within -8 to 36)
+    - Meaningful error messages in use cases
+  - **Database Fields:** ✅ All migrated and working
+    - Migration: `20251022084842_add_missing_society_columns.sql`
+    - Fields: `is_public`, `handicap_limit_enabled`, `handicap_min`, `handicap_max`, `location`, `rules`
+    - RPC function updated: `create_society_with_captain`
+  - **Tests:** ✅ All passing (213+ tests, 0 failures)
+    - Widget tests for all 6 sections
+    - Validation tests for handicap ranges
+    - Event parameter tests updated
+    - Form behavior tests (16 test cases)
+  - **Implementation Notes:**
+    - File: [society_form_screen.dart](lib/features/societies/presentation/screens/society_form_screen.dart) (567 lines)
+    - Progressive disclosure: Handicap slider appears only when toggle ON
+    - Fixed deprecation warnings (activeColor → activeTrackColor, withOpacity → withValues)
+    - All BLoC events updated with new parameters
+    - Repository layer fully integrated
+
+- [ ] **Enhance Society Dashboard Screen** (P1) #societies #ui
+  - Note: Add real stats and activity feed scaffolding
+  - Route: Within Societies tab Navigator: `/societies/:id/dashboard`
+  - **Step 1: Generate Screen Design (AI Prompt)**
+    - Create AI design prompt for dashboard with stats, next event card, activity feed
+    - Include design system (colors, spacing, components)
+    - Review and approve design before implementation
+  - **Stats Section (Real Implementation):**
+    - Total members (query from members table where status = 'ACTIVE')
+    - Owner name(s) (query members where role IN ('OWNER', 'CO_OWNER'))
+    - Captain name(s) (query members where role = 'CAPTAIN')
+    - Average handicap (calculate from ACTIVE members only)
+    - Total rounds played (TODO: implement when rounds feature ready)
+    - Use GetMemberCount and new GetSocietyStats use case
+  - **Next Event Section:**
+    - Placeholder card with "No upcoming events"
+    - TODO comment: "Will integrate with Events feature"
+    - Show event date, name, course when available
+  - **Activity Feed Section:**
+    - Build scaffolding for event publishing system
+    - Create ActivityFeed widget (even if using placeholder items initially)
+    - Define ActivityEvent domain entity (type, timestamp, userId, societyId, metadata)
+    - Create ActivityEventRepository interface (for future implementation)
+    - Placeholder items: "Member joined", "Round completed", "Role changed", "Member resigned"
+    - TODO: Wire up to real events from other features
+  - **Dashboard Tabs Note:**
+    - Overview tab: fully implemented
+    - Members tab: navigates to existing SocietyMembersScreen
+    - Location tab: placeholder - TODO
+    - Events tab: placeholder - TODO
+    - Leaderboard tab: placeholder - TODO
+    - Profile tab: placeholder - TODO
+  - **Soft Delete Handling:**
+    - If society is soft-deleted (deleted_at IS NOT NULL):
+      - Show banner: "This society has been deleted"
+      - All action buttons disabled
+      - Read-only access to dashboard, stats, past rounds, leaderboards
+  - Tests: Widget tests for stats display, activity feed widget, soft delete banner
+
+- [ ] **Create Invite to Society Screen** (P1) #societies #members #ui
+  - Note: New screen from design flows - for inviting existing app users only
+  - Route: Within Societies tab Navigator: `/societies/:id/invite`
+  - Accessible from: Society Members Screen (floating action button or app bar action)
+  - Only captains and owners can access this screen
+  - **Step 1: Generate Screen Design (AI Prompt)**
+    - Create AI design prompt for invite screen with search, handicap validation display
+    - Include design system (colors, spacing, components)
+    - Review and approve design before implementation
+  - **Features:**
+    - **Search Players Section:**
+      - Search bar to find existing app users by name/email
+      - Results list showing matching users not already in society
+      - Show user's handicap in results (for validation)
+      - **Handicap Validation:**
+        - If society has handicap limits enabled, check user's handicap before allowing invite
+        - If user's handicap outside range: Show error badge on user, disable invite button
+        - Error message: "Handicap [X] is outside society limits ([min] - [max])"
+      - Tap user to send invite (creates PENDING member record with 7-day expiry)
+    - **Suggested Players (TODO - Future Feature):**
+      - Show list of users who might be interested
+      - Based on location, mutual societies, similar handicap
+      - Algorithm to be implemented later
+    - **Custom Message:**
+      - Optional message field to include with invite (shown in notification)
+      - Max 200 characters
+  - **Business Logic:**
+    - Create InviteMember use case
+    - Validation: Check handicap limits before creating invite
+    - Creates member record with:
+      - status = 'PENDING'
+      - role = 'MEMBER' (default)
+      - expires_at = NOW() + 7 days
+    - Sends notification to invitee (TODO: notification system)
+    - Invitee must accept invitation before expiry
+  - **Share Link Section (TODO - Future Feature):**
+    - For inviting non-app users via deep link
+    - Will use native platform sharing (share_plus package)
+    - Implement invite link backend logic and deep link handling later
+  - Tests: Widget tests for search, handicap validation, invite creation, expiry date
+
+- [ ] **Create Join Society Flow for Public Societies** (P1) #societies #members #ui
+  - Note: Allow users to discover and request to join public societies
+  - **Step 1: Generate Screen Design (AI Prompt)**
+    - Create AI design prompt for public society discovery with join requests
+    - Include design system (colors, spacing, components)
+    - Review and approve design before implementation
+  - **Society Discovery:**
+    - Update SocietyListScreen to show "Discover Societies" tab/section
+    - Query public societies (where is_public = true AND deleted_at IS NULL)
+    - Show society cards with "Join" button
+    - Display society info: name, description, member count, handicap range (if limits enabled)
+  - **Handicap Validation:**
+    - Before showing "Join" button, check if society has handicap limits
+    - If limits enabled: Check if current user's handicap is within range
+    - If outside range: Show "Cannot Join" with message: "Your handicap ([X]) is outside this society's limits ([min] - [max])"
+    - If within range or no limits: Show "Request to Join" button
+  - **Join Request:**
+    - Tap "Request to Join" → Create PENDING member record
+    - Set expires_at = NOW() + 7 days
+    - Set role = 'MEMBER'
+    - Send notification to captains/owners (TODO: notification system)
+    - Show success message: "Join request sent. You'll be notified when a captain approves."
+  - **Business Logic:**
+    - Create JoinSociety use case (or RequestToJoinSociety)
+    - Validation: Check handicap limits before creating PENDING record
+    - Creates member record with status = 'PENDING', expires_at
+    - Automatically publish activity event: 'joinRequestReceived'
+  - **Pending Status Indication:**
+    - In user's society list, show societies with pending requests with "Pending Approval" badge
+    - User can cancel their own pending request
+  - Tests: Widget tests for discovery, handicap validation, join request, pending indication
+
+- [ ] **Update Add Member Screen with New Handicap Rules** (P1) #members #ui
+  - Note: Update existing task with correct handicap range and handicap limit validation
+  - Route: Within Societies tab Navigator: `/societies/:id/members/add`
+  - Only captains and owners can access this screen
+  - **Step 1: Generate Screen Design (AI Prompt)**
+    - Create AI design prompt for add member form with handicap validation
+    - Include design system (colors, spacing, components)
+    - Review and approve design before implementation
+  - **Updated Form Fields:**
+    - Name (required)
+    - Email (required, validated)
+    - Handicap dropdown (+8 to 36, default: 0)
+    - Role dropdown (Member/Captain) - only owners can set Captain role
+  - **Business Rules:**
+    - Handicap range: +8 (best) to 36 (highest) - not 0-54
+    - Default handicap: 0 (scratch golfer)
+    - Display format: "+8", "+4", "0", "12", "24", "36"
+    - Note: Plus handicaps are better than scratch (0)
+    - New member created with status = 'ACTIVE' (not PENDING, since captain is adding directly)
+  - **Handicap Limit Validation:**
+    - If society has handicap limits enabled:
+      - Show warning if selected handicap is outside society's range
+      - Block form submission with error: "Handicap [X] is outside society limits ([min] - [max])"
+      - Show society's handicap range at top of form for reference
+  - **Validation:**
+    - Email format check
+    - Handicap must be in valid range (+8 to 36)
+    - If handicap limits enabled: handicap must be within society's range
+    - All required fields must be filled
+    - Email must not already be a member of this society
+  - Use AddMember use case to create member
+  - Success: navigate back within tab, show snackbar, refresh member list
+  - Automatically publish activity event: 'memberJoined'
+  - Tests: Widget tests for validation, handicap range, handicap limit checking, form submission
+
+- [ ] **Create GetSocietyStats Use Case** (P1) #societies #tdd
+  - Note: Required for enhanced dashboard
+  - **Purpose:** Calculate real-time statistics for a society
+  - **Returns:** SocietyStats entity with:
+    - totalMembers (int) - count of ACTIVE members only
+    - ownerNames (List<String>) - members where role IN ('OWNER', 'CO_OWNER')
+    - captainNames (List<String>) - members where role = 'CAPTAIN'
+    - averageHandicap (double) - calculated from ACTIVE members only
+    - totalRoundsPlayed (int) - TODO: implement when rounds ready
+    - pendingRequestsCount (int) - count of members where status = 'PENDING'
+  - **Dependencies:**
+    - MemberRepository for member queries
+    - RoundRepository (for future rounds count)
+  - **Implementation:**
+    - Query members table for society where status = 'ACTIVE'
+    - Calculate stats from member data
+    - Handle edge cases (no members, no owners, no captains, division by zero for average)
+    - Exclude RESIGNED and PENDING members from totals
+  - Tests: Unit tests for calculation logic, edge cases, role filtering
+
+- [ ] **Create ActivityEvent Domain Entity** (P1) #societies #tdd
+  - Note: Foundation for activity feed - automatically published as actions occur
+  - **Entity Fields:**
+    - id (String)
+    - type (ActivityEventType enum) - see below
+    - societyId (String)
+    - userId (String) - user who triggered the event
+    - targetUserId (String?) - user affected by event (optional)
+    - metadata (Map<String, dynamic>) - event-specific data (e.g., old role, new role, rejection message)
+    - timestamp (DateTime)
+    - message (String) - human-readable message for display
+  - **ActivityEventType Enum:**
+    - **Member Invitation Events:**
+      - memberInvited - captain sent invitation to user
+      - invitationAccepted - user accepted invitation
+      - invitationDeclined - user declined invitation
+      - invitationExpired - invitation expired after 7 days
+    - **Join Request Events:**
+      - joinRequestReceived - user requested to join public society
+      - joinRequestApproved - captain approved join request
+      - joinRequestRejected - captain rejected join request (with optional message)
+    - **Member Management Events:**
+      - memberJoined - member added directly by captain (not via invitation)
+      - memberResigned - member removed or left voluntarily
+      - memberPromoted - role changed upward (e.g., Member → Captain → Co-Owner)
+      - memberDemoted - role changed downward (e.g., Co-Owner → Captain → Member)
+    - **Society Events:**
+      - societyCreated - new society created
+      - societyUpdated - society details changed
+      - societyDeleted - society soft-deleted by owner
+    - **Round Events (for future):**
+      - roundCreated
+      - roundCompleted
+      - (more types added as features develop)
+  - **Auto-Publishing:**
+    - Events automatically published when actions occur in use cases
+    - Use ActivityEventRepository.publishEvent() after successful operations
+    - Examples: After CreateSociety → publish societyCreated, After UpdateMemberRole → publish memberPromoted/memberDemoted
+  - Tests: Entity creation, JSON serialization, event type enum values
+
+- [ ] **Create ActivityEventRepository Interface** (P1) #societies #tdd
+  - Note: Repository for activity feed events
+  - **Methods:**
+    - `Future<void> publishEvent(ActivityEvent event)` - publish new event
+    - `Stream<List<ActivityEvent>> watchSocietyEvents(String societyId)` - real-time stream
+    - `Future<List<ActivityEvent>> getSocietyEvents(String societyId, {int limit = 20})` - paginated
+    - `Future<void> deleteEvent(String eventId)` - for moderation
+  - **Implementation Notes:**
+    - Will use Supabase activity_events table (to be created in migration)
+    - Real-time subscriptions for live updates
+    - Pagination support for performance
+  - Tests: Mock repository implementation for testing
+
+- [ ] **Implement Member Management Features** (P1) #members #ui
+  - Note: Complete member management from design flows with pending approvals and role hierarchy
+  - Location: SocietyMembersScreen enhancements
+  - **Step 1: Generate Screen Design (AI Prompt)**
+    - Create AI design prompt for members list with pending approvals, role badges, sorting
+    - Include design system (colors, spacing, components)
+    - Review and approve design before implementation
+  - **Pending Requests Section (Top of List):**
+    - Show all members with status = 'PENDING' at top of screen
+    - Separate section header: "Pending Requests ([count])"
+    - Each pending request shows:
+      - Name, email, handicap
+      - Date requested
+      - Days until expiry (e.g., "Expires in 5 days")
+      - **Approve button** (green) - changes status to ACTIVE, publishes joinRequestApproved event
+      - **Reject button** (red) - shows dialog for optional rejection message, deletes record, publishes joinRequestRejected event
+    - Only captains and owners see this section
+    - If no pending requests, hide section entirely
+  - **Active Members List (Sorted by Role):**
+    - Sort order: Owners → Co-Owners → Captains → Members (alphabetically within each role)
+    - Do NOT show RESIGNED members
+    - Section headers for each role group (optional, for clarity)
+  - **Member List Item Enhancement:**
+    - Show member avatar (or initials placeholder)
+    - Show handicap badge (e.g., "+8", "0", "24")
+    - **Show role badge with color coding:**
+      - Owner: Gold/Yellow badge
+      - Co-Owner: Gold/Yellow badge (with "Co" indicator)
+      - Captain: Blue badge
+      - Member: Gray badge
+    - Show "You" indicator if current user
+  - **Change Member Role (Owners Only):**
+    - Long-press or swipe actions on member list item
+    - Show bottom sheet with role change options:
+      - "Promote to Co-Owner" (if Captain)
+      - "Promote to Captain" (if Member)
+      - "Demote to Captain" (if Co-Owner)
+      - "Demote to Member" (if Captain or Co-Owner)
+    - Confirmation dialog for role changes: "Change [name]'s role from [old] to [new]?"
+    - Validation: Must always have at least one Owner (cannot demote last owner)
+    - Uses UpdateMemberRole use case, publishes memberPromoted/memberDemoted event
+  - **Remove Member (Captains and Owners):**
+    - Long-press or swipe actions on member list item
+    - Show bottom sheet with "Remove member" option (red text)
+    - Confirmation dialog: "Remove [name] from society? Their historical data will be preserved."
+    - Changes status to RESIGNED (not deleted)
+    - Captains can remove Members only
+    - Owners can remove Members and Captains (but not other Owners)
+    - Cannot remove yourself if you're the last Owner
+    - Uses RemoveMember use case (update to LeaveSociety), publishes memberResigned event
+  - **Filter by Role:**
+    - Filter chips: "All", "Owners", "Captains", "Members", "Pending"
+    - Filter member list based on selection
+    - "Pending" filter shows PENDING requests (same as top section)
+    - Preserve filter state when navigating away
+  - **Permissions Summary:**
+    - **Members**: Can only view the list
+    - **Captains**: Can approve/reject pending requests, remove Members, add members
+    - **Owners**: All captain permissions + can promote/demote captains, promote to co-owner, remove captains, delete society
+  - **Soft Delete Handling:**
+    - If society is soft-deleted: All action buttons disabled, list is read-only
+  - Tests: Widget tests for pending approvals, filtering, role changes, member removal, permissions, sorting
+
+- [ ] **Complete Society Settings Screen Implementation** (P1) #societies #ui
+  - Note: Expand existing settings screen with all sections from design and owner-only features
   - Route: Within Societies tab Navigator: `/societies/:id/settings`
-  - **Section 1: Society Details**
-    - ListTile "Edit society information" → Navigate to SocietyFormScreen (within Societies tab)
-  - **Section 2: Members**
-    - ListTile "View all members" → Navigate to Society Members Screen (within Societies tab)
-    - ListTile "Add member" → Navigate to Add Member Screen (within Societies tab)
-  - **Section 3: Danger Zone**
-    - Red outlined button "Delete Society" (uses existing delete use case from SocietyBloc)
-    - Confirmation dialog: "Are you sure? This cannot be undone."
-    - On delete success: pop back to SocietyListScreen within Societies tab
-  - Tests: Widget tests for navigation, delete confirmation
+  - **Step 1: Generate Screen Design (AI Prompt)**
+    - Create AI design prompt for settings screen with all sections and permissions
+    - Include design system (colors, spacing, components)
+    - Review and approve design before implementation
+  - **Permission Levels:**
+    - **Owners**: Full access to all sections
+    - **Captains**: Access to Sections 1-4, cannot delete society
+    - **Members**: Cannot access settings (show "You don't have permission" message)
+  - **All Sections:**
+    - **Section 1: Society Details**
+      - ListTile "Edit society information" → Navigate to SocietyFormScreen
+      - Shows current society name as subtitle
+      - Captains and owners can edit
+    - **Section 2: Members**
+      - ListTile "View all members" (active count as subtitle) → Navigate to Members Screen
+      - ListTile "Pending requests" (count as subtitle, if > 0) → Navigate to Members Screen with Pending filter
+      - ListTile "Add member" → Navigate to Add Member Screen
+      - ListTile "Invite to society" → Navigate to Invite Screen (new)
+      - Captains and owners can access
+    - **Section 3: Privacy & Permissions**
+      - SwitchListTile "Society is public" (linked to is_public field)
+      - Explanation text: "Public societies can be discovered and joined by anyone (with approval)"
+      - ListTile "Handicap limits"
+        - If enabled: Shows "Enforced: [min] - [max]" as subtitle
+        - If disabled: Shows "Not enforced" as subtitle
+        - Tap to show dialog for toggling and editing limits
+      - Captains and owners can edit
+    - **Section 4: Society Rules**
+      - ListTile "View/Edit rules" → Navigate to rules editor or show dialog
+      - Shows first line of rules as subtitle (if set), otherwise "Not set"
+      - Captains and owners can edit
+    - **Section 5: Danger Zone (Owners Only)**
+      - Red outlined button "Delete Society" (soft delete)
+      - Confirmation dialog with warning text:
+        - "Are you sure you want to delete [Society Name]?"
+        - "Members will retain read-only access to historical data."
+        - "This action sets deleted_at timestamp."
+      - Only owners can delete
+      - Uses DeleteSociety use case, publishes societyDeleted event
+  - **Soft Delete Handling:**
+    - If society is soft-deleted: All settings disabled, show banner "This society has been deleted"
+  - Tests: Widget tests for all sections, permissions (member/captain/owner), navigation, soft delete
+
+- [ ] **Implement Handicap Limit Validation Use Case** (P1) #societies #members #tdd
+  - Note: Reusable validation logic for handicap limits across invite/join/add flows
+  - **Purpose:** Check if a member's handicap is within a society's limits (if enabled)
+  - **Use Case: ValidateHandicapForSociety**
+    - Input: societyId, memberHandicap
+    - Output: ValidationResult (isValid: bool, errorMessage: String?)
+    - Logic:
+      - Query society to check if handicap_limit_enabled
+      - If false: return valid (no restrictions)
+      - If true: check if memberHandicap >= handicap_min AND memberHandicap <= handicap_max
+      - If invalid: return error with message: "Handicap [X] is outside society limits ([min] - [max])"
+  - **Usage:**
+    - Called before creating invitation (InviteMember use case)
+    - Called before join request (JoinSociety use case)
+    - Called in Add Member form validation
+    - Called in public society discovery (to show/hide Join button)
+  - **TODO for Future:**
+    - Handle existing member handicap changes
+    - What happens when member's handicap goes outside limits after joining?
+    - Options: notify only, prevent round participation, auto-remove (to be decided)
+  - Tests: Unit tests for validation logic, enabled/disabled limits, edge cases (exactly at min/max, plus handicaps)
+
+- [ ] **Implement Soft Delete for Societies** (P1) #societies #tdd
+  - Note: Implement soft delete functionality with read-only access for former members
+  - **Update DeleteSociety Use Case:**
+    - Instead of hard delete, set `deleted_at = NOW()`
+    - Validation: Only owners can delete
+    - Automatically publish activity event: 'societyDeleted'
+  - **Update SocietyRepository:**
+    - `getSocieties()` - filter out soft-deleted (WHERE deleted_at IS NULL)
+    - `getDeletedSocieties()` - new method to query soft-deleted societies for current user
+    - `getSocietyById()` - allow reading soft-deleted societies (for read-only access)
+  - **UI Changes:**
+    - SocietyListScreen: Add "Archived Societies" tab/section (optional)
+    - Show deleted societies with "Deleted" badge
+    - SocietyDashboardScreen: Show banner if deleted_at IS NOT NULL
+    - Disable all action buttons (no new rounds, no edits, no member changes)
+    - Allow viewing: dashboard, stats, past rounds, leaderboards (read-only)
+  - **RLS Policy Updates:**
+    - Former members can SELECT soft-deleted societies they belonged to
+    - Cannot UPDATE or INSERT on soft-deleted societies
+  - Tests: Unit tests for soft delete, repository filtering, read-only access, UI disabled states
+
+- [ ] **Implement Invitation Expiry Background Job** (P1) #societies #members #backend
+  - Note: Automated cleanup of expired PENDING invitations
+  - **Implementation Options:**
+    - **Option A: Supabase Edge Function** (scheduled)
+      - Create edge function: `expire_pending_invitations`
+      - Schedule to run daily or hourly via pg_cron
+      - Deletes PENDING members where expires_at < NOW()
+    - **Option B: Database Trigger/Function**
+      - Create PostgreSQL function to check expiry
+      - Trigger on SELECT or UPDATE of members table
+      - Lazy deletion when querying
+    - **Option C: Application-Level Job**
+      - Flutter background task (if app is running)
+      - Not reliable, prefer server-side solution
+  - **Recommended: Option A (Supabase Edge Function)**
+    - Create `supabase/functions/expire-invitations/index.ts`
+    - Query: `DELETE FROM members WHERE status = 'PENDING' AND expires_at < NOW()`
+    - Log count of deleted invitations
+    - Optionally publish 'invitationExpired' events for each
+    - Schedule with pg_cron: `SELECT cron.schedule('expire-invitations', '0 */6 * * *', $$SELECT expire_pending_invitations()$$);`
+  - **Notifications (TODO):**
+    - Send notification to inviter: "Invitation to [Name] expired"
+    - Send notification to invitee: "Your invitation to [Society] expired"
+    - Implement when notification system is built
+  - Tests: Integration tests for expiry logic, edge function execution, cron scheduling
+
+- [ ] **Update Database Schema for Activity Events** (P1) #database #migration
+  - Note: Required for activity feed feature
+  - Create new migration: `supabase migration new create_activity_events_table`
+  - **Table: activity_events**
+    - id (UUID, primary key)
+    - society_id (UUID, references societies, NOT NULL)
+    - user_id (UUID, references auth.users, NOT NULL) - who triggered it
+    - target_user_id (UUID, references auth.users, NULL) - who was affected
+    - event_type (TEXT, NOT NULL) - enum values
+    - metadata (JSONB, NULL) - event-specific data
+    - message (TEXT, NOT NULL) - human-readable message
+    - created_at (TIMESTAMPTZ, NOT NULL, default NOW())
+  - **Indexes:**
+    - idx_activity_events_society_id ON activity_events(society_id)
+    - idx_activity_events_created_at ON activity_events(created_at DESC)
+  - **RLS Policies:**
+    - SELECT: Society members (including former members of deleted societies) can view events for their societies
+    - INSERT: Authenticated users can publish events (application-level validation in use cases)
+    - DELETE: Only owners can delete events (for moderation)
+  - **Constraints:**
+    - Check event_type in valid enum values (memberInvited, invitationAccepted, joinRequestReceived, etc.)
+  - Apply migration: `supabase db reset`
+  - Tests: Verify table creation, RLS policies, indexes, event type constraints
 
 ---
 

@@ -18,6 +18,12 @@ abstract class SocietyRepository {
     required String name,
     String? description,
     String? logoUrl,
+    bool isPublic = false,
+    bool handicapLimitEnabled = false,
+    int? handicapMin,
+    int? handicapMax,
+    String? location,
+    String? rules,
   });
 
   /// Gets all societies where the current user is an active member.
@@ -53,6 +59,12 @@ abstract class SocietyRepository {
     String? name,
     String? description,
     String? logoUrl,
+    bool? isPublic,
+    bool? handicapLimitEnabled,
+    int? handicapMin,
+    int? handicapMax,
+    String? location,
+    String? rules,
   });
 
   /// Deletes a society.

@@ -20,6 +20,7 @@ class UpdateSociety {
   /// - At least one field is provided
   /// - Name (if provided) is not empty and does not exceed max length
   /// - Description (if provided) does not exceed max length
+  /// - Handicap range is valid (min <= max, within -8 to 36)
   ///
   /// Returns the updated [Society].
   ///
@@ -33,6 +34,12 @@ class UpdateSociety {
     String? name,
     String? description,
     String? logoUrl,
+    bool? isPublic,
+    bool? handicapLimitEnabled,
+    int? handicapMin,
+    int? handicapMax,
+    String? location,
+    String? rules,
   }) async {
     // Validate and process name
     String? finalName;
@@ -73,9 +80,63 @@ class UpdateSociety {
       }
     }
 
+    // Process location
+    String? finalLocation;
+    if (location != null) {
+      finalLocation = location.trim();
+      if (finalLocation.isEmpty) {
+        finalLocation = null;
+      }
+    }
+
+    // Process rules
+    String? finalRules;
+    if (rules != null) {
+      finalRules = rules.trim();
+      if (finalRules.isEmpty) {
+        finalRules = null;
+      }
+    }
+
+    // Validate handicap limits if being updated
+    if (handicapMin != null || handicapMax != null) {
+      // If either is provided, validate both values
+      if (handicapMin != null) {
+        if (handicapMin < -8 || handicapMin > 36) {
+          throw const InvalidSocietyDataException(
+            'Handicap minimum must be between -8 and 36',
+          );
+        }
+      }
+
+      if (handicapMax != null) {
+        if (handicapMax < -8 || handicapMax > 36) {
+          throw const InvalidSocietyDataException(
+            'Handicap maximum must be between -8 and 36',
+          );
+        }
+      }
+
+      // If both are provided, validate min <= max
+      if (handicapMin != null && handicapMax != null) {
+        if (handicapMin > handicapMax) {
+          throw const InvalidSocietyDataException(
+            'Handicap minimum must be less than or equal to maximum',
+          );
+        }
+      }
+    }
+
     // Ensure at least one field is being updated
-    // (check the original parameters, not the processed ones)
-    if (name == null && description == null && logoUrl == null) {
+    if (name == null &&
+        description == null &&
+        logoUrl == null &&
+        isPublic == null &&
+        handicapLimitEnabled == null &&
+        handicapMin == null &&
+        handicapMax == null &&
+        location == null &&
+        rules == null) {
       throw const InvalidSocietyDataException(
         'At least one field must be provided for update',
       );
@@ -87,6 +148,12 @@ class UpdateSociety {
       name: finalName,
       description: finalDescription,
       logoUrl: finalLogoUrl,
+      isPublic: isPublic,
+      handicapLimitEnabled: handicapLimitEnabled,
+      handicapMin: handicapMin,
+      handicapMax: handicapMax,
+      location: finalLocation,
+      rules: finalRules,
     );
   }
 }

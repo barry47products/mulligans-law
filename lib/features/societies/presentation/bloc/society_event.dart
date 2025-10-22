@@ -19,16 +19,39 @@ class SocietyCreateRequested extends SocietyEvent {
   final String name;
   final String? description;
   final String? logoUrl;
+  final bool isPublic;
+  final bool handicapLimitEnabled;
+  final int? handicapMin;
+  final int? handicapMax;
+  final String? location;
+  final String? rules;
 
   const SocietyCreateRequested({
     required this.userId,
     required this.name,
     this.description,
     this.logoUrl,
+    this.isPublic = false,
+    this.handicapLimitEnabled = false,
+    this.handicapMin,
+    this.handicapMax,
+    this.location,
+    this.rules,
   });
 
   @override
-  List<Object?> get props => [userId, name, description, logoUrl];
+  List<Object?> get props => [
+    userId,
+    name,
+    description,
+    logoUrl,
+    isPublic,
+    handicapLimitEnabled,
+    handicapMin,
+    handicapMax,
+    location,
+    rules,
+  ];
 }
 
 /// Event to update an existing society
@@ -37,16 +60,39 @@ class SocietyUpdateRequested extends SocietyEvent {
   final String? name;
   final String? description;
   final String? logoUrl;
+  final bool? isPublic;
+  final bool? handicapLimitEnabled;
+  final int? handicapMin;
+  final int? handicapMax;
+  final String? location;
+  final String? rules;
 
   const SocietyUpdateRequested({
     required this.id,
     this.name,
     this.description,
     this.logoUrl,
+    this.isPublic,
+    this.handicapLimitEnabled,
+    this.handicapMin,
+    this.handicapMax,
+    this.location,
+    this.rules,
   });
 
   @override
-  List<Object?> get props => [id, name, description, logoUrl];
+  List<Object?> get props => [
+    id,
+    name,
+    description,
+    logoUrl,
+    isPublic,
+    handicapLimitEnabled,
+    handicapMin,
+    handicapMax,
+    location,
+    rules,
+  ];
 }
 
 /// Event to delete a society

@@ -22,6 +22,12 @@ class SocietyRepositoryImpl implements SocietyRepository {
     required String name,
     String? description,
     String? logoUrl,
+    bool isPublic = false,
+    bool handicapLimitEnabled = false,
+    int? handicapMin,
+    int? handicapMax,
+    String? location,
+    String? rules,
   }) async {
     try {
       developer.log('Creating society: $name', name: 'SocietyRepository');
@@ -33,6 +39,12 @@ class SocietyRepositoryImpl implements SocietyRepository {
           'p_name': name,
           if (description != null) 'p_description': description,
           if (logoUrl != null) 'p_logo_url': logoUrl,
+          'p_is_public': isPublic,
+          'p_handicap_limit_enabled': handicapLimitEnabled,
+          if (handicapMin != null) 'p_handicap_min': handicapMin,
+          if (handicapMax != null) 'p_handicap_max': handicapMax,
+          if (location != null) 'p_location': location,
+          if (rules != null) 'p_rules': rules,
         },
       );
 
@@ -49,6 +61,19 @@ class SocietyRepositoryImpl implements SocietyRepository {
           DatabaseColumns.description: result['society_description'],
         if (result['society_logo_url'] != null)
           DatabaseColumns.logoUrl: result['society_logo_url'],
+        DatabaseColumns.isPublic: result['society_is_public'] ?? false,
+        DatabaseColumns.handicapLimitEnabled:
+            result['society_handicap_limit_enabled'] ?? false,
+        if (result['society_handicap_min'] != null)
+          DatabaseColumns.handicapMin: result['society_handicap_min'],
+        if (result['society_handicap_max'] != null)
+          DatabaseColumns.handicapMax: result['society_handicap_max'],
+        if (result['society_location'] != null)
+          DatabaseColumns.location: result['society_location'],
+        if (result['society_rules'] != null)
+          DatabaseColumns.rules: result['society_rules'],
+        if (result['society_deleted_at'] != null)
+          DatabaseColumns.deletedAt: result['society_deleted_at'],
         DatabaseColumns.createdAt: result['society_created_at'],
         DatabaseColumns.updatedAt: result['society_updated_at'],
       };
@@ -125,12 +150,26 @@ class SocietyRepositoryImpl implements SocietyRepository {
     String? name,
     String? description,
     String? logoUrl,
+    bool? isPublic,
+    bool? handicapLimitEnabled,
+    int? handicapMin,
+    int? handicapMax,
+    String? location,
+    String? rules,
   }) async {
     try {
       final data = <String, dynamic>{};
       if (name != null) data[DatabaseColumns.name] = name;
       if (description != null) data[DatabaseColumns.description] = description;
       if (logoUrl != null) data[DatabaseColumns.logoUrl] = logoUrl;
+      if (isPublic != null) data[DatabaseColumns.isPublic] = isPublic;
+      if (handicapLimitEnabled != null) {
+        data[DatabaseColumns.handicapLimitEnabled] = handicapLimitEnabled;
+      }
+      if (handicapMin != null) data[DatabaseColumns.handicapMin] = handicapMin;
+      if (handicapMax != null) data[DatabaseColumns.handicapMax] = handicapMax;
+      if (location != null) data[DatabaseColumns.location] = location;
+      if (rules != null) data[DatabaseColumns.rules] = rules;
 
       final response = await _supabase
           .from(DatabaseTables.societies)
