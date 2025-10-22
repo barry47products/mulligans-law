@@ -1,3 +1,9 @@
+## [0.28.0](https://github.com/barry47products/mulligans-law/compare/v0.27.1...v0.28.0) (2025-10-22)
+
+### Features
+
+* **societies:** enhance society form screen with advanced fields ([459adbe](https://github.com/barry47products/mulligans-law/commit/459adbe9c357db4c3954307dc50e3da785810411))
+
 ## [0.27.1](https://github.com/barry47products/mulligans-law/compare/v0.27.0...v0.27.1) (2025-10-21)
 
 ### Bug Fixes
