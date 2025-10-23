@@ -9,20 +9,24 @@ import 'package:mulligans_law/features/auth/presentation/bloc/auth_state.dart';
 import 'package:mulligans_law/features/societies/presentation/bloc/society_bloc.dart';
 import 'package:mulligans_law/features/societies/presentation/bloc/society_state.dart';
 import 'package:mulligans_law/features/members/domain/usecases/get_member_count.dart';
+import 'package:mulligans_law/features/societies/domain/usecases/get_society_stats.dart';
+import 'package:mulligans_law/features/societies/domain/entities/society_stats.dart';
 
 import 'main_scaffold_test.mocks.dart';
 
-@GenerateMocks([AuthBloc, SocietyBloc, GetMemberCount])
+@GenerateMocks([AuthBloc, SocietyBloc, GetMemberCount, GetSocietyStats])
 void main() {
   group('MainScaffold', () {
     late MockAuthBloc mockAuthBloc;
     late MockSocietyBloc mockSocietyBloc;
     late MockGetMemberCount mockGetMemberCount;
+    late MockGetSocietyStats mockGetSocietyStats;
 
     setUp(() {
       mockAuthBloc = MockAuthBloc();
       mockSocietyBloc = MockSocietyBloc();
       mockGetMemberCount = MockGetMemberCount();
+      mockGetSocietyStats = MockGetSocietyStats();
 
       when(mockAuthBloc.stream).thenAnswer((_) => const Stream.empty());
       when(mockAuthBloc.state).thenReturn(const AuthInitial());
@@ -31,12 +35,21 @@ void main() {
       when(mockSocietyBloc.state).thenReturn(const SocietyInitial());
 
       when(mockGetMemberCount.call(any)).thenAnswer((_) async => 0);
+      when(mockGetSocietyStats.call(any)).thenAnswer(
+        (_) async => const SocietyStats(
+          memberCount: 0,
+          ownerNames: [],
+          captainNames: [],
+          averageHandicap: 0.0,
+        ),
+      );
     });
 
     Widget buildTestWidget() {
       return MultiRepositoryProvider(
         providers: [
           RepositoryProvider<GetMemberCount>.value(value: mockGetMemberCount),
+          RepositoryProvider<GetSocietyStats>.value(value: mockGetSocietyStats),
         ],
         child: MultiBlocProvider(
           providers: [

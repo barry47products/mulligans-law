@@ -25,6 +25,7 @@ import 'features/societies/data/repositories/society_repository_impl.dart';
 import 'features/societies/domain/usecases/create_society.dart';
 import 'features/societies/domain/usecases/get_user_societies.dart';
 import 'features/societies/domain/usecases/update_society.dart';
+import 'features/societies/domain/usecases/get_society_stats.dart';
 import 'features/societies/presentation/bloc/society_bloc.dart';
 import 'features/members/domain/usecases/get_member_count.dart';
 import 'features/members/domain/usecases/get_society_members.dart';
@@ -79,10 +80,14 @@ class MulligansLawApp extends StatelessWidget {
     final joinSocietyUseCase = JoinSociety(memberRepository, societyRepository);
     final updateMemberRoleUseCase = UpdateMemberRole(memberRepository);
     final leaveSocietyUseCase = LeaveSociety(memberRepository);
+    final getSocietyStatsUseCase = GetSocietyStats(memberRepository);
 
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<GetMemberCount>.value(value: getMemberCountUseCase),
+        RepositoryProvider<GetSocietyStats>.value(
+          value: getSocietyStatsUseCase,
+        ),
       ],
       child: MultiBlocProvider(
         providers: [

@@ -3,13 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mulligans_law/features/members/domain/entities/member.dart'
-    as _i2;
-import 'package:mulligans_law/features/members/domain/repositories/member_repository.dart'
     as _i3;
+import 'package:mulligans_law/features/members/domain/repositories/member_repository.dart'
+    as _i4;
+import 'package:mulligans_law/features/societies/domain/entities/society_stats.dart'
+    as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -25,37 +27,55 @@ import 'package:mulligans_law/features/members/domain/repositories/member_reposi
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeMember_0 extends _i1.SmartFake implements _i2.Member {
-  _FakeMember_0(Object parent, Invocation parentInvocation)
+class _FakeSocietyStats_0 extends _i1.SmartFake implements _i2.SocietyStats {
+  _FakeSocietyStats_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeMember_1 extends _i1.SmartFake implements _i3.Member {
+  _FakeMember_1(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
 /// A class which mocks [MemberRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMemberRepository extends _i1.Mock implements _i3.MemberRepository {
+class MockMemberRepository extends _i1.Mock implements _i4.MemberRepository {
   MockMemberRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<List<_i2.Member>> getSocietyMembers(String? societyId) =>
+  _i5.Future<List<_i3.Member>> getSocietyMembers(String? societyId) =>
       (super.noSuchMethod(
             Invocation.method(#getSocietyMembers, [societyId]),
-            returnValue: _i4.Future<List<_i2.Member>>.value(<_i2.Member>[]),
+            returnValue: _i5.Future<List<_i3.Member>>.value(<_i3.Member>[]),
           )
-          as _i4.Future<List<_i2.Member>>);
+          as _i5.Future<List<_i3.Member>>);
 
   @override
-  _i4.Future<int> getMemberCount(String? societyId) =>
+  _i5.Future<int> getMemberCount(String? societyId) =>
       (super.noSuchMethod(
             Invocation.method(#getMemberCount, [societyId]),
-            returnValue: _i4.Future<int>.value(0),
+            returnValue: _i5.Future<int>.value(0),
           )
-          as _i4.Future<int>);
+          as _i5.Future<int>);
 
   @override
-  _i4.Future<_i2.Member> addMember({
+  _i5.Future<_i2.SocietyStats> getSocietyStats(String? societyId) =>
+      (super.noSuchMethod(
+            Invocation.method(#getSocietyStats, [societyId]),
+            returnValue: _i5.Future<_i2.SocietyStats>.value(
+              _FakeSocietyStats_0(
+                this,
+                Invocation.method(#getSocietyStats, [societyId]),
+              ),
+            ),
+          )
+          as _i5.Future<_i2.SocietyStats>);
+
+  @override
+  _i5.Future<_i3.Member> addMember({
     required String? societyId,
     required String? userId,
     required String? name,
@@ -74,8 +94,8 @@ class MockMemberRepository extends _i1.Mock implements _i3.MemberRepository {
               #handicap: handicap,
               #role: role,
             }),
-            returnValue: _i4.Future<_i2.Member>.value(
-              _FakeMember_0(
+            returnValue: _i5.Future<_i3.Member>.value(
+              _FakeMember_1(
                 this,
                 Invocation.method(#addMember, [], {
                   #societyId: societyId,
@@ -89,10 +109,10 @@ class MockMemberRepository extends _i1.Mock implements _i3.MemberRepository {
               ),
             ),
           )
-          as _i4.Future<_i2.Member>);
+          as _i5.Future<_i3.Member>);
 
   @override
-  _i4.Future<_i2.Member> updateMember({
+  _i5.Future<_i3.Member> updateMember({
     required String? memberId,
     String? name,
     String? email,
@@ -109,8 +129,8 @@ class MockMemberRepository extends _i1.Mock implements _i3.MemberRepository {
               #handicap: handicap,
               #role: role,
             }),
-            returnValue: _i4.Future<_i2.Member>.value(
-              _FakeMember_0(
+            returnValue: _i5.Future<_i3.Member>.value(
+              _FakeMember_1(
                 this,
                 Invocation.method(#updateMember, [], {
                   #memberId: memberId,
@@ -123,45 +143,45 @@ class MockMemberRepository extends _i1.Mock implements _i3.MemberRepository {
               ),
             ),
           )
-          as _i4.Future<_i2.Member>);
+          as _i5.Future<_i3.Member>);
 
   @override
-  _i4.Future<void> removeMember(String? memberId) =>
+  _i5.Future<void> removeMember(String? memberId) =>
       (super.noSuchMethod(
             Invocation.method(#removeMember, [memberId]),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
           )
-          as _i4.Future<void>);
+          as _i5.Future<void>);
 
   @override
-  _i4.Future<_i2.Member> getMemberById(String? memberId) =>
+  _i5.Future<_i3.Member> getMemberById(String? memberId) =>
       (super.noSuchMethod(
             Invocation.method(#getMemberById, [memberId]),
-            returnValue: _i4.Future<_i2.Member>.value(
-              _FakeMember_0(
+            returnValue: _i5.Future<_i3.Member>.value(
+              _FakeMember_1(
                 this,
                 Invocation.method(#getMemberById, [memberId]),
               ),
             ),
           )
-          as _i4.Future<_i2.Member>);
+          as _i5.Future<_i3.Member>);
 
   @override
-  _i4.Future<_i2.Member> getPrimaryMember(String? userId) =>
+  _i5.Future<_i3.Member> getPrimaryMember(String? userId) =>
       (super.noSuchMethod(
             Invocation.method(#getPrimaryMember, [userId]),
-            returnValue: _i4.Future<_i2.Member>.value(
-              _FakeMember_0(
+            returnValue: _i5.Future<_i3.Member>.value(
+              _FakeMember_1(
                 this,
                 Invocation.method(#getPrimaryMember, [userId]),
               ),
             ),
           )
-          as _i4.Future<_i2.Member>);
+          as _i5.Future<_i3.Member>);
 
   @override
-  _i4.Future<_i2.Member> createPrimaryMember({
+  _i5.Future<_i3.Member> createPrimaryMember({
     required String? userId,
     required String? name,
     required String? email,
@@ -176,8 +196,8 @@ class MockMemberRepository extends _i1.Mock implements _i3.MemberRepository {
               #handicap: handicap,
               #avatarUrl: avatarUrl,
             }),
-            returnValue: _i4.Future<_i2.Member>.value(
-              _FakeMember_0(
+            returnValue: _i5.Future<_i3.Member>.value(
+              _FakeMember_1(
                 this,
                 Invocation.method(#createPrimaryMember, [], {
                   #userId: userId,
@@ -189,10 +209,10 @@ class MockMemberRepository extends _i1.Mock implements _i3.MemberRepository {
               ),
             ),
           )
-          as _i4.Future<_i2.Member>);
+          as _i5.Future<_i3.Member>);
 
   @override
-  _i4.Future<_i2.Member> updatePrimaryMember({
+  _i5.Future<_i3.Member> updatePrimaryMember({
     required String? userId,
     String? name,
     String? email,
@@ -207,8 +227,8 @@ class MockMemberRepository extends _i1.Mock implements _i3.MemberRepository {
               #handicap: handicap,
               #avatarUrl: avatarUrl,
             }),
-            returnValue: _i4.Future<_i2.Member>.value(
-              _FakeMember_0(
+            returnValue: _i5.Future<_i3.Member>.value(
+              _FakeMember_1(
                 this,
                 Invocation.method(#updatePrimaryMember, [], {
                   #userId: userId,
@@ -220,10 +240,10 @@ class MockMemberRepository extends _i1.Mock implements _i3.MemberRepository {
               ),
             ),
           )
-          as _i4.Future<_i2.Member>);
+          as _i5.Future<_i3.Member>);
 
   @override
-  _i4.Future<_i2.Member> updateMemberRole({
+  _i5.Future<_i3.Member> updateMemberRole({
     required String? memberId,
     required String? role,
   }) =>
@@ -232,8 +252,8 @@ class MockMemberRepository extends _i1.Mock implements _i3.MemberRepository {
               #memberId: memberId,
               #role: role,
             }),
-            returnValue: _i4.Future<_i2.Member>.value(
-              _FakeMember_0(
+            returnValue: _i5.Future<_i3.Member>.value(
+              _FakeMember_1(
                 this,
                 Invocation.method(#updateMemberRole, [], {
                   #memberId: memberId,
@@ -242,14 +262,14 @@ class MockMemberRepository extends _i1.Mock implements _i3.MemberRepository {
               ),
             ),
           )
-          as _i4.Future<_i2.Member>);
+          as _i5.Future<_i3.Member>);
 
   @override
-  _i4.Future<void> removeSocietyMember(String? memberId) =>
+  _i5.Future<void> removeSocietyMember(String? memberId) =>
       (super.noSuchMethod(
             Invocation.method(#removeSocietyMember, [memberId]),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
           )
-          as _i4.Future<void>);
+          as _i5.Future<void>);
 }

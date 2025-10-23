@@ -117,14 +117,16 @@ class SocietyBloc extends Bloc<SocietyEvent, SocietyState> {
   void _onSocietySelected(SocietySelected event, Emitter<SocietyState> emit) {
     if (state is SocietyLoaded) {
       final currentState = state as SocietyLoaded;
-      final selectedSociety = currentState.societies.firstWhere(
-        (society) => society.id == event.societyId,
-        orElse: () => currentState.societies.first,
-      );
 
-      // Only emit if a matching society was found
-      if (currentState.societies.any((s) => s.id == event.societyId)) {
+      // Find the society with matching ID
+      try {
+        final selectedSociety = currentState.societies.firstWhere(
+          (society) => society.id == event.societyId,
+        );
         emit(currentState.copyWith(selectedSociety: selectedSociety));
+      } on StateError {
+        // Society not found - do nothing (no state emission)
+        // This maintains the current state/selection
       }
     }
   }

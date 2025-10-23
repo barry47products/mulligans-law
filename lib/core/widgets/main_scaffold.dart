@@ -9,7 +9,7 @@ import '../../features/societies/presentation/screens/society_list_screen.dart';
 import '../../features/societies/presentation/screens/society_form_screen.dart';
 import '../../features/societies/presentation/screens/society_dashboard_screen.dart';
 import '../../features/societies/presentation/screens/society_members_screen.dart';
-import '../../features/members/domain/usecases/get_member_count.dart';
+import '../../features/societies/domain/usecases/get_society_stats.dart';
 
 /// Main application scaffold with bottom navigation bar
 ///
@@ -159,12 +159,12 @@ class _MainScaffoldState extends State<MainScaffold> {
         if (settings.name?.endsWith('/dashboard') == true) {
           final society = settings.arguments as Society?;
           if (society != null) {
-            // Get GetMemberCount use case from context
-            final getMemberCount = context.read<GetMemberCount>();
+            // Get GetSocietyStats use case from context
+            final getSocietyStats = context.read<GetSocietyStats>();
             return MaterialPageRoute(
               builder: (context) => SocietyDashboardScreen(
                 society: society,
-                getMemberCount: getMemberCount,
+                getSocietyStats: getSocietyStats,
               ),
             );
           }

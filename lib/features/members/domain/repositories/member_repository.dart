@@ -1,4 +1,5 @@
 import '../entities/member.dart';
+import '../../../societies/domain/entities/society_stats.dart';
 
 /// Repository interface for member-related operations
 abstract class MemberRepository {
@@ -7,6 +8,11 @@ abstract class MemberRepository {
 
   /// Gets the count of members in a society
   Future<int> getMemberCount(String societyId);
+
+  /// Gets aggregated statistics for a society
+  /// Returns stats including member count, owner/captain names, and average handicap
+  /// Only includes ACTIVE members in calculations
+  Future<SocietyStats> getSocietyStats(String societyId);
 
   /// Adds a new member to a society
   Future<Member> addMember({

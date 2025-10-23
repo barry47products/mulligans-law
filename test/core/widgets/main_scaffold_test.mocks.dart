@@ -3,22 +3,26 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i6;
 
-import 'package:flutter_bloc/flutter_bloc.dart' as _i7;
+import 'package:flutter_bloc/flutter_bloc.dart' as _i8;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mulligans_law/features/auth/presentation/bloc/auth_bloc.dart'
-    as _i4;
+    as _i5;
 import 'package:mulligans_law/features/auth/presentation/bloc/auth_event.dart'
-    as _i6;
+    as _i7;
 import 'package:mulligans_law/features/auth/presentation/bloc/auth_state.dart'
     as _i2;
 import 'package:mulligans_law/features/members/domain/usecases/get_member_count.dart'
-    as _i10;
+    as _i11;
+import 'package:mulligans_law/features/societies/domain/entities/society_stats.dart'
+    as _i4;
+import 'package:mulligans_law/features/societies/domain/usecases/get_society_stats.dart'
+    as _i12;
 import 'package:mulligans_law/features/societies/presentation/bloc/society_bloc.dart'
-    as _i8;
-import 'package:mulligans_law/features/societies/presentation/bloc/society_event.dart'
     as _i9;
+import 'package:mulligans_law/features/societies/presentation/bloc/society_event.dart'
+    as _i10;
 import 'package:mulligans_law/features/societies/presentation/bloc/society_state.dart'
     as _i3;
 
@@ -46,10 +50,15 @@ class _FakeSocietyState_1 extends _i1.SmartFake implements _i3.SocietyState {
     : super(parent, parentInvocation);
 }
 
+class _FakeSocietyStats_2 extends _i1.SmartFake implements _i4.SocietyStats {
+  _FakeSocietyStats_2(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
 /// A class which mocks [AuthBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAuthBloc extends _i1.Mock implements _i4.AuthBloc {
+class MockAuthBloc extends _i1.Mock implements _i5.AuthBloc {
   MockAuthBloc() {
     _i1.throwOnMissingStub(this);
   }
@@ -63,12 +72,12 @@ class MockAuthBloc extends _i1.Mock implements _i4.AuthBloc {
           as _i2.AuthState);
 
   @override
-  _i5.Stream<_i2.AuthState> get stream =>
+  _i6.Stream<_i2.AuthState> get stream =>
       (super.noSuchMethod(
             Invocation.getter(#stream),
-            returnValue: _i5.Stream<_i2.AuthState>.empty(),
+            returnValue: _i6.Stream<_i2.AuthState>.empty(),
           )
-          as _i5.Stream<_i2.AuthState>);
+          as _i6.Stream<_i2.AuthState>);
 
   @override
   bool get isClosed =>
@@ -76,22 +85,22 @@ class MockAuthBloc extends _i1.Mock implements _i4.AuthBloc {
           as bool);
 
   @override
-  _i5.Future<void> close() =>
+  _i6.Future<void> close() =>
       (super.noSuchMethod(
             Invocation.method(#close, []),
-            returnValue: _i5.Future<void>.value(),
-            returnValueForMissingStub: _i5.Future<void>.value(),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
           )
-          as _i5.Future<void>);
+          as _i6.Future<void>);
 
   @override
-  void add(_i6.AuthEvent? event) => super.noSuchMethod(
+  void add(_i7.AuthEvent? event) => super.noSuchMethod(
     Invocation.method(#add, [event]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void onEvent(_i6.AuthEvent? event) => super.noSuchMethod(
+  void onEvent(_i7.AuthEvent? event) => super.noSuchMethod(
     Invocation.method(#onEvent, [event]),
     returnValueForMissingStub: null,
   );
@@ -103,30 +112,30 @@ class MockAuthBloc extends _i1.Mock implements _i4.AuthBloc {
   );
 
   @override
-  void on<E extends _i6.AuthEvent>(
-    _i7.EventHandler<E, _i2.AuthState>? handler, {
-    _i7.EventTransformer<E>? transformer,
+  void on<E extends _i7.AuthEvent>(
+    _i8.EventHandler<E, _i2.AuthState>? handler, {
+    _i8.EventTransformer<E>? transformer,
   }) => super.noSuchMethod(
     Invocation.method(#on, [handler], {#transformer: transformer}),
     returnValueForMissingStub: null,
   );
 
   @override
-  void onTransition(_i7.Transition<_i6.AuthEvent, _i2.AuthState>? transition) =>
+  void onTransition(_i8.Transition<_i7.AuthEvent, _i2.AuthState>? transition) =>
       super.noSuchMethod(
         Invocation.method(#onTransition, [transition]),
         returnValueForMissingStub: null,
       );
 
   @override
-  void onDone(_i6.AuthEvent? event, [Object? error, StackTrace? stackTrace]) =>
+  void onDone(_i7.AuthEvent? event, [Object? error, StackTrace? stackTrace]) =>
       super.noSuchMethod(
         Invocation.method(#onDone, [event, error, stackTrace]),
         returnValueForMissingStub: null,
       );
 
   @override
-  void onChange(_i7.Change<_i2.AuthState>? change) => super.noSuchMethod(
+  void onChange(_i8.Change<_i2.AuthState>? change) => super.noSuchMethod(
     Invocation.method(#onChange, [change]),
     returnValueForMissingStub: null,
   );
@@ -147,7 +156,7 @@ class MockAuthBloc extends _i1.Mock implements _i4.AuthBloc {
 /// A class which mocks [SocietyBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSocietyBloc extends _i1.Mock implements _i8.SocietyBloc {
+class MockSocietyBloc extends _i1.Mock implements _i9.SocietyBloc {
   MockSocietyBloc() {
     _i1.throwOnMissingStub(this);
   }
@@ -161,12 +170,12 @@ class MockSocietyBloc extends _i1.Mock implements _i8.SocietyBloc {
           as _i3.SocietyState);
 
   @override
-  _i5.Stream<_i3.SocietyState> get stream =>
+  _i6.Stream<_i3.SocietyState> get stream =>
       (super.noSuchMethod(
             Invocation.getter(#stream),
-            returnValue: _i5.Stream<_i3.SocietyState>.empty(),
+            returnValue: _i6.Stream<_i3.SocietyState>.empty(),
           )
-          as _i5.Stream<_i3.SocietyState>);
+          as _i6.Stream<_i3.SocietyState>);
 
   @override
   bool get isClosed =>
@@ -174,13 +183,13 @@ class MockSocietyBloc extends _i1.Mock implements _i8.SocietyBloc {
           as bool);
 
   @override
-  void add(_i9.SocietyEvent? event) => super.noSuchMethod(
+  void add(_i10.SocietyEvent? event) => super.noSuchMethod(
     Invocation.method(#add, [event]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void onEvent(_i9.SocietyEvent? event) => super.noSuchMethod(
+  void onEvent(_i10.SocietyEvent? event) => super.noSuchMethod(
     Invocation.method(#onEvent, [event]),
     returnValueForMissingStub: null,
   );
@@ -192,9 +201,9 @@ class MockSocietyBloc extends _i1.Mock implements _i8.SocietyBloc {
   );
 
   @override
-  void on<E extends _i9.SocietyEvent>(
-    _i7.EventHandler<E, _i3.SocietyState>? handler, {
-    _i7.EventTransformer<E>? transformer,
+  void on<E extends _i10.SocietyEvent>(
+    _i8.EventHandler<E, _i3.SocietyState>? handler, {
+    _i8.EventTransformer<E>? transformer,
   }) => super.noSuchMethod(
     Invocation.method(#on, [handler], {#transformer: transformer}),
     returnValueForMissingStub: null,
@@ -202,7 +211,7 @@ class MockSocietyBloc extends _i1.Mock implements _i8.SocietyBloc {
 
   @override
   void onTransition(
-    _i7.Transition<_i9.SocietyEvent, _i3.SocietyState>? transition,
+    _i8.Transition<_i10.SocietyEvent, _i3.SocietyState>? transition,
   ) => super.noSuchMethod(
     Invocation.method(#onTransition, [transition]),
     returnValueForMissingStub: null,
@@ -210,7 +219,7 @@ class MockSocietyBloc extends _i1.Mock implements _i8.SocietyBloc {
 
   @override
   void onDone(
-    _i9.SocietyEvent? event, [
+    _i10.SocietyEvent? event, [
     Object? error,
     StackTrace? stackTrace,
   ]) => super.noSuchMethod(
@@ -219,16 +228,16 @@ class MockSocietyBloc extends _i1.Mock implements _i8.SocietyBloc {
   );
 
   @override
-  _i5.Future<void> close() =>
+  _i6.Future<void> close() =>
       (super.noSuchMethod(
             Invocation.method(#close, []),
-            returnValue: _i5.Future<void>.value(),
-            returnValueForMissingStub: _i5.Future<void>.value(),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
           )
-          as _i5.Future<void>);
+          as _i6.Future<void>);
 
   @override
-  void onChange(_i7.Change<_i3.SocietyState>? change) => super.noSuchMethod(
+  void onChange(_i8.Change<_i3.SocietyState>? change) => super.noSuchMethod(
     Invocation.method(#onChange, [change]),
     returnValueForMissingStub: null,
   );
@@ -249,16 +258,35 @@ class MockSocietyBloc extends _i1.Mock implements _i8.SocietyBloc {
 /// A class which mocks [GetMemberCount].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetMemberCount extends _i1.Mock implements _i10.GetMemberCount {
+class MockGetMemberCount extends _i1.Mock implements _i11.GetMemberCount {
   MockGetMemberCount() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.Future<int> call(String? societyId) =>
+  _i6.Future<int> call(String? societyId) =>
       (super.noSuchMethod(
             Invocation.method(#call, [societyId]),
-            returnValue: _i5.Future<int>.value(0),
+            returnValue: _i6.Future<int>.value(0),
           )
-          as _i5.Future<int>);
+          as _i6.Future<int>);
+}
+
+/// A class which mocks [GetSocietyStats].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetSocietyStats extends _i1.Mock implements _i12.GetSocietyStats {
+  MockGetSocietyStats() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.Future<_i4.SocietyStats> call(String? societyId) =>
+      (super.noSuchMethod(
+            Invocation.method(#call, [societyId]),
+            returnValue: _i6.Future<_i4.SocietyStats>.value(
+              _FakeSocietyStats_2(this, Invocation.method(#call, [societyId])),
+            ),
+          )
+          as _i6.Future<_i4.SocietyStats>);
 }

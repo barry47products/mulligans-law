@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../../members/domain/usecases/get_member_count.dart';
 import '../../domain/entities/society.dart';
+import '../../domain/entities/society_stats.dart';
+import '../../domain/usecases/get_society_stats.dart';
 
 /// Dashboard screen for a specific society showing overview and members
 class SocietyDashboardScreen extends StatefulWidget {
   final Society society;
-  final GetMemberCount getMemberCount;
+  final GetSocietyStats getSocietyStats;
 
   const SocietyDashboardScreen({
     super.key,
     required this.society,
-    required this.getMemberCount,
+    required this.getSocietyStats,
   });
 
   @override
@@ -23,13 +24,14 @@ class SocietyDashboardScreen extends StatefulWidget {
 class _SocietyDashboardScreenState extends State<SocietyDashboardScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _memberCount = 0;
+  SocietyStats? _stats;
+  bool _isLoadingStats = true;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: _tabCount, vsync: this);
-    _loadMemberCount();
+    _loadStats();
   }
 
   @override
@@ -38,19 +40,26 @@ class _SocietyDashboardScreenState extends State<SocietyDashboardScreen>
     super.dispose();
   }
 
-  Future<void> _loadMemberCount() async {
+  Future<void> _loadStats() async {
     try {
-      final count = await widget.getMemberCount(widget.society.id);
+      final stats = await widget.getSocietyStats(widget.society.id);
       if (mounted) {
         setState(() {
-          _memberCount = count;
+          _stats = stats;
+          _isLoadingStats = false;
         });
       }
     } catch (e) {
-      // Default to 0 on error
+      // Default to empty stats on error
       if (mounted) {
         setState(() {
-          _memberCount = 0;
+          _stats = const SocietyStats(
+            memberCount: 0,
+            ownerNames: [],
+            captainNames: [],
+            averageHandicap: 0.0,
+          );
+          _isLoadingStats = false;
         });
       }
     }
@@ -58,6 +67,8 @@ class _SocietyDashboardScreenState extends State<SocietyDashboardScreen>
 
   @override
   Widget build(BuildContext context) {
+    final isDeleted = widget.society.deletedAt != null;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.society.name),
@@ -71,11 +82,39 @@ class _SocietyDashboardScreenState extends State<SocietyDashboardScreen>
       ),
       body: Column(
         children: [
+          if (isDeleted) _buildDeletedBanner(),
           _buildHeader(),
           Expanded(
             child: TabBarView(
               controller: _tabController,
               children: [_buildOverviewTab(), _buildMembersTab()],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDeletedBanner() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppSpacing.space3),
+      color: AppColors.error.withValues(alpha: _deletedBannerOpacity),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.info_outline,
+            color: AppColors.error,
+            size: _deletedBannerIconSize,
+          ),
+          const SizedBox(width: AppSpacing.space2),
+          Expanded(
+            child: Text(
+              _deletedBannerMessage,
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.error,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],
@@ -151,6 +190,14 @@ class _SocietyDashboardScreenState extends State<SocietyDashboardScreen>
   }
 
   Widget _buildOverviewTab() {
+    final isDeleted = widget.society.deletedAt != null;
+
+    if (_isLoadingStats) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final stats = _stats!;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppSpacing.screenPaddingHorizontal),
       child: Column(
@@ -164,27 +211,51 @@ class _SocietyDashboardScreenState extends State<SocietyDashboardScreen>
             ),
           ),
           const SizedBox(height: AppSpacing.space4),
-          // Statistics cards
+          // Statistics cards - Row 1
           Row(
             children: [
               Expanded(
                 child: _buildStatisticCard(
                   title: _membersLabel,
-                  value: _memberCount.toString(),
+                  value: stats.memberCount.toString(),
                   icon: Icons.people,
                 ),
               ),
               const SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: _buildStatisticCard(
-                  title: _eventsLabel,
-                  value: '0',
-                  subtitle: _comingSoonLabel,
-                  icon: Icons.event,
+                  title: _averageHandicapLabel,
+                  value: stats.averageHandicap.toStringAsFixed(
+                    _handicapDecimalPlaces,
+                  ),
+                  icon: Icons.golf_course,
                 ),
               ),
             ],
           ),
+          const SizedBox(height: AppSpacing.space4),
+          // Statistics cards - Row 2
+          _buildRoleCard(
+            title: _ownersLabel,
+            names: stats.ownerNames,
+            icon: Icons.star,
+          ),
+          const SizedBox(height: AppSpacing.space4),
+          _buildRoleCard(
+            title: _captainsLabel,
+            names: stats.captainNames,
+            icon: Icons.military_tech,
+          ),
+          const SizedBox(height: AppSpacing.space6),
+          // Activity Feed Section
+          Text(
+            _activityFeedLabel,
+            style: AppTypography.headlineLarge.copyWith(
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.space4),
+          _buildActivityFeed(),
           const SizedBox(height: AppSpacing.space6),
           Text(
             _quickActionsLabel,
@@ -197,21 +268,29 @@ class _SocietyDashboardScreenState extends State<SocietyDashboardScreen>
           _buildQuickActionButton(
             label: _viewMembersLabel,
             icon: Icons.people,
-            onPressed: () {
-              Navigator.pushNamed(
-                context,
-                '/${widget.society.id}/members',
-                arguments: widget.society,
-              );
-            },
+            onPressed: isDeleted
+                ? null
+                : () {
+                    Navigator.pushNamed(
+                      context,
+                      '/${widget.society.id}/members',
+                      arguments: widget.society,
+                    );
+                  },
           ),
           const SizedBox(height: AppSpacing.space3),
           _buildQuickActionButton(
             label: _settingsLabel,
             icon: Icons.settings,
-            onPressed: () {
-              Navigator.pushNamed(context, '/edit', arguments: widget.society);
-            },
+            onPressed: isDeleted
+                ? null
+                : () {
+                    Navigator.pushNamed(
+                      context,
+                      '/edit',
+                      arguments: widget.society,
+                    );
+                  },
           ),
         ],
       ),
@@ -265,10 +344,135 @@ class _SocietyDashboardScreenState extends State<SocietyDashboardScreen>
     );
   }
 
+  Widget _buildRoleCard({
+    required String title,
+    required List<String> names,
+    required IconData icon,
+  }) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSpacing.space2),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.cardPadding),
+        child: Row(
+          children: [
+            Icon(icon, color: AppColors.primary, size: _roleIconSize),
+            const SizedBox(width: AppSpacing.space3),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTypography.labelLarge.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.space1),
+                  Text(
+                    names.isEmpty ? _noRoleMembersLabel : names.join(', '),
+                    style: AppTypography.bodyMedium.copyWith(
+                      color: names.isEmpty
+                          ? AppColors.textSecondary
+                          : AppColors.textPrimary,
+                      fontStyle: names.isEmpty ? FontStyle.italic : null,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActivityFeed() {
+    // TODO: Wire up to real ActivityEventRepository when implemented
+    final placeholderEvents = [
+      _buildActivityItem(
+        icon: Icons.person_add,
+        title: _activityMemberJoined,
+        timestamp: _activityPlaceholderTime,
+      ),
+      _buildActivityItem(
+        icon: Icons.golf_course,
+        title: _activityRoundCompleted,
+        timestamp: _activityPlaceholderTime,
+      ),
+      _buildActivityItem(
+        icon: Icons.military_tech,
+        title: _activityRoleChanged,
+        timestamp: _activityPlaceholderTime,
+      ),
+    ];
+
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSpacing.space2),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.cardPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _activityFeedPlaceholder,
+              style: AppTypography.labelSmall.copyWith(
+                color: AppColors.textSecondary,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.space3),
+            ...placeholderEvents,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActivityItem({
+    required IconData icon,
+    required String title,
+    required String timestamp,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.space2),
+      child: Row(
+        children: [
+          Icon(icon, color: AppColors.textSecondary, size: _activityIconSize),
+          const SizedBox(width: AppSpacing.space2),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                Text(
+                  timestamp,
+                  style: AppTypography.labelSmall.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildQuickActionButton({
     required String label,
     required IconData icon,
-    required VoidCallback onPressed,
+    required VoidCallback? onPressed,
   }) {
     return SizedBox(
       width: double.infinity,
@@ -328,14 +532,32 @@ class _SocietyDashboardScreenState extends State<SocietyDashboardScreen>
   static const int _descriptionMaxLines = 2;
   static const double _statisticIconSize = 32.0;
   static const double _emptyStateIconSize = 80.0;
+  static const double _roleIconSize = 24.0;
+  static const double _activityIconSize = 20.0;
+  static const double _deletedBannerIconSize = 20.0;
+  static const double _deletedBannerOpacity = 0.1;
+  static const int _handicapDecimalPlaces = 1;
 
   static const String _overviewTabLabel = 'Overview';
   static const String _membersTabLabel = 'Members';
   static const String _statisticsLabel = 'Statistics';
   static const String _membersLabel = 'Members';
-  static const String _eventsLabel = 'Events';
+  static const String _averageHandicapLabel = 'Avg Handicap';
+  static const String _ownersLabel = 'Owners';
+  static const String _captainsLabel = 'Captains';
+  static const String _noRoleMembersLabel = 'None assigned';
+  static const String _activityFeedLabel = 'Recent Activity';
+  static const String _activityFeedPlaceholder =
+      'Activity feed will show recent events when implemented';
+  static const String _activityMemberJoined = 'New member joined the society';
+  static const String _activityRoundCompleted =
+      'Round completed at Example Golf Club';
+  static const String _activityRoleChanged = 'Member role updated to Captain';
+  static const String _activityPlaceholderTime = '2 hours ago';
   static const String _comingSoonLabel = 'Coming soon';
   static const String _quickActionsLabel = 'Quick Actions';
   static const String _viewMembersLabel = 'View Members';
   static const String _settingsLabel = 'Settings';
+  static const String _deletedBannerMessage =
+      'This society has been deleted and is read-only';
 }

@@ -3,6 +3,7 @@ import '../../../../core/constants/database_constants.dart';
 import '../../../../core/errors/member_exceptions.dart';
 import '../../domain/entities/member.dart';
 import '../../domain/repositories/member_repository.dart';
+import '../../../societies/domain/entities/society_stats.dart';
 import '../models/member_model.dart';
 
 /// Implementation of MemberRepository using Supabase
@@ -50,6 +51,72 @@ class MemberRepositoryImpl implements MemberRepository {
     } catch (e) {
       throw MemberDatabaseException(
         'Unexpected error fetching member count: $e',
+      );
+    }
+  }
+
+  @override
+  Future<SocietyStats> getSocietyStats(String societyId) async {
+    try {
+      // Fetch all ACTIVE members for the society
+      final response = await _supabase
+          .from(DatabaseTables.members)
+          .select(
+            '${DatabaseColumns.name}, ${DatabaseColumns.role}, ${DatabaseColumns.handicap}',
+          )
+          .eq(DatabaseColumns.societyId, societyId)
+          .eq(DatabaseColumns.status, MemberStatus.active);
+
+      final members = response as List;
+
+      // If no members, return empty stats
+      if (members.isEmpty) {
+        return const SocietyStats(
+          memberCount: 0,
+          ownerNames: [],
+          captainNames: [],
+          averageHandicap: 0.0,
+        );
+      }
+
+      // Extract owner names (OWNER and CO_OWNER)
+      final ownerNames = members
+          .where(
+            (m) =>
+                m[DatabaseColumns.role] == MemberRole.owner ||
+                m[DatabaseColumns.role] == MemberRole.coOwner,
+          )
+          .map((m) => m[DatabaseColumns.name] as String)
+          .toList();
+
+      // Extract captain names
+      final captainNames = members
+          .where((m) => m[DatabaseColumns.role] == MemberRole.captain)
+          .map((m) => m[DatabaseColumns.name] as String)
+          .toList();
+
+      // Calculate average handicap
+      final handicaps = members
+          .map((m) => (m[DatabaseColumns.handicap] as num).toDouble())
+          .toList();
+
+      final averageHandicap = handicaps.isEmpty
+          ? 0.0
+          : handicaps.reduce((a, b) => a + b) / handicaps.length;
+
+      return SocietyStats(
+        memberCount: members.length,
+        ownerNames: ownerNames,
+        captainNames: captainNames,
+        averageHandicap: averageHandicap,
+      );
+    } on PostgrestException catch (e) {
+      throw MemberDatabaseException(
+        'Failed to fetch society stats: ${e.message}',
+      );
+    } catch (e) {
+      throw MemberDatabaseException(
+        'Unexpected error fetching society stats: $e',
       );
     }
   }
