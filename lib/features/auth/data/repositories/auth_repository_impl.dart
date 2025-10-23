@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import '../../domain/entities/auth_session.dart';
 import '../../domain/entities/auth_user.dart';
+import '../../domain/entities/user_profile.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../../../core/errors/auth_exceptions.dart';
 import '../models/auth_user_model.dart';
 import '../models/auth_session_model.dart';
+import '../models/user_profile_model.dart';
 
 /// Implementation of [AuthRepository] using Supabase
 class AuthRepositoryImpl implements AuthRepository {
@@ -158,6 +160,30 @@ class AuthRepositoryImpl implements AuthRepository {
         throw const UnauthorizedException();
       }
       throw AuthException('Profile update failed: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<List<UserProfile>> searchUsers({
+    required String query,
+    int limit = 20,
+  }) async {
+    try {
+      // Search the user_profiles view we created in the migration
+      final response = await _supabase
+          .from('user_profiles')
+          .select()
+          .or('name.ilike.%$query%,email.ilike.%$query%')
+          .limit(limit);
+
+      final results = response as List;
+      return results
+          .map((json) => UserProfileModel.fromJson(json).toDomain())
+          .toList();
+    } on SocketException {
+      throw const NetworkException();
+    } catch (e) {
+      throw AuthException('User search failed: ${e.toString()}');
     }
   }
 

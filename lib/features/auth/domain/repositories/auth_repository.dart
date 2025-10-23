@@ -1,5 +1,6 @@
 import '../entities/auth_session.dart';
 import '../entities/auth_user.dart';
+import '../entities/user_profile.dart';
 
 /// Repository interface for authentication operations.
 ///
@@ -69,4 +70,19 @@ abstract class AuthRepository {
   /// - [UnauthorizedException] if no user is signed in
   /// - [AuthException] for other auth errors
   Future<AuthUser> updateProfile({String? name, String? avatarUrl});
+
+  /// Search for users by name or email
+  ///
+  /// [query] - Search term to match against name or email
+  /// [limit] - Maximum number of results to return (default 20)
+  ///
+  /// Returns list of matching user profiles
+  ///
+  /// Throws:
+  /// - [NetworkException] if there's no internet connection
+  /// - [AuthException] for other errors
+  Future<List<UserProfile>> searchUsers({
+    required String query,
+    int limit = 20,
+  });
 }
