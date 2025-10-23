@@ -1,3 +1,9 @@
+## [0.30.0](https://github.com/barry47products/mulligans-law/compare/v0.29.0...v0.30.0) (2025-10-23)
+
+### Features
+
+* **invitations:** implement backend infrastructure for society invitations (Phase 1) ([6e99fe5](https://github.com/barry47products/mulligans-law/commit/6e99fe528c04bd247064c608f0cba56a4d488afa))
+
 ## [0.29.0](https://github.com/barry47products/mulligans-law/compare/v0.28.0...v0.29.0) (2025-10-23)
 
 ### Features
