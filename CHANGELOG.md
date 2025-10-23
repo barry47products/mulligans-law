@@ -1,3 +1,9 @@
+## [0.29.0](https://github.com/barry47products/mulligans-law/compare/v0.28.0...v0.29.0) (2025-10-23)
+
+### Features
+
+* **societies:** enhance dashboard with real stats and activity feed scaffolding ([e9241fa](https://github.com/barry47products/mulligans-law/commit/e9241fa0b807e641e119c50e523e879f55f8155f))
+
 ## [0.28.0](https://github.com/barry47products/mulligans-law/compare/v0.27.1...v0.28.0) (2025-10-22)
 
 ### Features
