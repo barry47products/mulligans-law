@@ -1,3 +1,13 @@
+## [0.32.0](https://github.com/barry47products/mulligans-law/compare/v0.31.0...v0.32.0) (2025-10-24)
+
+### Features
+
+* **invitations:** filter existing members from invitation search ([0aba64a](https://github.com/barry47products/mulligans-law/commit/0aba64ad222e77ccbd9fd296c9328b188f8965e2))
+
+### Bug Fixes
+
+* **societies:** add permission check for society invitation button ([d4439e5](https://github.com/barry47products/mulligans-law/commit/d4439e5a0e42defe667b32ac33312a9b7019d962)), closes [#societies](https://github.com/barry47products/mulligans-law/issues/societies) [#members](https://github.com/barry47products/mulligans-law/issues/members) [#security](https://github.com/barry47products/mulligans-law/issues/security)
+
 ## [0.31.0](https://github.com/barry47products/mulligans-law/compare/v0.30.0...v0.31.0) (2025-10-24)
 
 ### Features
