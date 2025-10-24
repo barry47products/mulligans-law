@@ -85,17 +85,25 @@ void main() {
             () => mockSearchUsers(
               query: testQuery,
               limit: any(named: 'limit'),
+              excludeSocietyId: any(named: 'excludeSocietyId'),
             ),
           ).thenAnswer((_) async => testUsers);
           return bloc;
         },
-        act: (bloc) => bloc.add(const SearchUsersEvent(testQuery)),
+        act: (bloc) =>
+            bloc.add(const SearchUsersEvent(testQuery, testSocietyId)),
         expect: () => [
           const SearchingUsers(),
           UsersLoaded(testUsers, testQuery),
         ],
         verify: (_) {
-          verify(() => mockSearchUsers(query: testQuery, limit: 20)).called(1);
+          verify(
+            () => mockSearchUsers(
+              query: testQuery,
+              limit: 20,
+              excludeSocietyId: testSocietyId,
+            ),
+          ).called(1);
         },
       );
 
@@ -106,11 +114,13 @@ void main() {
             () => mockSearchUsers(
               query: testQuery,
               limit: any(named: 'limit'),
+              excludeSocietyId: any(named: 'excludeSocietyId'),
             ),
           ).thenAnswer((_) async => []);
           return bloc;
         },
-        act: (bloc) => bloc.add(const SearchUsersEvent(testQuery)),
+        act: (bloc) =>
+            bloc.add(const SearchUsersEvent(testQuery, testSocietyId)),
         expect: () => [
           const SearchingUsers(),
           const UsersLoaded([], testQuery),
@@ -124,11 +134,13 @@ void main() {
             () => mockSearchUsers(
               query: testQuery,
               limit: any(named: 'limit'),
+              excludeSocietyId: any(named: 'excludeSocietyId'),
             ),
           ).thenThrow(const NetworkException('No internet connection'));
           return bloc;
         },
-        act: (bloc) => bloc.add(const SearchUsersEvent(testQuery)),
+        act: (bloc) =>
+            bloc.add(const SearchUsersEvent(testQuery, testSocietyId)),
         expect: () => [
           const SearchingUsers(),
           const InviteMembersError('No internet connection'),
@@ -142,11 +154,13 @@ void main() {
             () => mockSearchUsers(
               query: testQuery,
               limit: any(named: 'limit'),
+              excludeSocietyId: any(named: 'excludeSocietyId'),
             ),
           ).thenThrow(const AuthException('Search failed'));
           return bloc;
         },
-        act: (bloc) => bloc.add(const SearchUsersEvent(testQuery)),
+        act: (bloc) =>
+            bloc.add(const SearchUsersEvent(testQuery, testSocietyId)),
         expect: () => [
           const SearchingUsers(),
           const InviteMembersError('Failed to search users: Search failed'),
@@ -156,7 +170,7 @@ void main() {
       blocTest<InviteMembersBloc, InviteMembersState>(
         'does not search when query is empty',
         build: () => bloc,
-        act: (bloc) => bloc.add(const SearchUsersEvent('')),
+        act: (bloc) => bloc.add(const SearchUsersEvent('', testSocietyId)),
         expect: () => [],
         verify: (_) {
           verifyNever(
@@ -171,7 +185,7 @@ void main() {
       blocTest<InviteMembersBloc, InviteMembersState>(
         'does not search when query is only whitespace',
         build: () => bloc,
-        act: (bloc) => bloc.add(const SearchUsersEvent('   ')),
+        act: (bloc) => bloc.add(const SearchUsersEvent('   ', testSocietyId)),
         expect: () => [],
         verify: (_) {
           verifyNever(

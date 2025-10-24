@@ -14,12 +14,18 @@ class SearchUsers {
   ///
   /// [query] - Search term to match against name or email
   /// [limit] - Maximum number of results (default 20)
+  /// [excludeSocietyId] - Optional society ID to exclude existing members
   ///
   /// Returns list of matching user profiles
   Future<List<UserProfile>> call({
     required String query,
     int limit = 20,
+    String? excludeSocietyId,
   }) async {
-    return await _repository.searchUsers(query: query, limit: limit);
+    return await _repository.searchUsers(
+      query: query,
+      limit: limit,
+      excludeSocietyId: excludeSocietyId,
+    );
   }
 }

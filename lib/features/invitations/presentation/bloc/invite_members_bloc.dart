@@ -44,6 +44,7 @@ class InviteMembersBloc extends Bloc<InviteMembersEvent, InviteMembersState> {
       final users = await _searchUsers(
         query: query,
         limit: _searchResultsLimit,
+        excludeSocietyId: event.societyId,
       );
 
       emit(UsersLoaded(users, query));

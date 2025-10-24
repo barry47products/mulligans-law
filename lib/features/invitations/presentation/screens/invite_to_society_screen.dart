@@ -34,7 +34,9 @@ class _InviteToSocietyScreenState extends State<InviteToSocietyScreen> {
   }
 
   void _onSearchChanged(String query) {
-    context.read<InviteMembersBloc>().add(SearchUsersEvent(query));
+    context.read<InviteMembersBloc>().add(
+      SearchUsersEvent(query, widget.societyId),
+    );
   }
 
   void _onInviteUser(UserProfile user) {

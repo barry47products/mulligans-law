@@ -11,11 +11,12 @@ abstract class InviteMembersEvent extends Equatable {
 /// Event to search for users by name or email
 class SearchUsersEvent extends InviteMembersEvent {
   final String query;
+  final String societyId;
 
-  const SearchUsersEvent(this.query);
+  const SearchUsersEvent(this.query, this.societyId);
 
   @override
-  List<Object?> get props => [query];
+  List<Object?> get props => [query, societyId];
 }
 
 /// Event to send an invitation to a user

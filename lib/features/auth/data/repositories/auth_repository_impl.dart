@@ -167,14 +167,27 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<List<UserProfile>> searchUsers({
     required String query,
     int limit = 20,
+    String? excludeSocietyId,
   }) async {
     try {
       // Search the user_profiles view we created in the migration
-      final response = await _supabase
+      var queryBuilder = _supabase
           .from('user_profiles')
           .select()
-          .or('name.ilike.%$query%,email.ilike.%$query%')
-          .limit(limit);
+          .or('name.ilike.%$query%,email.ilike.%$query%');
+
+      // If excludeSocietyId is provided, filter out existing members
+      if (excludeSocietyId != null) {
+        // Exclude users who are already members of this society
+        // Status ACTIVE or PENDING means they're current members or have pending invitations
+        queryBuilder = queryBuilder.not(
+          'id',
+          'in',
+          '(SELECT user_id FROM members WHERE society_id = \'$excludeSocietyId\' AND status IN (\'ACTIVE\', \'PENDING\'))',
+        );
+      }
+
+      final response = await queryBuilder.limit(limit);
 
       final results = response as List;
       return results

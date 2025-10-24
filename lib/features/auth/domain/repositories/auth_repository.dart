@@ -75,8 +75,12 @@ abstract class AuthRepository {
   ///
   /// [query] - Search term to match against name or email
   /// [limit] - Maximum number of results to return (default 20)
+  /// [excludeSocietyId] - Optional society ID to exclude existing members from results
   ///
   /// Returns list of matching user profiles
+  ///
+  /// When [excludeSocietyId] is provided, users who are already members of that
+  /// society (with status ACTIVE or PENDING) will be excluded from the results.
   ///
   /// Throws:
   /// - [NetworkException] if there's no internet connection
@@ -84,5 +88,6 @@ abstract class AuthRepository {
   Future<List<UserProfile>> searchUsers({
     required String query,
     int limit = 20,
+    String? excludeSocietyId,
   });
 }

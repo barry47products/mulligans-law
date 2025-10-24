@@ -766,7 +766,7 @@ IMPORTANT: Member Architecture
     - lib/features/societies/presentation/screens/society_members_screen.dart (added navigation to InviteToSocietyScreen)
   - **Known Limitations (Future Enhancements):**
     - [X] Permission check: Only captains/owners should see invite button ✅ FIXED
-    - [ ] Filter existing members: Search results should exclude users already in society
+    - [X] Filter existing members: Search results should exclude users already in society ✅ FIXED
     - [ ] Show invitation status: Display "Already Invited" badge for users with PENDING invitations
 
 - [X] **Add Permission Check for Invite Button** (P1) #societies #members #security
@@ -796,33 +796,35 @@ IMPORTANT: Member Architecture
       - Updated createWidgetUnderTest() to provide AuthBloc
       - Updated "displays Add Member button" test to set proper member state
 
-- [ ] **Filter Existing Members from Invitation Search** (P1) #invitations #members #ux
-  - Note: Search results should not show users who are already members of the society
-  - Location: SearchUsers use case or InviteMembersBloc
-  - **Implementation Option A (Recommended - Backend Filter):**
-    - Extend AuthRepository.searchUsers to accept optional societyId parameter
-    - Modify user_profiles view query to exclude users with existing member records
-    - SQL: `WHERE NOT EXISTS (SELECT 1 FROM members WHERE user_id = u.id AND society_id = $societyId AND status IN ('ACTIVE', 'PENDING'))`
-    - Update SearchUsers use case to pass societyId
-    - Update InviteMembersBloc to pass societyId in SearchUsersEvent
-  - **Implementation Option B (Alternative - Frontend Filter):**
-    - After search results returned, fetch member list for society
-    - Filter out user IDs that match existing members
-    - Return filtered list to UI
-  - **Business Rules:**
-    - Exclude users with status = 'ACTIVE' (current members)
-    - Exclude users with status = 'PENDING' (pending invitations)
-    - Include users with status = 'RESIGNED' (can be re-invited)
-  - Tests: Unit tests for filtering logic, integration tests for search with exclusions
-  - Files to modify:
-    - lib/features/auth/domain/repositories/auth_repository.dart (add societyId parameter)
-    - lib/features/auth/data/repositories/auth_repository_impl.dart (implement filtering)
-    - lib/features/auth/domain/usecases/search_users.dart (add societyId parameter)
-    - lib/features/invitations/presentation/bloc/invite_members_event.dart (add societyId to SearchUsersEvent)
-    - lib/features/invitations/presentation/bloc/invite_members_bloc.dart (pass societyId)
+- [X] **Filter Existing Members from Invitation Search** (P1) #invitations #members #ux ✅ COMPLETE
+  - Note: COMPLETE - Search results now exclude users who are already members or have pending invitations
+  - Location: AuthRepository, SearchUsers use case, InviteMembersBloc
+  - **Implementation (Backend Filter - Option A):** ✅
+    - [X] Extended AuthRepository.searchUsers to accept optional `excludeSocietyId` parameter ✅
+    - [X] Modified user_profiles query in AuthRepositoryImpl to filter members via SQL subquery ✅
+    - [X] SQL filtering: `NOT IN (SELECT user_id FROM members WHERE society_id = ? AND status IN ('ACTIVE', 'PENDING'))` ✅
+    - [X] Updated SearchUsers use case to pass `excludeSocietyId` parameter ✅
+    - [X] Updated SearchUsersEvent to include `societyId` field ✅
+    - [X] Updated InviteMembersBloc to pass `excludeSocietyId` to use case ✅
+    - [X] Updated InviteToSocietyScreen to pass societyId in SearchUsersEvent ✅
+  - **Business Rules:** ✅ All implemented
+    - [X] Excludes users with status = 'ACTIVE' (current members) ✅
+    - [X] Excludes users with status = 'PENDING' (pending invitations) ✅
+    - [X] Includes users with status = 'RESIGNED' (can be re-invited) ✅
+  - **Tests:** ✅ All passing
+    - [X] 2 new tests in search_users_test.dart (filtering with societyId, filtering without) ✅
+    - [X] Updated all existing SearchUsers use case tests (7 total tests) ✅
+    - [X] Updated all InviteMembersBloc tests to pass societyId (17 total BLoC tests) ✅
+    - [X] All 393 tests passing across entire codebase ✅
+  - **Files Modified:**
+    - lib/features/auth/domain/repositories/auth_repository.dart (added excludeSocietyId parameter)
+    - lib/features/auth/data/repositories/auth_repository_impl.dart (implemented SQL filtering)
+    - lib/features/auth/domain/usecases/search_users.dart (added excludeSocietyId parameter)
+    - lib/features/invitations/presentation/bloc/invite_members_event.dart (added societyId field)
+    - lib/features/invitations/presentation/bloc/invite_members_bloc.dart (pass excludeSocietyId to use case)
     - lib/features/invitations/presentation/screens/invite_to_society_screen.dart (pass societyId in event)
-    - test/features/auth/domain/usecases/search_users_test.dart (update tests)
-    - test/features/invitations/presentation/bloc/invite_members_bloc_test.dart (update tests)
+    - test/features/auth/domain/usecases/search_users_test.dart (added 2 new filtering tests)
+    - test/features/invitations/presentation/bloc/invite_members_bloc_test.dart (updated all test mocks)
 
 - [ ] **Show Invitation Status in Search Results** (P2) #invitations #ux
   - Note: Optional enhancement - show visual indicator for users with pending invitations

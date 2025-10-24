@@ -37,7 +37,11 @@ void main() {
     test('should return list of matching users', () async {
       // Arrange
       when(
-        () => mockRepository.searchUsers(query: testQuery, limit: testLimit),
+        () => mockRepository.searchUsers(
+          query: testQuery,
+          limit: testLimit,
+          excludeSocietyId: any(named: 'excludeSocietyId'),
+        ),
       ).thenAnswer((_) async => testUsers);
 
       // Act
@@ -47,14 +51,22 @@ void main() {
       expect(result, equals(testUsers));
       expect(result.length, equals(2));
       verify(
-        () => mockRepository.searchUsers(query: testQuery, limit: testLimit),
+        () => mockRepository.searchUsers(
+          query: testQuery,
+          limit: testLimit,
+          excludeSocietyId: null,
+        ),
       ).called(1);
     });
 
     test('should return empty list when no users match', () async {
       // Arrange
       when(
-        () => mockRepository.searchUsers(query: testQuery, limit: testLimit),
+        () => mockRepository.searchUsers(
+          query: testQuery,
+          limit: testLimit,
+          excludeSocietyId: any(named: 'excludeSocietyId'),
+        ),
       ).thenAnswer((_) async => []);
 
       // Act
@@ -63,7 +75,11 @@ void main() {
       // Assert
       expect(result, isEmpty);
       verify(
-        () => mockRepository.searchUsers(query: testQuery, limit: testLimit),
+        () => mockRepository.searchUsers(
+          query: testQuery,
+          limit: testLimit,
+          excludeSocietyId: null,
+        ),
       ).called(1);
     });
 
@@ -71,7 +87,11 @@ void main() {
       // Arrange
       const defaultLimit = 20;
       when(
-        () => mockRepository.searchUsers(query: testQuery, limit: defaultLimit),
+        () => mockRepository.searchUsers(
+          query: testQuery,
+          limit: defaultLimit,
+          excludeSocietyId: any(named: 'excludeSocietyId'),
+        ),
       ).thenAnswer((_) async => testUsers);
 
       // Act
@@ -80,7 +100,11 @@ void main() {
       // Assert
       expect(result, equals(testUsers));
       verify(
-        () => mockRepository.searchUsers(query: testQuery, limit: defaultLimit),
+        () => mockRepository.searchUsers(
+          query: testQuery,
+          limit: defaultLimit,
+          excludeSocietyId: null,
+        ),
       ).called(1);
     });
 
@@ -110,6 +134,7 @@ void main() {
         () => mockRepository.searchUsers(
           query: 'jane',
           limit: any(named: 'limit'),
+          excludeSocietyId: any(named: 'excludeSocietyId'),
         ),
       ).thenAnswer((_) async => usersWithoutHandicap);
 
@@ -119,6 +144,58 @@ void main() {
       // Assert
       expect(result, equals(usersWithoutHandicap));
       expect(result.first.handicap, isNull);
+    });
+
+    test('should pass excludeSocietyId to repository when provided', () async {
+      // Arrange
+      const societyId = 'society-123';
+      when(
+        () => mockRepository.searchUsers(
+          query: testQuery,
+          limit: any(named: 'limit'),
+          excludeSocietyId: societyId,
+        ),
+      ).thenAnswer((_) async => testUsers);
+
+      // Act
+      final result = await useCase(
+        query: testQuery,
+        excludeSocietyId: societyId,
+      );
+
+      // Assert
+      expect(result, equals(testUsers));
+      verify(
+        () => mockRepository.searchUsers(
+          query: testQuery,
+          limit: 20,
+          excludeSocietyId: societyId,
+        ),
+      ).called(1);
+    });
+
+    test('should not filter when excludeSocietyId is null', () async {
+      // Arrange
+      when(
+        () => mockRepository.searchUsers(
+          query: testQuery,
+          limit: any(named: 'limit'),
+          excludeSocietyId: null,
+        ),
+      ).thenAnswer((_) async => testUsers);
+
+      // Act
+      final result = await useCase(query: testQuery);
+
+      // Assert
+      expect(result, equals(testUsers));
+      verify(
+        () => mockRepository.searchUsers(
+          query: testQuery,
+          limit: 20,
+          excludeSocietyId: null,
+        ),
+      ).called(1);
     });
   });
 }
