@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:mulligans_law/features/auth/domain/entities/auth_user.dart';
+import 'package:mulligans_law/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:mulligans_law/features/auth/presentation/bloc/auth_state.dart';
 import 'package:mulligans_law/features/members/domain/entities/member.dart';
 import 'package:mulligans_law/features/members/presentation/bloc/member_bloc.dart';
 import 'package:mulligans_law/features/members/presentation/bloc/member_event.dart';
@@ -11,16 +14,35 @@ import 'package:mulligans_law/features/societies/presentation/screens/society_me
 
 class MockMemberBloc extends Mock implements MemberBloc {}
 
+class MockAuthBloc extends Mock implements AuthBloc {}
+
 void main() {
   late MockMemberBloc mockBloc;
+  late MockAuthBloc mockAuthBloc;
+
+  final testDateTime = DateTime.parse('2025-01-15T10:30:00.000Z');
 
   setUp(() {
     mockBloc = MockMemberBloc();
+    mockAuthBloc = MockAuthBloc();
+
     when(() => mockBloc.state).thenReturn(const MemberInitial());
     when(() => mockBloc.stream).thenAnswer((_) => const Stream.empty());
-  });
 
-  final testDateTime = DateTime.parse('2025-01-15T10:30:00.000Z');
+    // Mock authenticated user (captain role by default - user-1 is the captain in testMembers)
+    when(() => mockAuthBloc.state).thenReturn(
+      AuthAuthenticated(
+        AuthUser(
+          id: 'user-1',
+          email: 'john@example.com',
+          name: 'John Doe',
+          avatarUrl: null,
+          createdAt: testDateTime,
+        ),
+      ),
+    );
+    when(() => mockAuthBloc.stream).thenAnswer((_) => const Stream.empty());
+  });
 
   final testSociety = Society(
     id: 'society-1',
@@ -66,8 +88,11 @@ void main() {
 
   Widget createWidgetUnderTest() {
     return MaterialApp(
-      home: BlocProvider<MemberBloc>.value(
-        value: mockBloc,
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider<MemberBloc>.value(value: mockBloc),
+          BlocProvider<AuthBloc>.value(value: mockAuthBloc),
+        ],
         child: SocietyMembersScreen(society: testSociety),
       ),
     );
@@ -104,7 +129,12 @@ void main() {
       });
 
       testWidgets('displays Add Member button in app bar', (tester) async {
-        // Arrange & Act
+        // Arrange - user-1 is a captain, so button should be visible
+        when(() => mockBloc.state).thenReturn(
+          MemberLoaded(members: testMembers, societyId: 'society-1'),
+        );
+
+        // Act
         await tester.pumpWidget(createWidgetUnderTest());
 
         // Assert

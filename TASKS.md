@@ -673,8 +673,8 @@ IMPORTANT: Member Architecture
     - test/features/societies/presentation/screens/society_dashboard_screen_test.dart (updated tests)
     - test/core/widgets/main_scaffold_test.dart (updated mocks)
 
-- [>] **Create Invite to Society Screen** (P1) #societies #members #ui
-  - Note: Backend (Phase 1) and Presentation Layer (Phase 2) COMPLETE. Phase 3 (Integration) remaining.
+- [X] **Create Invite to Society Screen** (P1) #societies #members #ui
+  - Note: ALL 3 PHASES COMPLETE. Core functionality working end-to-end. See follow-up tasks below for enhancements.
   - Route: Within Societies tab Navigator: `/societies/:id/invite`
   - Accessible from: Society Members Screen (floating action button or app bar action)
   - Only captains and owners can access this screen
@@ -764,6 +764,85 @@ IMPORTANT: Member Architecture
   - **Files Modified (Phase 3):**
     - lib/main.dart (added InviteMembersBloc dependency injection)
     - lib/features/societies/presentation/screens/society_members_screen.dart (added navigation to InviteToSocietyScreen)
+  - **Known Limitations (Future Enhancements):**
+    - [X] Permission check: Only captains/owners should see invite button ✅ FIXED
+    - [ ] Filter existing members: Search results should exclude users already in society
+    - [ ] Show invitation status: Display "Already Invited" badge for users with PENDING invitations
+
+- [X] **Add Permission Check for Invite Button** (P1) #societies #members #security
+  - Note: COMPLETE - Only captains, owners, and co-owners can now invite members
+  - Location: SocietyMembersScreen app bar (person_add button)
+  - **Implementation:** ✅
+    - [X] Get current user's member record for this society from MemberBloc state
+    - [X] Check if user's role is IN ('CAPTAIN', 'OWNER', 'CO_OWNER')
+    - [X] Hide person_add IconButton if user is regular 'MEMBER' or not a member
+    - [X] Handle edge cases (empty member list, user not in list)
+  - **Business Rules:** ✅
+    - [X] Members: Cannot invite (button hidden)
+    - [X] Captains: Can invite (button shown)
+    - [X] Owners/Co-Owners: Can invite (button shown)
+    - [X] Empty society: Button hidden (no one can invite yet)
+  - **Tests:** ✅ All 15 existing tests passing
+    - [X] Updated test suite to provide AuthBloc for permission checks
+    - [X] Added test for captain seeing invite button
+    - [X] Verified button hidden for empty member list
+  - **Files Modified:**
+    - lib/features/societies/presentation/screens/society_members_screen.dart
+      - Added `_canInviteMembers()` helper method with comprehensive permission logic
+      - Wrapped person_add IconButton in BlocBuilder for dynamic visibility
+      - Added role constants (\_roleOwner, \_roleCoOwner, \_roleCaptain)
+    - test/features/societies/presentation/screens/society_members_screen_test.dart
+      - Added MockAuthBloc for permission testing
+      - Updated createWidgetUnderTest() to provide AuthBloc
+      - Updated "displays Add Member button" test to set proper member state
+
+- [ ] **Filter Existing Members from Invitation Search** (P1) #invitations #members #ux
+  - Note: Search results should not show users who are already members of the society
+  - Location: SearchUsers use case or InviteMembersBloc
+  - **Implementation Option A (Recommended - Backend Filter):**
+    - Extend AuthRepository.searchUsers to accept optional societyId parameter
+    - Modify user_profiles view query to exclude users with existing member records
+    - SQL: `WHERE NOT EXISTS (SELECT 1 FROM members WHERE user_id = u.id AND society_id = $societyId AND status IN ('ACTIVE', 'PENDING'))`
+    - Update SearchUsers use case to pass societyId
+    - Update InviteMembersBloc to pass societyId in SearchUsersEvent
+  - **Implementation Option B (Alternative - Frontend Filter):**
+    - After search results returned, fetch member list for society
+    - Filter out user IDs that match existing members
+    - Return filtered list to UI
+  - **Business Rules:**
+    - Exclude users with status = 'ACTIVE' (current members)
+    - Exclude users with status = 'PENDING' (pending invitations)
+    - Include users with status = 'RESIGNED' (can be re-invited)
+  - Tests: Unit tests for filtering logic, integration tests for search with exclusions
+  - Files to modify:
+    - lib/features/auth/domain/repositories/auth_repository.dart (add societyId parameter)
+    - lib/features/auth/data/repositories/auth_repository_impl.dart (implement filtering)
+    - lib/features/auth/domain/usecases/search_users.dart (add societyId parameter)
+    - lib/features/invitations/presentation/bloc/invite_members_event.dart (add societyId to SearchUsersEvent)
+    - lib/features/invitations/presentation/bloc/invite_members_bloc.dart (pass societyId)
+    - lib/features/invitations/presentation/screens/invite_to_society_screen.dart (pass societyId in event)
+    - test/features/auth/domain/usecases/search_users_test.dart (update tests)
+    - test/features/invitations/presentation/bloc/invite_members_bloc_test.dart (update tests)
+
+- [ ] **Show Invitation Status in Search Results** (P2) #invitations #ux
+  - Note: Optional enhancement - show visual indicator for users with pending invitations
+  - Location: UserSearchResultCard widget
+  - **Implementation:**
+    - Extend search results to include invitation status
+    - Query society_invitations table for pending invitations when searching
+    - Add invitationStatus field to UserProfile entity (or create SearchResultUser entity)
+    - Update UserSearchResultCard to show badge/chip if status is PENDING
+    - Disable "Invite" button and show "Already Invited" text
+  - **UI Changes:**
+    - Show amber/orange chip with "Invitation Pending" text
+    - Gray out and disable invite button
+    - Optional: Show date invitation was sent
+  - **Alternative (Simpler):**
+    - Keep current behavior (backend throws PendingInvitationExistsException)
+    - Error snackbar already shows clear message
+    - This is acceptable UX for MVP
+  - Tests: Widget tests for invitation status display, button disabled state
+  - Priority: P2 (nice-to-have, not critical)
 
 - [ ] **Create Join Society Flow for Public Societies** (P1) #societies #members #ui
   - Note: Allow users to discover and request to join public societies

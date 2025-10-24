@@ -64,28 +64,72 @@ class _SocietyMembersScreenState extends State<SocietyMembersScreen> {
         },
       ),
       actions: [
-        IconButton(
-          icon: const Icon(Icons.person_add),
-          onPressed: () {
-            // Get current user ID from AuthBloc
-            final authState = context.read<AuthBloc>().state;
-            if (authState is AuthAuthenticated) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => InviteToSocietyScreen(
-                    societyId: widget.society.id,
-                    societyName: widget.society.name,
-                    currentUserId: authState.user.id,
-                  ),
-                ),
-              );
+        BlocBuilder<MemberBloc, MemberState>(
+          builder: (context, memberState) {
+            // Only show invite button if current user is captain/owner/co-owner
+            if (!_canInviteMembers(memberState)) {
+              return const SizedBox.shrink();
             }
+
+            return IconButton(
+              icon: const Icon(Icons.person_add),
+              onPressed: () {
+                // Get current user ID from AuthBloc
+                final authState = context.read<AuthBloc>().state;
+                if (authState is AuthAuthenticated) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => InviteToSocietyScreen(
+                        societyId: widget.society.id,
+                        societyName: widget.society.name,
+                        currentUserId: authState.user.id,
+                      ),
+                    ),
+                  );
+                }
+              },
+              tooltip: _addMemberTooltip,
+            );
           },
-          tooltip: _addMemberTooltip,
         ),
       ],
     );
+  }
+
+  /// Checks if the current user has permission to invite members
+  /// Only captains, owners, and co-owners can invite
+  bool _canInviteMembers(MemberState memberState) {
+    if (memberState is! MemberLoaded) {
+      return false;
+    }
+
+    // If there are no members, no one can invite
+    if (memberState.members.isEmpty) {
+      return false;
+    }
+
+    // Get current user ID from AuthBloc
+    final authState = context.read<AuthBloc>().state;
+    if (authState is! AuthAuthenticated) {
+      return false;
+    }
+
+    final currentUserId = authState.user.id;
+
+    // Find current user's member record in this society
+    try {
+      final currentUserMember = memberState.members.firstWhere(
+        (member) => member.userId == currentUserId,
+      );
+
+      // Check if user has leadership role
+      final role = currentUserMember.role?.toUpperCase();
+      return role == _roleOwner || role == _roleCoOwner || role == _roleCaptain;
+    } catch (e) {
+      // Current user is not a member of this society
+      return false;
+    }
   }
 
   Widget _buildLoadingState() {
@@ -254,6 +298,11 @@ class _SocietyMembersScreenState extends State<SocietyMembersScreen> {
   static const String _emptyStateTitle = 'No members yet';
   static const String _emptyStateMessage =
       'Add your first member to get started!';
+
+  // Role constants for permission checking
+  static const String _roleOwner = 'OWNER';
+  static const String _roleCoOwner = 'CO_OWNER';
+  static const String _roleCaptain = 'CAPTAIN';
 
   static const String _sortNameAsc = 'name_asc';
   static const String _sortNameDesc = 'name_desc';
