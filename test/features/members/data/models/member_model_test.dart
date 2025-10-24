@@ -126,6 +126,7 @@ void main() {
           avatarUrl: 'https://example.com/avatar.jpg',
           handicap: 8.4,
           role: 'member',
+          status: 'ACTIVE',
           joinedAt: testDateTime,
           lastPlayedAt: testLastPlayed,
         );
@@ -143,6 +144,8 @@ void main() {
           'avatar_url': 'https://example.com/avatar.jpg',
           'handicap': 8.4,
           'role': 'member',
+          'status': 'ACTIVE',
+          'expires_at': null,
           'joined_at': '2025-01-15T10:30:00.000Z',
           'last_played_at': '2025-01-10T14:00:00.000Z',
         });

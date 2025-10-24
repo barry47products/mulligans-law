@@ -846,12 +846,19 @@ IMPORTANT: Member Architecture
   - Tests: Widget tests for invitation status display, button disabled state
   - Priority: P2 (nice-to-have, not critical)
 
-- [ ] **Create Join Society Flow for Public Societies** (P1) #societies #members #ui
+- [ ] **Create Join Society Flow for Public Societies** (P1) #societies #members #ui - IN PROGRESS
   - Note: Allow users to discover and request to join public societies
-  - **Step 1: Generate Screen Design (AI Prompt)**
-    - Create AI design prompt for public society discovery with join requests
-    - Include design system (colors, spacing, components)
-    - Review and approve design before implementation
+  - **Step 1: Generate Screen Design (AI Prompt)** ✅ COMPLETE
+    - [X] Created comprehensive AI design prompt at docs/design-prompts/discover-societies-screen.md
+    - [X] Included design system (colors, spacing, components)
+    - [X] Defined all UI states (can join, cannot join, pending approval)
+    - [X] Documented interaction flows and accessibility requirements
+  - **Foundation: Member Entity Updates** ✅ COMPLETE
+    - [X] Added `status` field to Member entity (PENDING, ACTIVE, RESIGNED)
+    - [X] Added `expiresAt` field for 7-day invitation expiry tracking
+    - [X] Updated MemberModel for JSON serialization/deserialization
+    - [X] Updated test fixtures and all 393 tests passing
+    - [X] Member entity now supports invitation lifecycle tracking
   - **Society Discovery:**
     - Update SocietyListScreen to show "Discover Societies" tab/section
     - Query public societies (where is_public = true AND deleted_at IS NULL)

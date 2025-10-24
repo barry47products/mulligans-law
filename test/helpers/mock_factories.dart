@@ -86,6 +86,8 @@ Map<String, dynamic> createTestMember({
   int handicap = 18,
   String role = 'MEMBER',
   String status = 'ACTIVE',
+  DateTime? expiresAt,
+  DateTime? joinedAt,
 }) {
   return {
     'id': id,
@@ -96,6 +98,8 @@ Map<String, dynamic> createTestMember({
     'handicap': handicap,
     'role': role,
     'status': status,
+    'expires_at': expiresAt?.toIso8601String(),
+    'joined_at': (joinedAt ?? DateTime.now()).toIso8601String(),
     'created_at': DateTime.now().toIso8601String(),
     'updated_at': DateTime.now().toIso8601String(),
   };

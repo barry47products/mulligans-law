@@ -24,9 +24,17 @@ class Member extends Equatable {
   /// Member's handicap index (0-54)
   final double handicap;
 
-  /// Member's role in the society (CAPTAIN, MEMBER)
+  /// Member's role in the society (MEMBER, CAPTAIN, OWNER, CO_OWNER)
   /// Null for primary member profiles, required for society memberships
   final String? role;
+
+  /// Member's status in the society (PENDING, ACTIVE, RESIGNED)
+  /// Null for primary member profiles, required for society memberships
+  final String? status;
+
+  /// Expiration date for PENDING invitations (7 days from created_at)
+  /// Only set when status is PENDING
+  final DateTime? expiresAt;
 
   /// Timestamp when the member joined the society
   final DateTime joinedAt;
@@ -43,6 +51,8 @@ class Member extends Equatable {
     this.avatarUrl,
     required this.handicap,
     this.role,
+    this.status,
+    this.expiresAt,
     required this.joinedAt,
     this.lastPlayedAt,
   });
@@ -57,6 +67,8 @@ class Member extends Equatable {
     avatarUrl,
     handicap,
     role,
+    status,
+    expiresAt,
     joinedAt,
     lastPlayedAt,
   ];
@@ -71,6 +83,8 @@ class Member extends Equatable {
     String? avatarUrl,
     double? handicap,
     String? role,
+    String? status,
+    DateTime? expiresAt,
     DateTime? joinedAt,
     DateTime? lastPlayedAt,
   }) {
@@ -83,6 +97,8 @@ class Member extends Equatable {
       avatarUrl: avatarUrl ?? this.avatarUrl,
       handicap: handicap ?? this.handicap,
       role: role ?? this.role,
+      status: status ?? this.status,
+      expiresAt: expiresAt ?? this.expiresAt,
       joinedAt: joinedAt ?? this.joinedAt,
       lastPlayedAt: lastPlayedAt ?? this.lastPlayedAt,
     );

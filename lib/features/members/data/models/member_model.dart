@@ -11,6 +11,8 @@ class MemberModel extends Member {
     super.avatarUrl,
     required super.handicap,
     super.role,
+    super.status,
+    super.expiresAt,
     required super.joinedAt,
     super.lastPlayedAt,
   });
@@ -26,6 +28,10 @@ class MemberModel extends Member {
       avatarUrl: json['avatar_url'] as String?,
       handicap: (json['handicap'] as num).toDouble(),
       role: json['role'] as String?,
+      status: json['status'] as String?,
+      expiresAt: json['expires_at'] != null
+          ? DateTime.parse(json['expires_at'] as String)
+          : null,
       joinedAt: DateTime.parse(json['joined_at'] as String),
       lastPlayedAt: json['last_played_at'] != null
           ? DateTime.parse(json['last_played_at'] as String)
@@ -44,6 +50,8 @@ class MemberModel extends Member {
       'avatar_url': avatarUrl,
       'handicap': handicap,
       'role': role,
+      'status': status,
+      'expires_at': expiresAt?.toIso8601String(),
       'joined_at': joinedAt.toIso8601String(),
       'last_played_at': lastPlayedAt?.toIso8601String(),
     };
@@ -60,6 +68,8 @@ class MemberModel extends Member {
       avatarUrl: member.avatarUrl,
       handicap: member.handicap,
       role: member.role,
+      status: member.status,
+      expiresAt: member.expiresAt,
       joinedAt: member.joinedAt,
       lastPlayedAt: member.lastPlayedAt,
     );
@@ -76,6 +86,8 @@ class MemberModel extends Member {
       avatarUrl: avatarUrl,
       handicap: handicap,
       role: role,
+      status: status,
+      expiresAt: expiresAt,
       joinedAt: joinedAt,
       lastPlayedAt: lastPlayedAt,
     );
