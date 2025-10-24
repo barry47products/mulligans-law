@@ -1,3 +1,9 @@
+## [0.33.0](https://github.com/barry47products/mulligans-law/compare/v0.32.0...v0.33.0) (2025-10-24)
+
+### Features
+
+* **members:** add status and expiresAt fields to Member entity ([3d07910](https://github.com/barry47products/mulligans-law/commit/3d07910f67757bee2b02cefb622990affb57a18f))
+
 ## [0.32.0](https://github.com/barry47products/mulligans-law/compare/v0.31.0...v0.32.0) (2025-10-24)
 
 ### Features
