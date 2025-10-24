@@ -1,3 +1,9 @@
+## [0.34.0](https://github.com/barry47products/mulligans-law/compare/v0.33.0...v0.34.0) (2025-10-24)
+
+### Features
+
+* **members:** implement RequestToJoinSociety use case for public society join flow ([f974bd9](https://github.com/barry47products/mulligans-law/commit/f974bd98c3618912e75ccedeabef8701e8796d87))
+
 ## [0.33.0](https://github.com/barry47products/mulligans-law/compare/v0.32.0...v0.33.0) (2025-10-24)
 
 ### Features
