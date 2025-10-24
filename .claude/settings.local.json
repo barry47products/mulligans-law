@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(flutter test)"
+      "Bash(flutter test)",
+      "Bash(cd:*)",
+      "Bash(timeout 60 flutter test)"
     ],
     "deny": [],
     "ask": []

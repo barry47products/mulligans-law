@@ -1,7 +1,7 @@
 # Invitation System Implementation Progress
 
-**Date**: October 23, 2025
-**Status**: Backend Infrastructure Complete (Phase 1 of 3)
+**Date**: October 24, 2025
+**Status**: Presentation Layer In Progress (Phase 2 of 3)
 
 ## Overview
 
@@ -11,8 +11,10 @@ This document tracks the progress of implementing the society invitation system 
 
 ### 1. Domain Layer ✅
 
-#### Entities Created:
+#### Entities Created
+
 - **`SocietyInvitation`** ([lib/features/invitations/domain/entities/society_invitation.dart](../../lib/features/invitations/domain/entities/society_invitation.dart))
+
   - Complete invitation entity with all required fields
   - `InvitationStatus` enum (PENDING, ACCEPTED, DECLINED, CANCELLED, EXPIRED)
   - Equatable implementation for value equality
@@ -22,8 +24,10 @@ This document tracks the progress of implementing the society invitation system 
   - Lightweight user profile for search/display
   - Includes: id, name, email, handicap, avatarUrl
 
-#### Repositories:
+#### Repositories
+
 - **`InvitationRepository`** ([lib/features/invitations/domain/repositories/invitation_repository.dart](../../lib/features/invitations/domain/repositories/invitation_repository.dart))
+
   - Complete interface with 9 methods
   - Methods: sendInvitation, getInvitation, getPendingInvitationsForUser, getInvitationsSentBy, getSocietyInvitations, acceptInvitation, declineInvitation, cancelInvitation, watchPendingInvitationsForUser
   - Comprehensive documentation for all exceptions
@@ -32,8 +36,10 @@ This document tracks the progress of implementing the society invitation system 
   - Added searchUsers method to existing repository
   - Searches users by name or email with configurable limit
 
-#### Use Cases:
+#### Use Cases
+
 - **`SendSocietyInvitation`** ([lib/features/invitations/domain/usecases/send_society_invitation.dart](../../lib/features/invitations/domain/usecases/send_society_invitation.dart))
+
   - Validates and sends invitations through repository
   - 5 passing unit tests
 
@@ -43,8 +49,10 @@ This document tracks the progress of implementing the society invitation system 
 
 ### 2. Data Layer ✅
 
-#### Models:
+#### Models
+
 - **`SocietyInvitationModel`** ([lib/features/invitations/data/models/society_invitation_model.dart](../../lib/features/invitations/data/models/society_invitation_model.dart))
+
   - JSON serialization/deserialization
   - Status enum conversion (domain ↔ database)
   - toDomain() method
@@ -54,8 +62,10 @@ This document tracks the progress of implementing the society invitation system 
   - Handles optional handicap field
   - toDomain() method
 
-#### Repository Implementations:
+#### Repository Implementations
+
 - **`InvitationRepositoryImpl.sendInvitation`** ([lib/features/invitations/data/repositories/invitation_repository_impl.dart](../../lib/features/invitations/data/repositories/invitation_repository_impl.dart))
+
   - Fetches user, inviter, and society information
   - Validates handicap limits if society enforces them
   - Creates invitation record in database
@@ -70,9 +80,11 @@ This document tracks the progress of implementing the society invitation system 
 ### 3. Database Layer ✅
 
 #### Migration: `20251023175504_create_invitations_and_user_profiles.sql`
+
 ([supabase/migrations/20251023175504_create_invitations_and_user_profiles.sql](../../supabase/migrations/20251023175504_create_invitations_and_user_profiles.sql))
 
 **Tables Created:**
+
 - `society_invitations`
   - Columns: id, society_id, invited_user_id, invited_by_user_id, message, status, responded_at, created_at, updated_at
   - Constraints: status validation, unique pending invitation per user/society, no self-invites
@@ -80,6 +92,7 @@ This document tracks the progress of implementing the society invitation system 
   - RLS enabled with 5 policies
 
 **Views Created:**
+
 - `user_profiles`
   - Joins auth.users with members table to get primary handicap
   - Columns: id, email, name, avatar_url, handicap
@@ -87,6 +100,7 @@ This document tracks the progress of implementing the society invitation system 
   - Accessible to all authenticated users
 
 **Functions Created:**
+
 - `accept_society_invitation(invitation_id UUID)`
   - Security definer function (runs with elevated privileges)
   - Validates invitation status and user authorization
@@ -96,6 +110,7 @@ This document tracks the progress of implementing the society invitation system 
   - Atomic operation (transaction-safe)
 
 **RLS Policies:**
+
 1. Users can view their own invitations
 2. Society leadership can view society invitations
 3. Society leadership can send invitations (with validation)
@@ -104,7 +119,8 @@ This document tracks the progress of implementing the society invitation system 
 
 ### 4. Error Handling ✅
 
-#### New Exception Classes:
+#### New Exception Classes
+
 ([lib/core/errors/invitation_exceptions.dart](../../lib/core/errors/invitation_exceptions.dart))
 
 - `InvitationException` - Base class
@@ -119,10 +135,12 @@ This document tracks the progress of implementing the society invitation system 
 ### 5. Testing ✅
 
 **Unit Tests Written:**
+
 - `send_society_invitation_test.dart` - 5 tests, all passing
 - `search_users_test.dart` - 5 tests, all passing
 
 **Test Coverage:**
+
 - Domain layer: Full use case coverage
 - Repository interfaces: Mocked in tests
 - Error handling: Exception scenarios covered
@@ -132,6 +150,7 @@ This document tracks the progress of implementing the society invitation system 
 ### 6. Documentation ✅
 
 - **Design Prompt**: [docs/design-prompts/invite-to-society-screen.md](../design-prompts/invite-to-society-screen.md)
+
   - Comprehensive UI/UX specification
   - Brand colors and design system
   - Component specifications
@@ -147,12 +166,15 @@ This document tracks the progress of implementing the society invitation system 
 **Blocked by**: Need to create BLoC and UI
 
 **Required Components:**
+
 1. **InviteMembersBloc**
+
    - Events: LoadUsers, SearchUsers, SendInvitation, ClearSearch
    - States: Initial, Loading, Loaded, Inviting, Invited, Error
    - Tests: BlocTest for all state transitions
 
 2. **InviteToSocietyScreen**
+
    - Search bar with debounced input
    - User results list with handicap validation
    - Invite buttons with loading states
@@ -172,7 +194,9 @@ This document tracks the progress of implementing the society invitation system 
 **Blocked by**: Phase 2 completion
 
 **Required Work:**
+
 1. **Dependency Injection** (main.dart)
+
    - Create InvitationRepository instance
    - Create SendSocietyInvitation use case
    - Create SearchUsers use case
@@ -180,6 +204,7 @@ This document tracks the progress of implementing the society invitation system 
    - Add to RepositoryProvider/BlocProvider tree
 
 2. **Navigation**
+
    - Add FAB or app bar action to Society Members Screen
    - Navigate to InviteToSocietyScreen
    - Pass society context
@@ -193,6 +218,7 @@ This document tracks the progress of implementing the society invitation system 
 ## Design Prompt Status
 
 The AI design prompt has been created and is ready for use with design tools (Midjourney, DALL-E, etc.). The prompt includes:
+
 - Complete design system (colors, typography, spacing)
 - Detailed component specifications
 - Layout requirements
@@ -220,17 +246,18 @@ society_invitations (
 
 ## Testing Summary
 
-| Component | Tests | Status |
-|-----------|-------|--------|
-| SendSocietyInvitation Use Case | 5 | ✅ All Passing |
-| SearchUsers Use Case | 5 | ✅ All Passing |
-| InvitationRepository (Mocked) | Covered | ✅ |
-| AuthRepository.searchUsers (Mocked) | Covered | ✅ |
-| **Total** | **10** | **✅ 100%** |
+| Component                           | Tests   | Status         |
+| ----------------------------------- | ------- | -------------- |
+| SendSocietyInvitation Use Case      | 5       | ✅ All Passing |
+| SearchUsers Use Case                | 5       | ✅ All Passing |
+| InvitationRepository (Mocked)       | Covered | ✅             |
+| AuthRepository.searchUsers (Mocked) | Covered | ✅             |
+| **Total**                           | **10**  | **✅ 100%**    |
 
 ## Files Created/Modified
 
-### Created (17 files):
+### Created (17 files)
+
 1. `lib/features/invitations/domain/entities/society_invitation.dart`
 2. `lib/features/invitations/domain/repositories/invitation_repository.dart`
 3. `lib/features/invitations/domain/usecases/send_society_invitation.dart`
@@ -246,28 +273,33 @@ society_invitations (
 13. `docs/design-prompts/invite-to-society-screen.md`
 14. `docs/development/invitation-system-progress.md` (this file)
 
-### Modified (2 files):
+### Modified (2 files)
+
 1. `lib/features/auth/domain/repositories/auth_repository.dart` (added searchUsers method)
 2. `lib/features/auth/data/repositories/auth_repository_impl.dart` (implemented searchUsers)
 
 ## Architecture Decisions
 
 1. **Two-Phase User Search**:
+
    - User profiles view provides searchable user data
    - Primary member profile used for handicap information
    - Avoids complex joins in application code
 
 2. **Handicap Validation**:
+
    - Performed at invitation send time (fail fast)
    - Also validated at acceptance time (database function)
    - Clear error messages for users
 
 3. **RLS Security Model**:
+
    - Users can only view their own invitations
    - Society leadership can manage their society's invitations
    - Database enforces business rules (no duplicates, no self-invites)
 
 4. **Invitation Status Lifecycle**:
+
    - PENDING → ACCEPTED (via accept function)
    - PENDING → DECLINED (user rejection)
    - PENDING → CANCELLED (sender/leadership cancellation)

@@ -16,11 +16,15 @@ import 'features/auth/domain/usecases/get_current_user.dart';
 import 'features/auth/domain/usecases/sign_in.dart';
 import 'features/auth/domain/usecases/sign_out.dart';
 import 'features/auth/domain/usecases/sign_up.dart';
+import 'features/auth/domain/usecases/search_users.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/auth/presentation/bloc/auth_state.dart';
 import 'features/members/data/repositories/member_repository_impl.dart';
 import 'features/auth/presentation/screens/screens.dart';
+import 'features/invitations/data/repositories/invitation_repository_impl.dart';
+import 'features/invitations/domain/usecases/send_society_invitation.dart';
+import 'features/invitations/presentation/bloc/invite_members_bloc.dart';
 import 'features/societies/data/repositories/society_repository_impl.dart';
 import 'features/societies/domain/usecases/create_society.dart';
 import 'features/societies/domain/usecases/get_user_societies.dart';
@@ -60,12 +64,19 @@ class MulligansLawApp extends StatelessWidget {
     final signInUseCase = SignIn(authRepository);
     final signOutUseCase = SignOut(authRepository);
     final getCurrentUserUseCase = GetCurrentUser(authRepository);
+    final searchUsersUseCase = SearchUsers(authRepository);
 
     // Create member repository
     final memberRepository = MemberRepositoryImpl(supabase: supabaseClient);
 
     // Create SignUp use case (requires both auth and member repositories)
     final signUpUseCase = SignUp(authRepository, memberRepository);
+
+    // Create invitation repository and use cases
+    final invitationRepository = InvitationRepositoryImpl(
+      supabase: supabaseClient,
+    );
+    final sendInvitationUseCase = SendSocietyInvitation(invitationRepository);
 
     // Create society repository and use cases
     final societyRepository = SocietyRepositoryImpl(supabase: supabaseClient);
@@ -113,6 +124,12 @@ class MulligansLawApp extends StatelessWidget {
               joinSociety: joinSocietyUseCase,
               updateMemberRole: updateMemberRoleUseCase,
               leaveSociety: leaveSocietyUseCase,
+            ),
+          ),
+          BlocProvider(
+            create: (context) => InviteMembersBloc(
+              searchUsers: searchUsersUseCase,
+              sendInvitation: sendInvitationUseCase,
             ),
           ),
         ],

@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
+import '../../../invitations/presentation/screens/invite_to_society_screen.dart';
 import '../../../members/domain/entities/member.dart';
 import '../../../members/presentation/bloc/member_bloc.dart';
 import '../../../members/presentation/bloc/member_event.dart';
@@ -64,11 +67,20 @@ class _SocietyMembersScreenState extends State<SocietyMembersScreen> {
         IconButton(
           icon: const Icon(Icons.person_add),
           onPressed: () {
-            // TODO: Navigate to add member screen
-            // Navigator.pushNamed(
-            //   context,
-            //   '/societies/${widget.society.id}/members/add',
-            // );
+            // Get current user ID from AuthBloc
+            final authState = context.read<AuthBloc>().state;
+            if (authState is AuthAuthenticated) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => InviteToSocietyScreen(
+                    societyId: widget.society.id,
+                    societyName: widget.society.name,
+                    currentUserId: authState.user.id,
+                  ),
+                ),
+              );
+            }
           },
           tooltip: _addMemberTooltip,
         ),
