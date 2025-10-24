@@ -10,6 +10,8 @@ import 'package:mulligans_law/features/auth/domain/entities/auth_session.dart'
     as _i2;
 import 'package:mulligans_law/features/auth/domain/entities/auth_user.dart'
     as _i3;
+import 'package:mulligans_law/features/auth/domain/entities/user_profile.dart'
+    as _i6;
 import 'package:mulligans_law/features/auth/domain/repositories/auth_repository.dart'
     as _i4;
 
@@ -152,4 +154,22 @@ class MockAuthRepository extends _i1.Mock implements _i4.AuthRepository {
             ),
           )
           as _i5.Future<_i3.AuthUser>);
+
+  @override
+  _i5.Future<List<_i6.UserProfile>> searchUsers({
+    required String? query,
+    int? limit = 20,
+    String? excludeSocietyId,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#searchUsers, [], {
+              #query: query,
+              #limit: limit,
+              #excludeSocietyId: excludeSocietyId,
+            }),
+            returnValue: _i5.Future<List<_i6.UserProfile>>.value(
+              <_i6.UserProfile>[],
+            ),
+          )
+          as _i5.Future<List<_i6.UserProfile>>);
 }

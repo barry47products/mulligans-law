@@ -92,6 +92,8 @@ class MockMemberRepository extends _i1.Mock implements _i5.MemberRepository {
     String? avatarUrl,
     required double? handicap,
     required String? role,
+    String? status,
+    DateTime? expiresAt,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#addMember, [], {
@@ -102,6 +104,8 @@ class MockMemberRepository extends _i1.Mock implements _i5.MemberRepository {
               #avatarUrl: avatarUrl,
               #handicap: handicap,
               #role: role,
+              #status: status,
+              #expiresAt: expiresAt,
             }),
             returnValue: _i6.Future<_i3.Member>.value(
               _FakeMember_1(
@@ -114,6 +118,8 @@ class MockMemberRepository extends _i1.Mock implements _i5.MemberRepository {
                   #avatarUrl: avatarUrl,
                   #handicap: handicap,
                   #role: role,
+                  #status: status,
+                  #expiresAt: expiresAt,
                 }),
               ),
             ),

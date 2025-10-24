@@ -15,6 +15,9 @@ abstract class MemberRepository {
   Future<SocietyStats> getSocietyStats(String societyId);
 
   /// Adds a new member to a society
+  ///
+  /// Optional [status] defaults to 'ACTIVE' in database if not provided
+  /// Optional [expiresAt] for PENDING status (7-day expiry for join requests)
   Future<Member> addMember({
     required String societyId,
     required String userId,
@@ -23,6 +26,8 @@ abstract class MemberRepository {
     String? avatarUrl,
     required double handicap,
     required String role,
+    String? status,
+    DateTime? expiresAt,
   });
 
   /// Updates a member's information

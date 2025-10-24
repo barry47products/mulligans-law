@@ -875,11 +875,13 @@ IMPORTANT: Member Architecture
     - Set role = 'MEMBER'
     - Send notification to captains/owners (TODO: notification system)
     - Show success message: "Join request sent. You'll be notified when a captain approves."
-  - **Business Logic:**
-    - Create JoinSociety use case (or RequestToJoinSociety)
-    - Validation: Check handicap limits before creating PENDING record
-    - Creates member record with status = 'PENDING', expires_at
-    - Automatically publish activity event: 'joinRequestReceived'
+  - **Business Logic:** ✅ COMPLETE
+    - [X] Created RequestToJoinSociety use case with full validation
+    - [X] Extended MemberRepository.addMember to support status and expiresAt parameters
+    - [X] Handicap validation: Checks limits before creating PENDING record
+    - [X] Creates member record with status = 'PENDING', expires_at = NOW() + 7 days
+    - [X] All 6 use case tests passing (handicap validation, public society check, etc.)
+    - [ ] Automatically publish activity event: 'joinRequestReceived' (deferred)
   - **Pending Status Indication:**
     - In user's society list, show societies with pending requests with "Pending Approval" badge
     - User can cancel their own pending request

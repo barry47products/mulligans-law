@@ -130,6 +130,8 @@ class MemberRepositoryImpl implements MemberRepository {
     String? avatarUrl,
     required double handicap,
     required String role,
+    String? status,
+    DateTime? expiresAt,
   }) async {
     try {
       final data = {
@@ -140,6 +142,9 @@ class MemberRepositoryImpl implements MemberRepository {
         if (avatarUrl != null) DatabaseColumns.avatarUrl: avatarUrl,
         DatabaseColumns.handicap: handicap,
         DatabaseColumns.role: role,
+        if (status != null) DatabaseColumns.status: status,
+        if (expiresAt != null)
+          DatabaseColumns.expiresAt: expiresAt.toIso8601String(),
       };
 
       final response = await _supabase

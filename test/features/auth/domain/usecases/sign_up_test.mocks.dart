@@ -10,12 +10,14 @@ import 'package:mulligans_law/features/auth/domain/entities/auth_session.dart'
     as _i2;
 import 'package:mulligans_law/features/auth/domain/entities/auth_user.dart'
     as _i3;
+import 'package:mulligans_law/features/auth/domain/entities/user_profile.dart'
+    as _i8;
 import 'package:mulligans_law/features/auth/domain/repositories/auth_repository.dart'
     as _i6;
 import 'package:mulligans_law/features/members/domain/entities/member.dart'
     as _i5;
 import 'package:mulligans_law/features/members/domain/repositories/member_repository.dart'
-    as _i8;
+    as _i9;
 import 'package:mulligans_law/features/societies/domain/entities/society_stats.dart'
     as _i4;
 
@@ -168,12 +170,30 @@ class MockAuthRepository extends _i1.Mock implements _i6.AuthRepository {
             ),
           )
           as _i7.Future<_i3.AuthUser>);
+
+  @override
+  _i7.Future<List<_i8.UserProfile>> searchUsers({
+    required String? query,
+    int? limit = 20,
+    String? excludeSocietyId,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#searchUsers, [], {
+              #query: query,
+              #limit: limit,
+              #excludeSocietyId: excludeSocietyId,
+            }),
+            returnValue: _i7.Future<List<_i8.UserProfile>>.value(
+              <_i8.UserProfile>[],
+            ),
+          )
+          as _i7.Future<List<_i8.UserProfile>>);
 }
 
 /// A class which mocks [MemberRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMemberRepository extends _i1.Mock implements _i8.MemberRepository {
+class MockMemberRepository extends _i1.Mock implements _i9.MemberRepository {
   MockMemberRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -216,6 +236,8 @@ class MockMemberRepository extends _i1.Mock implements _i8.MemberRepository {
     String? avatarUrl,
     required double? handicap,
     required String? role,
+    String? status,
+    DateTime? expiresAt,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#addMember, [], {
@@ -226,6 +248,8 @@ class MockMemberRepository extends _i1.Mock implements _i8.MemberRepository {
               #avatarUrl: avatarUrl,
               #handicap: handicap,
               #role: role,
+              #status: status,
+              #expiresAt: expiresAt,
             }),
             returnValue: _i7.Future<_i5.Member>.value(
               _FakeMember_3(
@@ -238,6 +262,8 @@ class MockMemberRepository extends _i1.Mock implements _i8.MemberRepository {
                   #avatarUrl: avatarUrl,
                   #handicap: handicap,
                   #role: role,
+                  #status: status,
+                  #expiresAt: expiresAt,
                 }),
               ),
             ),
