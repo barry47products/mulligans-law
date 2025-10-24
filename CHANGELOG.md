@@ -1,3 +1,9 @@
+## [0.31.0](https://github.com/barry47products/mulligans-law/compare/v0.30.0...v0.31.0) (2025-10-24)
+
+### Features
+
+* **invitations:** implement presentation layer and integration for society invitations (Phase 2 & 3) ([3dbbd9c](https://github.com/barry47products/mulligans-law/commit/3dbbd9c9ccc524b9f74e352bc7481deed0611809)), closes [#societies](https://github.com/barry47products/mulligans-law/issues/societies) [#members](https://github.com/barry47products/mulligans-law/issues/members) [#ui](https://github.com/barry47products/mulligans-law/issues/ui) [#invitations](https://github.com/barry47products/mulligans-law/issues/invitations)
+
 ## [0.30.0](https://github.com/barry47products/mulligans-law/compare/v0.29.0...v0.30.0) (2025-10-23)
 
 ### Features
