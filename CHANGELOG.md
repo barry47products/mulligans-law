@@ -1,3 +1,9 @@
+## [0.35.0](https://github.com/barry47products/mulligans-law/compare/v0.34.0...v0.35.0) (2025-10-28)
+
+### Features
+
+* **societies:** add backend infrastructure for public society discovery ([6c5d101](https://github.com/barry47products/mulligans-law/commit/6c5d1016c4d43850ddad8efd8b03ed991b51d24b))
+
 ## [0.34.0](https://github.com/barry47products/mulligans-law/compare/v0.33.0...v0.34.0) (2025-10-24)
 
 ### Features
