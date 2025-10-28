@@ -10,10 +10,12 @@ import 'package:mulligans_law/features/societies/domain/entities/society.dart'
     as _i2;
 import 'package:mulligans_law/features/societies/domain/usecases/create_society.dart'
     as _i3;
+import 'package:mulligans_law/features/societies/domain/usecases/get_public_societies.dart'
+    as _i6;
 import 'package:mulligans_law/features/societies/domain/usecases/get_user_societies.dart'
     as _i5;
 import 'package:mulligans_law/features/societies/domain/usecases/update_society.dart'
-    as _i6;
+    as _i7;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -106,10 +108,28 @@ class MockGetUserSocieties extends _i1.Mock implements _i5.GetUserSocieties {
           as _i4.Future<List<_i2.Society>>);
 }
 
+/// A class which mocks [GetPublicSocieties].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetPublicSocieties extends _i1.Mock
+    implements _i6.GetPublicSocieties {
+  MockGetPublicSocieties() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<List<_i2.Society>> call() =>
+      (super.noSuchMethod(
+            Invocation.method(#call, []),
+            returnValue: _i4.Future<List<_i2.Society>>.value(<_i2.Society>[]),
+          )
+          as _i4.Future<List<_i2.Society>>);
+}
+
 /// A class which mocks [UpdateSociety].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUpdateSociety extends _i1.Mock implements _i6.UpdateSociety {
+class MockUpdateSociety extends _i1.Mock implements _i7.UpdateSociety {
   MockUpdateSociety() {
     _i1.throwOnMissingStub(this);
   }

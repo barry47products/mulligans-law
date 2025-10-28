@@ -161,4 +161,12 @@ class MockSocietyRepository extends _i1.Mock implements _i3.SocietyRepository {
             returnValue: _i4.Stream<List<_i2.Society>>.empty(),
           )
           as _i4.Stream<List<_i2.Society>>);
+
+  @override
+  _i4.Future<List<_i2.Society>> getPublicSocieties() =>
+      (super.noSuchMethod(
+            Invocation.method(#getPublicSocieties, []),
+            returnValue: _i4.Future<List<_i2.Society>>.value(<_i2.Society>[]),
+          )
+          as _i4.Future<List<_i2.Society>>);
 }

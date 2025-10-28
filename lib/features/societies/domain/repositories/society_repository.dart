@@ -83,4 +83,18 @@ abstract class SocietyRepository {
   /// Returns a stream that emits updated society lists when changes occur.
   /// Useful for real-time updates in the UI.
   Stream<List<Society>> watchUserSocieties();
+
+  /// Gets all public societies that the user can discover and join.
+  ///
+  /// Returns societies where:
+  /// - is_public = true
+  /// - deleted_at IS NULL (not soft-deleted)
+  /// - User is NOT already a member (ACTIVE or PENDING status)
+  ///
+  /// Returns empty list if no public societies available.
+  ///
+  /// Throws:
+  /// - [UnauthorizedException] if user is not authenticated
+  /// - [NetworkException] for network errors
+  Future<List<Society>> getPublicSocieties();
 }

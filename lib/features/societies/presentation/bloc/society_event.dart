@@ -119,3 +119,8 @@ class SocietySelected extends SocietyEvent {
 class SocietyClearSelection extends SocietyEvent {
   const SocietyClearSelection();
 }
+
+/// Event to load public societies that the user can discover and join
+class SocietyLoadPublicRequested extends SocietyEvent {
+  const SocietyLoadPublicRequested();
+}

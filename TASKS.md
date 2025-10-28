@@ -859,22 +859,35 @@ IMPORTANT: Member Architecture
     - [X] Updated MemberModel for JSON serialization/deserialization
     - [X] Updated test fixtures and all 393 tests passing
     - [X] Member entity now supports invitation lifecycle tracking
-  - **Society Discovery:**
-    - Update SocietyListScreen to show "Discover Societies" tab/section
-    - Query public societies (where is_public = true AND deleted_at IS NULL)
-    - Show society cards with "Join" button
-    - Display society info: name, description, member count, handicap range (if limits enabled)
-  - **Handicap Validation:**
-    - Before showing "Join" button, check if society has handicap limits
-    - If limits enabled: Check if current user's handicap is within range
-    - If outside range: Show "Cannot Join" with message: "Your handicap ([X]) is outside this society's limits ([min] - [max])"
-    - If within range or no limits: Show "Request to Join" button
-  - **Join Request:**
-    - Tap "Request to Join" → Create PENDING member record
-    - Set expires_at = NOW() + 7 days
-    - Set role = 'MEMBER'
-    - Send notification to captains/owners (TODO: notification system)
-    - Show success message: "Join request sent. You'll be notified when a captain approves."
+  - **Backend Infrastructure** ✅ COMPLETE
+    - [X] Added SocietyRepository.getPublicSocieties() method
+    - [X] Filters: is_public = true, deleted_at IS NULL, excludes user's ACTIVE/PENDING memberships
+    - [X] Created GetPublicSocieties use case
+    - [X] Added SocietyLoadPublicRequested event to SocietyBloc
+    - [X] Added SocietyLoadingPublic and SocietyPublicLoaded states
+    - [X] All 393 tests passing
+  - **Presentation Layer Foundation** ✅ COMPLETE
+    - [X] Created DiscoverSocietiesTab widget with complete UI
+    - [X] Society cards display: name, member count, description, handicap range
+    - [X] Loading, empty, and error states implemented
+    - [X] "Request to Join" button placeholder (ready to wire up)
+    - [X] Zero linting errors
+  - **Society Discovery:** 🔲 REMAINING
+    - [ ] Integrate DiscoverSocietiesTab into SocietyListScreen with TabBar
+    - [ ] Add "My Societies" and "Discover" tabs
+    - [ ] Load public societies when Discover tab is selected
+  - **Handicap Validation:** 🔲 REMAINING
+    - [ ] Get current user's handicap from primary member profile
+    - [ ] Check if society has handicap limits enabled
+    - [ ] If limits enabled: Validate user handicap is within range
+    - [ ] Show "Cannot Join" message if outside range
+    - [ ] Show "Request to Join" button if eligible
+  - **Join Request Flow:** 🔲 REMAINING
+    - [ ] Wire "Request to Join" button to RequestToJoinSociety use case
+    - [ ] Get current user ID from AuthBloc
+    - [ ] Call use case with societyId and userId
+    - [ ] Show success snackbar: "Join request sent. You'll be notified when a captain approves."
+    - [ ] Refresh public societies list to remove joined society
   - **Business Logic:** ✅ COMPLETE
     - [X] Created RequestToJoinSociety use case with full validation
     - [X] Extended MemberRepository.addMember to support status and expiresAt parameters
@@ -882,10 +895,15 @@ IMPORTANT: Member Architecture
     - [X] Creates member record with status = 'PENDING', expires_at = NOW() + 7 days
     - [X] All 6 use case tests passing (handicap validation, public society check, etc.)
     - [ ] Automatically publish activity event: 'joinRequestReceived' (deferred)
-  - **Pending Status Indication:**
-    - In user's society list, show societies with pending requests with "Pending Approval" badge
-    - User can cancel their own pending request
-  - Tests: Widget tests for discovery, handicap validation, join request, pending indication
+  - **Pending Status Indication:** 🔲 REMAINING
+    - [ ] In user's society list, show societies with pending requests with "Pending Approval" badge
+    - [ ] User can cancel their own pending request
+  - **Tests:** 🔲 REMAINING
+    - [ ] Widget tests for DiscoverSocietiesTab
+    - [ ] Widget tests for integrated SocietyListScreen with tabs
+    - [ ] Widget tests for handicap validation display
+    - [ ] Widget tests for join request flow
+    - [ ] Manual testing on device
 
 - [ ] **Update Add Member Screen with New Handicap Rules** (P1) #members #ui
   - Note: Update existing task with correct handicap range and handicap limit validation

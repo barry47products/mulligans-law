@@ -6,6 +6,7 @@ import 'package:mulligans_law/core/errors/society_exceptions.dart';
 import 'package:mulligans_law/features/societies/domain/entities/society.dart';
 import 'package:mulligans_law/features/societies/domain/usecases/create_society.dart';
 import 'package:mulligans_law/features/societies/domain/usecases/get_user_societies.dart';
+import 'package:mulligans_law/features/societies/domain/usecases/get_public_societies.dart';
 import 'package:mulligans_law/features/societies/domain/usecases/update_society.dart';
 import 'package:mulligans_law/features/societies/presentation/bloc/society_bloc.dart';
 import 'package:mulligans_law/features/societies/presentation/bloc/society_event.dart';
@@ -13,20 +14,28 @@ import 'package:mulligans_law/features/societies/presentation/bloc/society_state
 
 import 'society_bloc_test.mocks.dart';
 
-@GenerateMocks([CreateSociety, GetUserSocieties, UpdateSociety])
+@GenerateMocks([
+  CreateSociety,
+  GetUserSocieties,
+  GetPublicSocieties,
+  UpdateSociety,
+])
 void main() {
   late SocietyBloc bloc;
   late MockCreateSociety mockCreateSociety;
   late MockGetUserSocieties mockGetUserSocieties;
+  late MockGetPublicSocieties mockGetPublicSocieties;
   late MockUpdateSociety mockUpdateSociety;
 
   setUp(() {
     mockCreateSociety = MockCreateSociety();
     mockGetUserSocieties = MockGetUserSocieties();
+    mockGetPublicSocieties = MockGetPublicSocieties();
     mockUpdateSociety = MockUpdateSociety();
     bloc = SocietyBloc(
       createSociety: mockCreateSociety,
       getUserSocieties: mockGetUserSocieties,
+      getPublicSocieties: mockGetPublicSocieties,
       updateSociety: mockUpdateSociety,
     );
   });

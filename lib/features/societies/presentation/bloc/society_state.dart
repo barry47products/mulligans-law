@@ -78,3 +78,18 @@ class SocietyError extends SocietyState {
   @override
   List<Object?> get props => [message, societies];
 }
+
+/// State when loading public societies for discovery
+class SocietyLoadingPublic extends SocietyState {
+  const SocietyLoadingPublic();
+}
+
+/// State when public societies are loaded successfully
+class SocietyPublicLoaded extends SocietyState {
+  final List<Society> publicSocieties;
+
+  const SocietyPublicLoaded({required this.publicSocieties});
+
+  @override
+  List<Object?> get props => [publicSocieties];
+}

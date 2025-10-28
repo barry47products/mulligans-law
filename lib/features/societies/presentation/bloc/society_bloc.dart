@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/errors/society_exceptions.dart';
 import '../../domain/usecases/create_society.dart';
+import '../../domain/usecases/get_public_societies.dart';
 import '../../domain/usecases/get_user_societies.dart';
 import '../../domain/usecases/update_society.dart';
 import 'society_event.dart';
@@ -10,17 +11,21 @@ import 'society_state.dart';
 class SocietyBloc extends Bloc<SocietyEvent, SocietyState> {
   final CreateSociety _createSociety;
   final GetUserSocieties _getUserSocieties;
+  final GetPublicSocieties _getPublicSocieties;
   final UpdateSociety _updateSociety;
 
   SocietyBloc({
     required CreateSociety createSociety,
     required GetUserSocieties getUserSocieties,
+    required GetPublicSocieties getPublicSocieties,
     required UpdateSociety updateSociety,
   }) : _createSociety = createSociety,
        _getUserSocieties = getUserSocieties,
+       _getPublicSocieties = getPublicSocieties,
        _updateSociety = updateSociety,
        super(const SocietyInitial()) {
     on<SocietyLoadRequested>(_onLoadRequested);
+    on<SocietyLoadPublicRequested>(_onLoadPublicRequested);
     on<SocietyCreateRequested>(_onCreateRequested);
     on<SocietyUpdateRequested>(_onUpdateRequested);
     on<SocietySelected>(_onSocietySelected);
@@ -36,6 +41,22 @@ class SocietyBloc extends Bloc<SocietyEvent, SocietyState> {
     try {
       final societies = await _getUserSocieties();
       emit(SocietyLoaded(societies: societies));
+    } on SocietyException catch (e) {
+      emit(SocietyError(message: e.message));
+    } catch (e) {
+      emit(SocietyError(message: e.toString()));
+    }
+  }
+
+  /// Handles loading public societies for discovery
+  Future<void> _onLoadPublicRequested(
+    SocietyLoadPublicRequested event,
+    Emitter<SocietyState> emit,
+  ) async {
+    emit(const SocietyLoadingPublic());
+    try {
+      final publicSocieties = await _getPublicSocieties();
+      emit(SocietyPublicLoaded(publicSocieties: publicSocieties));
     } on SocietyException catch (e) {
       emit(SocietyError(message: e.message));
     } catch (e) {

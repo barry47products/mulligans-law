@@ -28,6 +28,7 @@ import 'features/invitations/presentation/bloc/invite_members_bloc.dart';
 import 'features/societies/data/repositories/society_repository_impl.dart';
 import 'features/societies/domain/usecases/create_society.dart';
 import 'features/societies/domain/usecases/get_user_societies.dart';
+import 'features/societies/domain/usecases/get_public_societies.dart';
 import 'features/societies/domain/usecases/update_society.dart';
 import 'features/societies/domain/usecases/get_society_stats.dart';
 import 'features/societies/presentation/bloc/society_bloc.dart';
@@ -83,6 +84,7 @@ class MulligansLawApp extends StatelessWidget {
     // CreateSociety now uses a database function that handles member creation
     final createSocietyUseCase = CreateSociety(societyRepository);
     final getUserSocietiesUseCase = GetUserSocieties(societyRepository);
+    final getPublicSocietiesUseCase = GetPublicSocieties(societyRepository);
     final updateSocietyUseCase = UpdateSociety(societyRepository);
 
     // Create member use cases
@@ -115,6 +117,7 @@ class MulligansLawApp extends StatelessWidget {
             create: (context) => SocietyBloc(
               createSociety: createSocietyUseCase,
               getUserSocieties: getUserSocietiesUseCase,
+              getPublicSocieties: getPublicSocietiesUseCase,
               updateSociety: updateSocietyUseCase,
             ),
           ),

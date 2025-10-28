@@ -248,4 +248,59 @@ class SocietyRepositoryImpl implements SocietyRepository {
 
     return controller.stream;
   }
+
+  @override
+  Future<List<Society>> getPublicSocieties() async {
+    try {
+      // Query public societies excluding user's current memberships
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) {
+        throw const UnauthorizedException('User not authenticated');
+      }
+
+      // Get user's current society IDs (ACTIVE or PENDING)
+      final membershipResponse = await _supabase
+          .from(DatabaseTables.members)
+          .select(DatabaseColumns.societyId)
+          .eq(DatabaseColumns.userId, userId)
+          .inFilter(DatabaseColumns.status, [
+            MemberStatus.active,
+            MemberStatus.pending,
+          ]);
+
+      final userSocietyIds = (membershipResponse as List)
+          .map((row) => row[DatabaseColumns.societyId] as String)
+          .toList();
+
+      // Query public societies, excluding user's societies
+      var query = _supabase
+          .from(DatabaseTables.societies)
+          .select()
+          .eq(DatabaseColumns.isPublic, true)
+          .isFilter(DatabaseColumns.deletedAt, null);
+
+      // Exclude societies user is already a member of
+      if (userSocietyIds.isNotEmpty) {
+        query = query.not(
+          DatabaseColumns.id,
+          'in',
+          '(${userSocietyIds.join(',')})',
+        );
+      }
+
+      final response = await query;
+
+      return (response as List)
+          .map((json) => SocietyModel.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } on SocketException {
+      throw const NetworkException();
+    } on UnauthorizedException {
+      rethrow;
+    } catch (e) {
+      throw SocietyDatabaseException(
+        'Failed to fetch public societies: ${e.toString()}',
+      );
+    }
+  }
 }
