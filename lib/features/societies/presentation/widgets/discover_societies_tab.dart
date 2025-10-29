@@ -3,9 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../members/domain/usecases/get_member_count.dart';
+import '../../../members/domain/usecases/request_to_join_society.dart';
 import '../../domain/entities/society.dart';
 import '../bloc/society_bloc.dart';
+import '../bloc/society_event.dart';
 import '../bloc/society_state.dart';
 
 /// Widget displaying public societies that users can discover and join
@@ -19,11 +23,13 @@ class DiscoverSocietiesTab extends StatefulWidget {
 class _DiscoverSocietiesTabState extends State<DiscoverSocietiesTab> {
   final Map<String, int> _memberCounts = {};
   late final GetMemberCount _getMemberCount;
+  late final RequestToJoinSociety _requestToJoinSociety;
 
   @override
   void initState() {
     super.initState();
     _getMemberCount = context.read<GetMemberCount>();
+    _requestToJoinSociety = context.read<RequestToJoinSociety>();
   }
 
   Future<void> _loadMemberCounts(List<Society> societies) async {
@@ -259,25 +265,41 @@ class _DiscoverSocietiesTabState extends State<DiscoverSocietiesTab> {
 
   Future<void> _requestToJoin(Society society) async {
     try {
-      // TODO: Get current user ID from AuthBloc
-      // TODO: Validate handicap limits
-      // TODO: Call RequestToJoinSociety use case
-      // TODO: Show success message
-      // TODO: Refresh public societies list
+      // Get current user ID from AuthBloc
+      final authState = context.read<AuthBloc>().state;
+      if (authState is! AuthAuthenticated) {
+        throw Exception('User not authenticated');
+      }
+      final userId = authState.user.id;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Join request sent to ${society.name}!'),
-          backgroundColor: AppColors.success,
-        ),
-      );
+      // Call RequestToJoinSociety use case
+      // Note: Handicap validation is handled inside the use case
+      await _requestToJoinSociety(userId: userId, societyId: society.id);
+
+      // Show success message
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Join request sent to ${society.name}! '
+              'You\'ll be notified when a captain approves.',
+            ),
+            backgroundColor: AppColors.success,
+          ),
+        );
+
+        // Refresh public societies list to remove the joined society
+        context.read<SocietyBloc>().add(const SocietyLoadPublicRequested());
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to send join request: ${e.toString()}'),
-          backgroundColor: AppColors.error,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to send join request: ${e.toString()}'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
     }
   }
 }

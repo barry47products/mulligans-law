@@ -124,7 +124,9 @@ void main() {
         findsOneWidget,
       );
       expect(
-        find.text('Create your first society to get started'),
+        find.text(
+          'Create your first society or discover public societies to join',
+        ),
         findsOneWidget,
       );
     });

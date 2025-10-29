@@ -35,6 +35,7 @@ import 'features/societies/presentation/bloc/society_bloc.dart';
 import 'features/members/domain/usecases/get_member_count.dart';
 import 'features/members/domain/usecases/get_society_members.dart';
 import 'features/members/domain/usecases/join_society.dart';
+import 'features/members/domain/usecases/request_to_join_society.dart';
 import 'features/members/domain/usecases/update_member_role.dart';
 import 'features/members/domain/usecases/leave_society.dart';
 import 'features/members/presentation/bloc/member_bloc.dart';
@@ -91,6 +92,10 @@ class MulligansLawApp extends StatelessWidget {
     final getMemberCountUseCase = GetMemberCount(memberRepository);
     final getSocietyMembersUseCase = GetSocietyMembers(memberRepository);
     final joinSocietyUseCase = JoinSociety(memberRepository, societyRepository);
+    final requestToJoinSocietyUseCase = RequestToJoinSociety(
+      memberRepository: memberRepository,
+      societyRepository: societyRepository,
+    );
     final updateMemberRoleUseCase = UpdateMemberRole(memberRepository);
     final leaveSocietyUseCase = LeaveSociety(memberRepository);
     final getSocietyStatsUseCase = GetSocietyStats(memberRepository);
@@ -100,6 +105,9 @@ class MulligansLawApp extends StatelessWidget {
         RepositoryProvider<GetMemberCount>.value(value: getMemberCountUseCase),
         RepositoryProvider<GetSocietyStats>.value(
           value: getSocietyStatsUseCase,
+        ),
+        RepositoryProvider<RequestToJoinSociety>.value(
+          value: requestToJoinSocietyUseCase,
         ),
       ],
       child: MultiBlocProvider(
