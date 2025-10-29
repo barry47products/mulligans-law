@@ -1,3 +1,9 @@
+## [0.36.0](https://github.com/barry47products/mulligans-law/compare/v0.35.0...v0.36.0) (2025-10-29)
+
+### Features
+
+* **societies:** complete UI integration for public society discovery and join flow ([efb7f5f](https://github.com/barry47products/mulligans-law/commit/efb7f5f33a263b0432706a1cbf4181d618bb209f))
+
 ## [0.35.0](https://github.com/barry47products/mulligans-law/compare/v0.34.0...v0.35.0) (2025-10-28)
 
 ### Features
